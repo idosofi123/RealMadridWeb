@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealMadridWebApp.Data;
 
 namespace RealMadridWebApp.Migrations
 {
     [DbContext(typeof(RealMadridWebAppContext))]
-    partial class RealMadridWebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20210528142851_StadiumImage")]
+    partial class StadiumImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

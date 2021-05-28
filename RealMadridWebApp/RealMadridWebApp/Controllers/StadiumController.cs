@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using RealMadridWebApp.Data;
 using RealMadridWebApp.Models;
 
-namespace RealMadridWebApp.Controllers {
-
+namespace RealMadridWebApp.Controllers
+{
     public class StadiumController : Controller {
 
         private readonly RealMadridWebAppContext _context;
@@ -49,14 +49,13 @@ namespace RealMadridWebApp.Controllers {
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Capacity")] Stadium stadium) {
+        public async Task<IActionResult> Create([Bind("Id,Name,Capacity,ImagePath")] Stadium stadium) {
 
             if (ModelState.IsValid) {
                 _context.Add(stadium);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
             return View(stadium);
         }
 
@@ -81,7 +80,7 @@ namespace RealMadridWebApp.Controllers {
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Capacity")] Stadium stadium) {
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Capacity,ImagePath")] Stadium stadium) {
 
             if (id != stadium.Id) {
                 return NotFound();
@@ -97,10 +96,12 @@ namespace RealMadridWebApp.Controllers {
 
                     if (!StadiumExists(stadium.Id)) {
                         return NotFound();
-                    } else {
+                    }
+                    else {
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -131,7 +132,6 @@ namespace RealMadridWebApp.Controllers {
             var stadium = await _context.Stadium.FindAsync(id);
             _context.Stadium.Remove(stadium);
             await _context.SaveChangesAsync();
-
             return RedirectToAction(nameof(Index));
         }
 
