@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Stadiums</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -46,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.Longitude)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImagePath)
+                <img src="@item.ImagePath" />
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
