@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +20,13 @@ namespace RealMadridWebApp.Controllers
         public UsersController(RealMadridWebAppContext context)
         {
             _context = context;
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Login");
         }
 
         // GET: Users/Login
@@ -45,7 +55,7 @@ namespace RealMadridWebApp.Controllers
                 if (q != null) 
                 {
 
-               //     Signin(q);
+                    Signin(q);
 
                     return RedirectToAction(nameof(Index), "Home");
                 }
@@ -57,27 +67,27 @@ namespace RealMadridWebApp.Controllers
             return View(user);
         }
 
-        //private async void Signin(User account)
-        //{
-        //    var claims = new List<Claim>
-        //        {
-        //            new Claim(ClaimTypes.Name, account.Username),
-        //            new Claim(ClaimTypes.Role, account.Type.ToString()),
-        //        };
+        private async void Signin(User account)
+        {
+            var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, account.Username),
+                    new Claim(ClaimTypes.Role, account.Type.ToString()),
+                };
 
-        //    var claimsIdentity = new ClaimsIdentity(
-        //        claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-        //    var authProperties = new AuthenticationProperties
-        //    {
-        //        //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10)
-        //    };
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(3)
+            };
 
-        //    await HttpContext.SignInAsync(
-        //        CookieAuthenticationDefaults.AuthenticationScheme,
-        //        new ClaimsPrincipal(claimsIdentity),
-        //        authProperties);
-        //}
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
+        }
 
         // GET: Users/Register
         public IActionResult Register()
@@ -103,7 +113,7 @@ namespace RealMadridWebApp.Controllers
 
                     var u = _context.User.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
 
-                  //  Signin(u);
+                    Signin(u);
 
                     return RedirectToAction(nameof(Index), "Home");
                 }
