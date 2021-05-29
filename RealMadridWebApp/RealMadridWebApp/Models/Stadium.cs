@@ -15,6 +15,7 @@ namespace RealMadridWebApp.Models {
 
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Negative values are not allowed.")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public int Capacity { get; set; }
 
         [Required]
