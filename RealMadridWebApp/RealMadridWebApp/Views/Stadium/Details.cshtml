@@ -12,45 +12,42 @@
 <div>
     <h4>Stadium</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Capacity)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Capacity)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Latitude)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Latitude)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Longitude)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Longitude)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImagePath)
-        </dd>
-    </dl>
+    <div class="container detailsContainer">
+        <div class="row">
+            <div class="col-6 col-lg-4">
+                <div class="container detailsContainer">
+                    <dl class="row">
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.Name)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.Name)
+                        </dd>
+                        <dt class="col-sm-3">
+                            @Html.DisplayNameFor(model => model.Capacity)
+                        </dt>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.Capacity)
+                        </dd>
+                    </dl>
+                    <div class="row">
+                        <div class="col-12">
+                            <img class="stadiumImage" src="@Model.ImagePath"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-8">
+                <div id="map" lat="@Model.Latitude" lng="@Model.Longitude"></div>
+            </div>
+        </div>
+    </div>
 </div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
-
-<div id="map" lat="@Model.Latitude" lng="@Model.Longitude"></div>
 
 <!-- Bing Maps API script -->
 <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=initMap&key=AoCfRwsXujp9SsMt-PzqwDbn9_ZZ942gAPuKWvSvCfT_3KCMXuKb1LoWPIsxN7Wi' async defer></script>
