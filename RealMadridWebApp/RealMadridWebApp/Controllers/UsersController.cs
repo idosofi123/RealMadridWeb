@@ -48,6 +48,11 @@ namespace RealMadridWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind("Id,Username,Password")] User user)
         {
+            ModelState.Remove("FirstName");
+            ModelState.Remove("PhoneNumber");
+            ModelState.Remove("LastName");
+            ModelState.Remove("EmailAddress");
+
             if (ModelState.IsValid)
             {
                 var q = _context.User.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
