@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RealMadridWebApp.Models;
 using System;
@@ -16,11 +17,13 @@ namespace RealMadridWebApp.Controllers {
             _logger = logger;
         }
 
+      //  [Authorize]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Privacy()
         {
             return View();

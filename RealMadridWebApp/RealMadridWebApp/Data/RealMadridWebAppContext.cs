@@ -12,5 +12,7 @@ namespace RealMadridWebApp.Data {
         public RealMadridWebAppContext (DbContextOptions<RealMadridWebAppContext> options) : base(options) { }
 
         public DbSet<RealMadridWebApp.Models.Stadium> Stadium { get; set; }
+        
+         public DbSet<RealMadridWebApp.Models.User> User { get; set; }
     }
 }
