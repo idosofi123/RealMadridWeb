@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace RealMadridWebApp.Models {
@@ -23,5 +24,7 @@ namespace RealMadridWebApp.Models {
 
         [Range(0, int.MaxValue, ErrorMessage = "Negative values are not allowed.")]
         public int? GoalsAway { get; set; }
+
+        public List<User> Users { get; set; }
     }
 }

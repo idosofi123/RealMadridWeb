@@ -16,5 +16,7 @@ namespace RealMadridWebApp.Data {
          public DbSet<RealMadridWebApp.Models.User> User { get; set; }
         
          public DbSet<RealMadridWebApp.Models.Team> Team { get; set; }
+        
+         public DbSet<RealMadridWebApp.Models.Match> Match { get; set; }
     }
 }
