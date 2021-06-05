@@ -18,7 +18,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isAway" /> @Html.DisplayNameFor(model => model.isAway)
+                    <input class="form-check-input" asp-for="isAwayMatch" /> @Html.DisplayNameFor(model => model.isAwayMatch)
                 </label>
             </div>
             <div class="form-group">
@@ -27,14 +27,14 @@
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GoalsHome" class="control-label"></label>
-                <input asp-for="GoalsHome" class="form-control" />
-                <span asp-validation-for="GoalsHome" class="text-danger"></span>
+                <label asp-for="HomeGoals" class="control-label"></label>
+                <input asp-for="HomeGoals" class="form-control" />
+                <span asp-validation-for="HomeGoals" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GoalsAway" class="control-label"></label>
-                <input asp-for="GoalsAway" class="form-control" />
-                <span asp-validation-for="GoalsAway" class="text-danger"></span>
+                <label asp-for="AwayGoals" class="control-label"></label>
+                <input asp-for="AwayGoals" class="form-control" />
+                <span asp-validation-for="AwayGoals" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

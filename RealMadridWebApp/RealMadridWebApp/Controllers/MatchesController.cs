@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using RealMadridWebApp.Data;
 using RealMadridWebApp.Models;
 
-namespace RealMadridWebApp.Controllers {
-
+namespace RealMadridWebApp.Controllers
+{
     public class MatchesController : Controller {
 
         private readonly RealMadridWebAppContext _context;
@@ -20,6 +20,7 @@ namespace RealMadridWebApp.Controllers {
 
         // GET: Matches
         public async Task<IActionResult> Index() {
+
             var realMadridWebAppContext = _context.Match.Include(m => m.Team);
             return View(await realMadridWebAppContext.ToListAsync());
         }
@@ -51,7 +52,7 @@ namespace RealMadridWebApp.Controllers {
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TeamId,isAway,Date,GoalsHome,GoalsAway")] Match match) {
+        public async Task<IActionResult> Create([Bind("Id,TeamId,isAwayMatch,Date,HomeGoals,AwayGoals")] Match match) {
 
             if (ModelState.IsValid) {
                 _context.Add(match);
@@ -85,7 +86,7 @@ namespace RealMadridWebApp.Controllers {
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TeamId,isAway,Date,GoalsHome,GoalsAway")] Match match) {
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TeamId,isAwayMatch,Date,HomeGoals,AwayGoals")] Match match) {
 
             if (id != match.Id) {
                 return NotFound();
@@ -99,7 +100,7 @@ namespace RealMadridWebApp.Controllers {
                     await _context.SaveChangesAsync();
 
                 } catch (DbUpdateConcurrencyException) {
-
+                    
                     if (!MatchExists(match.Id)) {
                         return NotFound();
                     } else {
@@ -134,6 +135,7 @@ namespace RealMadridWebApp.Controllers {
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id) {
+
             var match = await _context.Match.FindAsync(id);
             _context.Match.Remove(match);
             await _context.SaveChangesAsync();

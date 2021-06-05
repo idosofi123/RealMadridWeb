@@ -16,16 +16,16 @@
                 @Html.DisplayNameFor(model => model.Team)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.isAway)
+                @Html.DisplayNameFor(model => model.isAwayMatch)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.GoalsHome)
+                @Html.DisplayNameFor(model => model.HomeGoals)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.GoalsAway)
+                @Html.DisplayNameFor(model => model.AwayGoals)
             </th>
             <th></th>
         </tr>
@@ -37,16 +37,16 @@
                 @Html.DisplayFor(modelItem => item.Team.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.isAway)
+                @Html.DisplayFor(modelItem => item.isAwayMatch)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.GoalsHome)
+                @Html.DisplayFor(modelItem => item.HomeGoals)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.GoalsAway)
+                @Html.DisplayFor(modelItem => item.AwayGoals)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
