@@ -9,6 +9,7 @@ namespace RealMadridWebApp.Models {
         [Required]
         public string Name { get; set; }
 
+        [Display(Name = "Stadium")]
         public int StadiumId { get; set; }
 
         public Stadium Stadium { get; set; }
