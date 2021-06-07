@@ -67,7 +67,7 @@ namespace RealMadridWebApp.Controllers
                     service.AuthenticateWith(Keys.TweeterToken, Keys.TweeterSecretToken);
 
                     // Read the newly saved match data, including the data of the corresponding team.
-                    Match savedMatch = await _context.Match.Include(match => match.Team).FirstOrDefaultAsync(match => match.Id == match.Id);
+                    Match savedMatch = await _context.Match.Include(m => m.Team).FirstOrDefaultAsync(m => m.Id == match.Id);
 
                     if (savedMatch != null) {
 
