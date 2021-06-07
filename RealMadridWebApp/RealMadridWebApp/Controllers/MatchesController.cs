@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RealMadridWebApp.Data;
 using RealMadridWebApp.Models;
+using TweetSharp;
 
 namespace RealMadridWebApp.Controllers
 {
@@ -57,6 +58,26 @@ namespace RealMadridWebApp.Controllers
             if (ModelState.IsValid) {
                 _context.Add(match);
                 await _context.SaveChangesAsync();
+
+                // If the created match is an upcoming match, post an announcement tweet about it.
+                if (match.Date > DateTime.Now) {
+
+                    // Connect to the service and authenticate.
+                    var service = new TwitterService(Keys.TweeterAPIKey, Keys.TweeterAPISecretKey);
+                    service.AuthenticateWith(Keys.TweeterToken, Keys.TweeterSecretToken);
+
+                    // Read the newly saved match data, including the data of the corresponding team.
+                    Match savedMatch = await _context.Match.Include(match => match.Team).FirstOrDefaultAsync(match => match.Id == match.Id);
+
+                    if (savedMatch != null) {
+
+                        // Post the tweet.
+                        service.SendTweet(new SendTweetOptions {
+                            Status = $"Real Madrid will match against {savedMatch.Team.Name} on {savedMatch.Date.ToShortDateString()}. Order your tickets now!"
+                        });
+                    }
+                }
+
                 return RedirectToAction(nameof(Index));
             }
 

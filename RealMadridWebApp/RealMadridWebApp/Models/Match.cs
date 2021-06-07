@@ -22,10 +22,12 @@ namespace RealMadridWebApp.Models {
         public DateTime Date { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Negative values are not allowed.")]
+        [DisplayFormat(NullDisplayText = "TBD")]
         [Display(Name = "Home Goals")]
         public int? HomeGoals { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Negative values are not allowed.")]
+        [DisplayFormat(NullDisplayText = "TBD")]
         [Display(Name = "Away Goals")]
         public int? AwayGoals { get; set; }
 
