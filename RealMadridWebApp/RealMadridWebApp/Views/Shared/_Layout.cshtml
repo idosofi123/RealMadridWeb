@@ -36,9 +36,19 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
                             </li>
                         }
+                        @{ 
+                            string role = null;
+                            var identity = (System.Security.Claims.ClaimsIdentity)Context.User.Identity;
+                            if (identity.Claims.Count() > 0 )
+                            {
+                                role = identity.Claims.FirstOrDefault(c => c.Type.Contains("role")).Value;
+                            }
+                            if (role != null && role == "Admin") {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Manage users</a>
                             </li>
+                                }
+                            }
                     </ul>
                 </div>
             </div>
