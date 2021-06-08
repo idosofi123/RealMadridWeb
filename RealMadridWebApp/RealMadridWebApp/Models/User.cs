@@ -9,6 +9,7 @@ namespace RealMadridWebApp.Models
     public enum UserType
     {
         Client,
+        Manager,
         Admin
     }
 
