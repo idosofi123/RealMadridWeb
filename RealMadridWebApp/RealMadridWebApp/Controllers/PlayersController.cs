@@ -22,8 +22,13 @@ namespace RealMadridWebApp.Controllers
         // GET: Players
         public async Task<IActionResult> Index()
         {
-            var realMadridWebAppContext = _context.Player.Include(p => p.Position);
-            return View(await realMadridWebAppContext.ToListAsync());
+            //var groupedPlayers = _context.Player.GroupBy(p => p.PositionId);
+            var players = await _context.Player.Include(p => p.BirthCountry).Include(p => p.Position).ToListAsync();
+            var groupedPlayersByPosition = players.GroupBy(p => p.Position).Select(p => new { position = p ,count = p.Count() }).ToList();
+
+                ViewData["GroupedPlayers"] = groupedPlayersByPosition;
+
+            return View();
         }
 
         // GET: Players/Details/5
@@ -35,6 +40,7 @@ namespace RealMadridWebApp.Controllers
             }
 
             var player = await _context.Player
+                .Include(p => p.BirthCountry)
                 .Include(p => p.Position)
                 .FirstOrDefaultAsync(m => m.PlayerId == id);
             if (player == null)
@@ -48,7 +54,8 @@ namespace RealMadridWebApp.Controllers
         // GET: Players/Create
         public IActionResult Create()
         {
-            ViewData["PositionId"] = new SelectList(_context.Set<Position>(), "Id", "Id");
+            ViewData["BirthCountryId"] = new SelectList(_context.Set<Country>(), "CountryID", nameof(Country.CountryName));
+            ViewData["PositionId"] = new SelectList(_context.Set<Position>(), "Id", nameof(Position.PositionName));
             return View();
         }
 
@@ -57,15 +64,18 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PlayerId,FirstName,LastName,ShirtNumber,ImagePath,PositionId,BirthDate,PreferedFoot,Height,Weight")] Player player)
+        public async Task<IActionResult> Create([Bind("PlayerId,FirstName,LastName,ShirtNumber,ImagePath,PositionId,BirthDate,PreferedFoot,CountryId,BirthCountryId,Height,Weight")] Player player)
         {
+            ModelState.Remove(nameof(Player.Position));
+            ModelState.Remove(nameof(Player.BirthCountry));
             if (ModelState.IsValid)
             {
                 _context.Add(player);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));          
             }
-            ViewData["PositionId"] = new SelectList(_context.Set<Position>(), "Id", "Id", player.PositionId);
+            ViewData["BirthCountryId"] = new SelectList(_context.Set<Country>(), "CountryID", nameof(Country.CountryName), player.BirthCountryId);
+            ViewData["PositionId"] = new SelectList(_context.Set<Position>(), "Id", nameof(Position.PositionName), player.PositionId);
             return View(player);
         }
 
@@ -82,7 +92,8 @@ namespace RealMadridWebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["PositionId"] = new SelectList(_context.Set<Position>(), "Id", "Id", player.PositionId);
+            ViewData["BirthCountryId"] = new SelectList(_context.Set<Country>(), "CountryID", nameof(Country.CountryName), player.BirthCountryId);
+            ViewData["PositionId"] = new SelectList(_context.Set<Position>(), "Id", nameof(Position.PositionName), player.PositionId);
             return View(player);
         }
 
@@ -91,7 +102,7 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PlayerId,FirstName,LastName,ShirtNumber,ImagePath,PositionId,BirthDate,PreferedFoot,Height,Weight")] Player player)
+        public async Task<IActionResult> Edit(int id, [Bind("PlayerId,FirstName,LastName,ShirtNumber,ImagePath,PositionId,BirthDate,PreferedFoot,CountryId,BirthCountryId,Height,Weight")] Player player)
         {
             if (id != player.PlayerId)
             {
@@ -118,7 +129,8 @@ namespace RealMadridWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PositionId"] = new SelectList(_context.Set<Position>(), "Id", "Id", player.PositionId);
+            ViewData["BirthCountryId"] = new SelectList(_context.Set<Country>(), "CountryID", nameof(Country.CountryName), player.BirthCountryId);
+            ViewData["PositionId"] = new SelectList(_context.Set<Position>(), "Id", nameof(Position.PositionName), player.PositionId);
             return View(player);
         }
 
@@ -131,6 +143,7 @@ namespace RealMadridWebApp.Controllers
             }
 
             var player = await _context.Player
+                .Include(p => p.BirthCountry)
                 .Include(p => p.Position)
                 .FirstOrDefaultAsync(m => m.PlayerId == id);
             if (player == null)

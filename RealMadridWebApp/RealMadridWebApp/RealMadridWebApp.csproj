@@ -13,4 +13,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\Countries\" />
+    <Folder Include="wwwroot\Images\Positions\" />
+    <Folder Include="wwwroot\Images\Players\" />
+  </ItemGroup>
+
 </Project>

@@ -35,7 +35,7 @@ namespace RealMadridWebApp.Models
         public string ImagePath { get; set; }
 
         [Required]
-        [Display(Name = "Position Id")]
+        [Display(Name = "Position")]
         public int PositionId { get; set; }
 
         [Required]
@@ -53,13 +53,17 @@ namespace RealMadridWebApp.Models
         [Required]
         public Country BirthCountry { get; set; }
 
+        [Required]
+        [Display(Name = "Country")]
+        public int BirthCountryId { get; set; }
+
         [Display(Name = "Height(cm)")]
         [Range(0,300)]
-        public int Height { get; set; }
+        public double Height { get; set; }
 
         [Display(Name = "Weight(kg)")]
         [Range(0, 400)]
-        public int Weight { get; set; }
+        public double Weight { get; set; }
 
     }
 }
