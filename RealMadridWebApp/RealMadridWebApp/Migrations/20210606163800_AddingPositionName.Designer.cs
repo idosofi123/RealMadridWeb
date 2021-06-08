@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealMadridWebApp.Data;
 
 namespace RealMadridWebApp.Migrations
 {
     [DbContext(typeof(RealMadridWebAppContext))]
-    partial class RealMadridWebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20210606163800_AddingPositionName")]
+    partial class AddingPositionName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,9 +29,6 @@ namespace RealMadridWebApp.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CountryName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CountryID");
@@ -54,8 +53,8 @@ namespace RealMadridWebApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Height")
-                        .HasColumnType("float");
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
 
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
@@ -73,8 +72,8 @@ namespace RealMadridWebApp.Migrations
                     b.Property<int>("ShirtNumber")
                         .HasColumnType("int");
 
-                    b.Property<double>("Weight")
-                        .HasColumnType("float");
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
 
                     b.HasKey("PlayerId");
 
@@ -176,7 +175,7 @@ namespace RealMadridWebApp.Migrations
             modelBuilder.Entity("RealMadridWebApp.Models.Player", b =>
                 {
                     b.HasOne("RealMadridWebApp.Models.Country", "BirthCountry")
-                        .WithMany("Players")
+                        .WithMany()
                         .HasForeignKey("BirthCountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -190,11 +189,6 @@ namespace RealMadridWebApp.Migrations
                     b.Navigation("BirthCountry");
 
                     b.Navigation("Position");
-                });
-
-            modelBuilder.Entity("RealMadridWebApp.Models.Country", b =>
-                {
-                    b.Navigation("Players");
                 });
 
             modelBuilder.Entity("RealMadridWebApp.Models.Position", b =>

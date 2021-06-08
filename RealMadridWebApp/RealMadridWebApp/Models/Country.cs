@@ -11,5 +11,9 @@ namespace RealMadridWebApp.Models
         public int CountryID { get; set; }
 
         public string CountryName { get; set; }
+
+        public string ImagePath { get; set; }
+
+        public List<Player> Players { get; set; }
     }
 }
