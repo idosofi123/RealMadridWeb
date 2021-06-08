@@ -44,7 +44,7 @@ namespace RealMadridWebApp.Models
         [Required]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
-        
+
         [Required]
         [Display(Name = "Prefered Foot")]
         [EnumDataType(typeof(Foot))]
@@ -58,7 +58,7 @@ namespace RealMadridWebApp.Models
         public int BirthCountryId { get; set; }
 
         [Display(Name = "Height(cm)")]
-        [Range(0,300)]
+        [Range(0, 300)]
         public double Height { get; set; }
 
         [Display(Name = "Weight(kg)")]

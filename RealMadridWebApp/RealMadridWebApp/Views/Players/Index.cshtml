@@ -13,28 +13,28 @@
 </p>
 
 <div class="container">
-            @foreach (var group in ViewBag.GroupedPlayers)
-            {
-    <h2>@group.position.Key.PositionName : @group.count</h2>
+    @foreach (var group in ViewBag.GroupedPlayers)
+    {
+        <h2>@group.position.Key.PositionName : @group.count</h2>
         <div class="row position-block">
-                @foreach (RealMadridWebApp.Models.Player player in group.position)
-                {
-                    <div class="col-4 col-lg-3 cardCol">
-                        <div class="card h-100">
-                            <img src="@player.ImagePath" alt="Card image cap">
-                            <img class="country-photo" src="@player.BirthCountry.ImagePath" alt="Card image cap">
-                            <div class="shirtNumberBox"><span>@Html.DisplayFor(modelItem => player.ShirtNumber)</span></div>
-                            <div class="card-body">
-                                <center><h5 class="card-title">@Html.DisplayFor(modelItem => player.FirstName) @Html.DisplayFor(modelItem => player.LastName)</h5></center>
-                            </div>
-                            <div class="card-body">
-                                <a asp-action="Details" asp-route-id="@player.PlayerId" class="btn btn-primary">See more...</a>
-                            </div>
+            @foreach (RealMadridWebApp.Models.Player player in group.position)
+            {
+                <div class="col-4 col-lg-3 cardCol">
+                    <div class="card h-100">
+                        <img src="@player.ImagePath" alt="Card image cap">
+                        <img class="country-photo" src="@player.BirthCountry.ImagePath" alt="Card image cap">
+                        <div class="shirtNumberBox"><span>@Html.DisplayFor(modelItem => player.ShirtNumber)</span></div>
+                        <div class="card-body">
+                            <center><h5 class="card-title">@Html.DisplayFor(modelItem => player.FirstName) @Html.DisplayFor(modelItem => player.LastName)</h5></center>
+                        </div>
+                        <div class="card-body">
+                            <a asp-action="Details" asp-route-id="@player.PlayerId" class="btn btn-primary">See more...</a>
                         </div>
                     </div>
-                }
-            </div>
+                </div>
             }
+        </div>
+    }
 </div>
 
 
