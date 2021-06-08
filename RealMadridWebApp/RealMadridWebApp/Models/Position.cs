@@ -13,6 +13,9 @@ namespace RealMadridWebApp.Models
         [Display(Name = "Image Path")]
         public string ImagePath { get; set; }
 
+        [Display(Name = "Position")]
+        public string PositionName { get; set; }
+
         public List<Player> Players { get; set; }
     }
 }
