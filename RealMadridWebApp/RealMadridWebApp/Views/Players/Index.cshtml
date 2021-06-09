@@ -1,6 +1,7 @@
 ﻿<link rel="stylesheet" href="~/css/Player/Index.css" />
 
-@model IEnumerable<RealMadridWebApp.Models.Player>
+@model IList<dynamic> 
+    <!--IEnumerable<RealMadridWebApp.Models.Player>-->
 
 @{
     ViewData["Title"] = "Index";
@@ -13,13 +14,13 @@
 </p>
 
 <div class="container">
-    @foreach (var group in ViewBag.GroupedPlayers)
+    @foreach (var group in Model)
     {
         <h2>@group.position.Key.PositionName : @group.count</h2>
         <div class="row position-block">
             @foreach (RealMadridWebApp.Models.Player player in group.position)
             {
-                <div class="col-4 col-lg-3 cardCol">
+                <div class="col-4 col-lg-3 cardCol player-card">
                     <div class="card h-100">
                         <img src="@player.ImagePath" alt="Card image cap">
                         <img class="country-photo" src="@player.BirthCountry.ImagePath" alt="Card image cap">

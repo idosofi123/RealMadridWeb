@@ -1,18 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using RealMadridWebApp.Data;
 using RealMadridWebApp.Models;
 
 namespace RealMadridWebApp.Controllers
 {
+    public static class Extension
+    {
+        public static IEnumerable<dynamic> ToExpando(this IEnumerable<object> anonymousObject)
+        {
+            IList<dynamic> list = new List<dynamic>();
+
+            foreach (var item in anonymousObject)
+            {
+                IDictionary<string, object> anonymousDictionary = HtmlHelper.AnonymousObjectToHtmlAttributes(item);
+                IDictionary<string, object> expando = new ExpandoObject();
+
+                foreach (var nestedItem in anonymousDictionary)
+                    expando.Add(nestedItem);
+
+                list.Add(expando);
+            }
+
+            return list.AsEnumerable();
+        }
+    }
+
+
     public class PlayersController : Controller
     {
         private readonly RealMadridWebAppContext _context;
+
+
 
         public PlayersController(RealMadridWebAppContext context)
         {
@@ -24,11 +50,11 @@ namespace RealMadridWebApp.Controllers
         {
             //var groupedPlayers = _context.Player.GroupBy(p => p.PositionId);
             var players = await _context.Player.Include(p => p.BirthCountry).Include(p => p.Position).ToListAsync();
-            var groupedPlayersByPosition = players.GroupBy(p => p.Position).Select(p => new { position = p ,count = p.Count() }).ToList();
+            var groupedPlayersByPosition = players.GroupBy(p => p.Position).Select(p => new { position = p ,count = p.Count() }).ToExpando().ToList();
 
-                ViewData["GroupedPlayers"] = groupedPlayersByPosition;
+                //ViewData["GroupedPlayers"] = groupedPlayersByPosition;
 
-            return View();
+            return View(groupedPlayersByPosition);
         }
 
         // GET: Players/Details/5
