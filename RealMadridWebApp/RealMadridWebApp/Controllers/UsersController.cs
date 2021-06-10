@@ -57,7 +57,7 @@ namespace RealMadridWebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                var q = _context.User.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
+                var q = _context.User.FirstOrDefault(u => u.Username.Equals(user.Username) && u.Password.Equals(user.Password));
 
                 if (q != null) 
                 {
@@ -140,25 +140,26 @@ namespace RealMadridWebApp.Controllers
             return View(await _context.User.ToListAsync());
         }
 
-        // GET: Users/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: Users/Details/5
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+        //    var user = await _context.User
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(user);
-        }
+        //    return View(user);
+        //}
 
         // GET: Users/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -166,6 +167,24 @@ namespace RealMadridWebApp.Controllers
                 return NotFound();
             }
 
+            ViewData["ReadOnly"] = false;
+
+            var currentUserName = HttpContext.User.Identity.Name;
+
+            var userDB = _context.User.FirstOrDefault(u => u.Username == currentUserName);
+
+            if(userDB.Id != id)
+            {
+                if (HttpContext.User.IsInRole(UserType.Admin.ToString()))
+                {
+                    ViewData["ReadOnly"] = true;
+                }
+                else
+                {
+                    return RedirectToAction(nameof(AccessDenied));
+                }
+            }
+              
             var user = await _context.User.FindAsync(id);
             if (user == null)
             {
@@ -210,6 +229,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Users/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
