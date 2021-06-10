@@ -50,11 +50,29 @@ namespace RealMadridWebApp.Controllers
         {
             //var groupedPlayers = _context.Player.GroupBy(p => p.PositionId);
             var players = await _context.Player.Include(p => p.BirthCountry).Include(p => p.Position).ToListAsync();
-            var groupedPlayersByPosition = players.GroupBy(p => p.Position).Select(p => new { position = p ,count = p.Count() }).ToExpando().ToList();
+            var groupedPlayersByPosition = players.GroupBy(p => p.Position).Select(p => new { position = p, count = p.Count() }).ToExpando().ToList();
 
-                //ViewData["GroupedPlayers"] = groupedPlayersByPosition;
+            ViewData["countries"] = new SelectList(_context.Country, nameof(Country.CountryID), nameof(Country.CountryName));
+            ViewData["GroupedPlayers"] = groupedPlayersByPosition;
 
-            return View(groupedPlayersByPosition);
+            return View();
+        }
+
+        public async Task<IActionResult> Search(Foot? prefferedFoot, int[]? country, int minAge, int maxAge)
+        {
+            DateTime today = DateTime.Today;
+            DateTime minDate = today.AddYears(-minAge);
+            DateTime maxDate = today.AddYears(-maxAge);
+            //var groupedPlayers = _context.Player.GroupBy(p => p.PositionId);
+            var players = await _context.Player.Where(p =>  (country.Length == 0 || country.Contains(p.BirthCountryId) ) &&
+                                                            ( prefferedFoot == null || p.PreferedFoot == prefferedFoot) &&
+                                                            ( p.BirthDate <= minDate && p.BirthDate >= maxDate)).Include(p => p.BirthCountry).Include(p => p.Position).ToListAsync();
+            var groupedPlayersByPosition = players.GroupBy(p => p.Position).Select(p => new { position = p, count = p.Count() }).ToExpando().ToList();
+
+            ViewData["countries"] = new SelectList(_context.Country, nameof(Country.CountryID), nameof(Country.CountryName));
+            ViewData["GroupedPlayers"] = groupedPlayersByPosition;
+
+            return View("Index");
         }
 
         // GET: Players/Details/5

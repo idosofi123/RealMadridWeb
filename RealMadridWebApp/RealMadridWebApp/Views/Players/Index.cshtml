@@ -1,20 +1,39 @@
 ﻿<link rel="stylesheet" href="~/css/Player/Index.css" />
 
-@model IList<dynamic> 
-    <!--IEnumerable<RealMadridWebApp.Models.Player>-->
+@model IEnumerable<RealMadridWebApp.Models.Player>
+<!--IEnumerable<RealMadridWebApp.Models.Player>-->
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
-
 <p>
     <a asp-action="Create">Click Here to add new player</a>
 </p>
 
 <div class="container">
-    @foreach (var group in Model)
+    <form asp-action="Search" method="get">
+        <div class="form-group">
+            <label class="control-label"> @Html.DisplayNameFor(model => model.PreferedFoot)</label>
+            <select name="prefferedFoot" class="form-control" asp-items="@Html.GetEnumSelectList<Foot>()">
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label"> @Html.DisplayNameFor(model => model.BirthCountry)</label>
+            <select name="country" multiple class="form-control" asp-items="ViewBag.countries">
+            </select>
+        </div>
+        <label class="form-label" id="minAgeLabel">Min Age: </label>
+        <input name="minAge" type="range" class="form-range" min="1" max="100" step="1" id="minAgeRange">
+        <label class="form-label" id="maxAgeLabel">Max Age: </label>
+        <input name="maxAge" type="range" class="form-range" min="1" max="100" step="1" id="maxAgeRange">
+        <div class="form-group">
+            <input type="submit" value="Search" class="btn btn-primary" />
+        </div>
+    </form>
+
+    @foreach (var group in ViewBag.GroupedPlayers)
     {
         <h2>@group.position.Key.PositionName : @group.count</h2>
         <div class="row position-block">
@@ -37,6 +56,10 @@
         </div>
     }
 </div>
+
+@section Scripts {
+<script src="~/js/Player/Index.js"></script>
+}
 
 
 @*
