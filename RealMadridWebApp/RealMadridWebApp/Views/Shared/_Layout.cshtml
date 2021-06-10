@@ -36,19 +36,17 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
                             </li>
                         }
-                        @{ 
-                            string role = null;
-                            var identity = (System.Security.Claims.ClaimsIdentity)Context.User.Identity;
-                            if (identity.Claims.Count() > 0 )
+                        @{
+                            if (Context.User.IsInRole(UserType.Admin.ToString()))
                             {
-                                role = identity.Claims.FirstOrDefault(c => c.Type.Contains("role")).Value;
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
+                                </li>
                             }
-                            if (role != null && role == "Admin") {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Manage users</a>
-                            </li>
-                                }
-                            }
+                        }
+                        @*<li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Edit">Edit My Profile</a>
+                        </li>*@
                     </ul>
                 </div>
             </div>

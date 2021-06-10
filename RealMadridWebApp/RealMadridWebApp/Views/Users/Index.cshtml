@@ -28,9 +28,6 @@
                 @Html.DisplayNameFor(model => model.EmailAddress)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Password)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Type)
             </th>
             <th></th>
@@ -58,15 +55,12 @@
                 @Html.DisplayFor(modelItem => item.EmailAddress)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Type)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> 
+                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
             </td>
         </tr>
 }
