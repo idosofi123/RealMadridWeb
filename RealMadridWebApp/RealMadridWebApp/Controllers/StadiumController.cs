@@ -20,7 +20,7 @@ namespace RealMadridWebApp.Controllers {
 
         // GET: Stadium
         public async Task<IActionResult> Index() {
-            return View(await _context.Stadium.ToListAsync());
+            return View(await _context.Stadium.Include((s) => s.Team).ToListAsync());
         }
 
         // GET: Stadium/Details/5
