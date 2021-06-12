@@ -44,7 +44,7 @@ namespace RealMadridWebApp.Controllers
 
         // GET: Matches/Create
         public IActionResult Create() {
-            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name");
+            ViewData["TeamId"] = new SelectList(_context.Team.Where(t => t.IsHome == false), "Id", "Name");
             return View();
         }
 
@@ -56,29 +56,39 @@ namespace RealMadridWebApp.Controllers
         public async Task<IActionResult> Create([Bind("Id,TeamId,isAwayMatch,Date,HomeGoals,AwayGoals")] Match match) {
 
             if (ModelState.IsValid) {
-                _context.Add(match);
-                await _context.SaveChangesAsync();
 
-                // If the created match is an upcoming match, post an announcement tweet about it.
-                if (match.Date > DateTime.Now) {
+                // Validate that the given team ID does not represent our home team.
+                Team givenTeam = await _context.Team.FirstOrDefaultAsync(t => t.Id == match.TeamId);
 
-                    // Connect to the service and authenticate.
-                    var service = new TwitterService(Keys.TweeterAPIKey, Keys.TweeterAPISecretKey);
-                    service.AuthenticateWith(Keys.TweeterToken, Keys.TweeterSecretToken);
+                if (givenTeam.IsHome == false) {
 
-                    // Read the newly saved match data, including the data of the corresponding team.
-                    Match savedMatch = await _context.Match.Include(m => m.Team).FirstOrDefaultAsync(m => m.Id == match.Id);
+                    _context.Add(match);
+                    await _context.SaveChangesAsync();
 
-                    if (savedMatch != null) {
+                    // If the created match is an upcoming match, post an announcement tweet about it.
+                    if (match.Date > DateTime.Now) {
 
-                        // Post the tweet.
-                        service.SendTweet(new SendTweetOptions {
-                            Status = $"Real Madrid will match against {savedMatch.Team.Name} on {savedMatch.Date.ToShortDateString()}. Order your tickets now!"
-                        });
+                        // Connect to the service and authenticate.
+                        var service = new TwitterService(Keys.TweeterAPIKey, Keys.TweeterAPISecretKey);
+                        service.AuthenticateWith(Keys.TweeterToken, Keys.TweeterSecretToken);
+
+                        // Read the newly saved match data, including the data of the corresponding team.
+                        Match savedMatch = await _context.Match.Include(m => m.Team).FirstOrDefaultAsync(m => m.Id == match.Id);
+
+                        if (savedMatch != null) {
+
+                            // Post the tweet.
+                            service.SendTweet(new SendTweetOptions {
+                                Status = $"Real Madrid will match against {savedMatch.Team.Name} on {savedMatch.Date.ToShortDateString()}. Order your tickets now!"
+                            });
+                        }
                     }
-                }
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+
+                } else {
+                    ViewData["Error"] = "A match against our home team cannot be created.";
+                }
             }
 
             ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name", match.TeamId);
