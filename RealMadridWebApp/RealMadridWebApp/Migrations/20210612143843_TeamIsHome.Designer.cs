@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealMadridWebApp.Data;
 
 namespace RealMadridWebApp.Migrations
 {
     [DbContext(typeof(RealMadridWebAppContext))]
-    partial class RealMadridWebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20210612143843_TeamIsHome")]
+    partial class TeamIsHome
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,10 +114,6 @@ namespace RealMadridWebApp.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IsHome")
-                        .IsUnique()
-                        .HasFilter("IsHome = 1");
 
                     b.HasIndex("StadiumId")
                         .IsUnique();

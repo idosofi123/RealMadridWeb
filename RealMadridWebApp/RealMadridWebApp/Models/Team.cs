@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace RealMadridWebApp.Models {
@@ -9,6 +10,10 @@ namespace RealMadridWebApp.Models {
 
         [Required]
         public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Is Home Team?")]
+        public bool IsHome { get; set; }
 
         [Required]
         [Display(Name = "Stadium")]
