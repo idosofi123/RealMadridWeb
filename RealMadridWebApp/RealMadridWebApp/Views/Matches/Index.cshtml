@@ -1,59 +1,63 @@
-﻿@model IEnumerable<RealMadridWebApp.Models.Match>
+﻿<link rel="stylesheet" href="~/css/Match/Index.css" />
+
+@model IEnumerable<RealMadridWebApp.Models.Match>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Matches</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Team)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isAwayMatch)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HomeGoals)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AwayGoals)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Team.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isAwayMatch)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HomeGoals)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AwayGoals)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+
+@foreach (var group in ViewBag.GroupedMatches) {
+    <h3 class="monthRow">@group.Key.Year - @group.Key.Month</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Team)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.isAwayMatch)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HomeGoals)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AwayGoals)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Match item in group) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Team.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.isAwayMatch)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HomeGoals)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AwayGoals)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>

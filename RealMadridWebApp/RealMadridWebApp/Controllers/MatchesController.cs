@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +23,13 @@ namespace RealMadridWebApp.Controllers
         // GET: Matches
         public async Task<IActionResult> Index() {
 
-            var realMadridWebAppContext = _context.Match.Include(m => m.Team);
-            return View(await realMadridWebAppContext.ToListAsync());
+            var matches = await _context.Match.Include(m => m.Team).ToListAsync();
+
+            // Group the queried matches by their scheduled year and month.
+            ViewData["GroupedMatches"] = matches.OrderByDescending(m => m.Date)
+                                                .GroupBy(m => new MonthGroup{ Year = m.Date.Year, Month = m.Date.ToString("MMMM", new CultureInfo("en-US")) }).ToList();
+
+            return View(matches);
         }
 
         // GET: Matches/Details/5
