@@ -1,4 +1,6 @@
-﻿@model RealMadridWebApp.Models.Player
+﻿<link rel="stylesheet" href="~/css/Player/Details.css" />
+
+@model RealMadridWebApp.Models.Player
 
 @{
     ViewData["Title"] = "Details";
@@ -9,68 +11,65 @@
 <div>
     <h4>Player</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ShirtNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ShirtNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImagePath)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Position)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Position.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.BirthDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.BirthDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PreferedFoot)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PreferedFoot)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.BirthCountry)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.BirthCountry.CountryID)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Height)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Height)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Weight)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Weight)
-        </dd>
-    </dl>
+
+    <div class="card mb-10" style="max-width: 1000px;">
+        <div class="row g-0">
+            <div class="col-md-6">
+                <img src="@Html.DisplayFor(model => model.ImagePath)" alt="@Html.DisplayFor(model => model.FirstName)">
+            </div>
+            <div class="col-md-6">
+                <div class="card-body">
+                    <h1 class="card-title">
+                        @Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)
+                    </h1>
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.ShirtNumber)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.ShirtNumber)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.BirthDate)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.BirthDate)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.PreferedFoot)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.PreferedFoot)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.BirthCountry)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.BirthCountry.CountryName)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Height)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Height)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Weight)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Weight)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Position)
+                        </dt>
+                        <dd class="col-sm-8">
+                            <img class="position-img" src="@Html.DisplayFor(model => model.Position.ImagePath)" alt="@Html.DisplayFor(model => model.Position.PositionName)"
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.PlayerId">Edit</a> |
