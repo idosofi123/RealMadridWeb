@@ -17,7 +17,7 @@ namespace RealMadridWebApp.Models {
         [Required]
         [Display(Name = "Competition")]
         public int CompetitionId { get; set; }
-        
+
         public Competition Competition { get; set; }
 
         [Required]

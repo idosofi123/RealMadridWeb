@@ -54,7 +54,7 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,TicketPrice,Image")] Competition competition)
+        public async Task<IActionResult> Create([Bind("Id,Name,TicketPrice,ImagePath")] Competition competition)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,TicketPrice,Image")] Competition competition)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,TicketPrice,ImagePath")] Competition competition)
         {
             if (id != competition.Id)
             {

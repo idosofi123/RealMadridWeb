@@ -1,7 +1,5 @@
-﻿
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RealMadridWebApp.Models {
 
@@ -13,13 +11,14 @@ namespace RealMadridWebApp.Models {
         public string Name { get; set; }
 
         [Required]
+        [DataType(DataType.Currency)]
         [Range(0, float.MaxValue, ErrorMessage = "Negative values are not allowed.")]
         [Display(Name = "Ticket Price")]
         public float TicketPrice { get; set; }
 
-        public byte[] Image { get; set; }
+        public List<Match> Matches;
 
-        [NotMapped]
-        public IFormFile ImageFile { get; set; }
+        [Display(Name = "Image Path")]
+        public string ImagePath { get; set; }
     }
 }
