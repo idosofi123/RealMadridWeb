@@ -24,7 +24,7 @@ namespace RealMadridWebApp.Controllers
         // GET: Matches
         public async Task<IActionResult> Index() {
 
-            var matches = await _context.Match.Include(m => m.Team).ToListAsync();
+            var matches = await _context.Match.Include(m => m.Team).Include(m => m.Competition).ToListAsync();
 
             // Group the queried matches by their scheduled year and month.
             ViewData["GroupedMatches"] = matches.OrderByDescending(m => m.Date)
@@ -40,7 +40,7 @@ namespace RealMadridWebApp.Controllers
                 return NotFound();
             }
 
-            var match = await _context.Match.Include(m => m.Team).FirstOrDefaultAsync(m => m.Id == id);
+            var match = await _context.Match.Include(m => m.Team).Include(m => m.Competition).FirstOrDefaultAsync(m => m.Id == id);
 
             if (match == null) {
                 return NotFound();
@@ -52,6 +52,7 @@ namespace RealMadridWebApp.Controllers
         // GET: Matches/Create
         public IActionResult Create() {
             ViewData["TeamId"] = new SelectList(_context.Team.Where(t => t.IsHome == false), "Id", "Name");
+            ViewData["CompetitionId"] = new SelectList(_context.Competition, "Id", "Name");
             return View();
         }
 
@@ -60,7 +61,7 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TeamId,isAwayMatch,Date,HomeGoals,AwayGoals")] Match match) {
+        public async Task<IActionResult> Create([Bind("Id,TeamId,CompetitionId,isAwayMatch,Date,HomeGoals,AwayGoals")] Match match) {
 
             if (ModelState.IsValid) {
 
@@ -92,6 +93,7 @@ namespace RealMadridWebApp.Controllers
             }
 
             ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name", match.TeamId);
+            ViewData["CompetitionId"] = new SelectList(_context.Competition, "Id", "Name", match.CompetitionId);
             return View(match);
         }
 
@@ -109,6 +111,7 @@ namespace RealMadridWebApp.Controllers
             }
 
             ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name", match.TeamId);
+            ViewData["CompetitionId"] = new SelectList(_context.Competition, "Id", "Name", match.CompetitionId);
             return View(match);
         }
 
@@ -117,7 +120,7 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TeamId,isAwayMatch,Date,HomeGoals,AwayGoals")] Match match) {
+        public async Task<IActionResult> Edit(int id, [Bind("Id,TeamId,CompetitionId,isAwayMatch,Date,HomeGoals,AwayGoals")] Match match) {
 
             if (id != match.Id) {
                 return NotFound();
@@ -143,6 +146,7 @@ namespace RealMadridWebApp.Controllers
             }
 
             ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name", match.TeamId);
+            ViewData["CompetitionId"] = new SelectList(_context.Competition, "Id", "Name", match.CompetitionId);
             return View(match);
         }
 
@@ -153,7 +157,7 @@ namespace RealMadridWebApp.Controllers
                 return NotFound();
             }
 
-            var match = await _context.Match.Include(m => m.Team).FirstOrDefaultAsync(m => m.Id == id);
+            var match = await _context.Match.Include(m => m.Team).Include(m => m.Competition).FirstOrDefaultAsync(m => m.Id == id);
 
             if (match == null) {
                 return NotFound();
