@@ -14,6 +14,8 @@ namespace RealMadridWebApp.Models {
 
         public Team Team { get; set; }
 
+        [Required]
+        [Display(Name = "Competition")]
         public int CompetitionId { get; set; }
         
         public Competition Competition { get; set; }

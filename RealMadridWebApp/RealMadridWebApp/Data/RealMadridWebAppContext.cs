@@ -27,5 +27,7 @@ namespace RealMadridWebApp.Data {
                                        .IsUnique()
                                        .HasFilter($"{nameof(Models.Team.IsHome)} = 1");
         }
+
+        public DbSet<RealMadridWebApp.Models.Competition> Competition { get; set; }
     }
 }
