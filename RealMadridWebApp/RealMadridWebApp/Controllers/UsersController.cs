@@ -153,13 +153,25 @@ namespace RealMadridWebApp.Controllers
         [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            User user = null;
+
+            if (id != null)
             {
-                return NotFound();
+                var currentUserName = HttpContext.User.Identity.Name;
+
+                var userDB = _context.User.FirstOrDefault(u => u.Username == currentUserName);
+
+                if (userDB.Id != id && !HttpContext.User.IsInRole(UserType.Admin.ToString()))
+                {
+                    return RedirectToAction(nameof(AccessDenied));
+                }
+                 user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
+            }
+            else // From Layout
+            {
+                user = await _context.User.FirstOrDefaultAsync(m => m.Username == HttpContext.User.Identity.Name);
             }
 
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
             {
                 return NotFound();
@@ -233,7 +245,8 @@ namespace RealMadridWebApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                string targetController = HttpContext.User.IsInRole(UserType.Admin.ToString()) ? "Users" : "Home";
+                return RedirectToAction(nameof(Index), targetController);
             }
             return View(user);
         }
