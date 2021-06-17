@@ -1,15 +1,22 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
+//using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace RealMadridWebApp.Models
 {
     public enum UserType
     {
+        [EnumMember(Value="Client gk")]
         Client,
+        [EnumMember(Value = "Manager jj")]
         Manager,
+        [EnumMember(Value = "Admin ljklj")]
         Admin
     }
 
@@ -48,6 +55,7 @@ namespace RealMadridWebApp.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public UserType Type { get; set; } = UserType.Client;
     }
 }

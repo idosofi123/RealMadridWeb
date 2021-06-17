@@ -29,6 +29,12 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
                             </li>
+                            @*if (Context.Items["UserId"] != null)
+                            {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Details" asp-route-id="@Context.Items["UserId"].ToString()">My Profile</a>
+                            </li>*@
+                            //}
                         }
                         else
                         {
@@ -44,9 +50,6 @@
                                 </li>
                             }
                         }
-                        @*<li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Edit">Edit My Profile</a>
-                        </li>*@
                     </ul>
                 </div>
             </div>

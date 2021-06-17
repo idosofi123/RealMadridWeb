@@ -82,12 +82,14 @@ namespace RealMadridWebApp.Controllers
                     new Claim(ClaimTypes.Role, account.Type.ToString()),
                 };
 
+            //HttpContext.Items["UserId"] = account.Id;
+
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             var authProperties = new AuthenticationProperties
             {
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(3)
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10)
             };
 
             await HttpContext.SignInAsync(
@@ -140,23 +142,31 @@ namespace RealMadridWebApp.Controllers
             return View(await _context.User.ToListAsync());
         }
 
-        //// GET: Users/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: Users
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> FilterUser(UserType role)
+        {
+            return Json(await _context.User.Where(u => u.Type == role).ToListAsync());
+        }
 
-        //    var user = await _context.User
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: Users/Details/5
+        [Authorize]
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    return View(user);
-        //}
+            var user = await _context.User
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
 
         // GET: Users/Edit/5
         [Authorize]
