@@ -49,6 +49,15 @@
     </dl>
 </div>
 <div>
+    <form asp-action="PurchaseTicket" asp-route-id="@Model.Id">
+        <button type="submit" class="btn btn-success">Purchase a Ticket</button>
+    </form>
+    @if (TempData["Success"] != null) {
+        <div class="text-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null) {
+        <div class="text-danger">@TempData["Error"]</div>
+    }
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
