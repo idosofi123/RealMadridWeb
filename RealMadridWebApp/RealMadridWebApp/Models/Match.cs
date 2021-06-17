@@ -14,6 +14,10 @@ namespace RealMadridWebApp.Models {
 
         public Team Team { get; set; }
 
+        public int CompetitionId { get; set; }
+        
+        public Competition Competition { get; set; }
+
         [Required]
         [Display(Name = "Is Away Match?")]
         public bool isAwayMatch { get; set; }
