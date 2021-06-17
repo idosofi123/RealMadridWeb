@@ -54,6 +54,7 @@ namespace RealMadridWebApp.Controllers
             ModelState.Remove("PhoneNumber");
             ModelState.Remove("LastName");
             ModelState.Remove("EmailAddress");
+            ModelState.Remove("CreationDate");
 
             if (ModelState.IsValid)
             {
@@ -117,6 +118,7 @@ namespace RealMadridWebApp.Controllers
 
                 if (q == null)
                 {
+                    user.CreationDate = DateTime.Now;
                     _context.Add(user);
                     await _context.SaveChangesAsync();
 

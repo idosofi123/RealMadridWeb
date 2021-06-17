@@ -12,11 +12,11 @@ namespace RealMadridWebApp.Models
 {
     public enum UserType
     {
-        [EnumMember(Value="Client gk")]
+        [EnumMember(Value="Client")]
         Client,
-        [EnumMember(Value = "Manager jj")]
+        [EnumMember(Value = "Manager")]
         Manager,
-        [EnumMember(Value = "Admin ljklj")]
+        [EnumMember(Value = "Admin")]
         Admin
     }
 
@@ -50,6 +50,10 @@ namespace RealMadridWebApp.Models
         [Display(Name = "Email Address")]
         [DataType(DataType.EmailAddress)]
         public string EmailAddress { get; set; }
+
+        [Display(Name = "Creation Date")]
+        [DataType(DataType.Date)]
+        public DateTime CreationDate { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
