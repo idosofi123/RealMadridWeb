@@ -30,18 +30,26 @@ namespace RealMadridWebApp.Controllers
             ViewData["GroupedMatches"] = matches.OrderByDescending(m => m.Date)
                                                 .GroupBy(m => new MonthGroup{ Year = m.Date.Year, Month = m.Date.ToString("MMMM", new CultureInfo("en-US")) }).ToList();
 
+            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name");
+            ViewData["CompetitionId"] = new SelectList(_context.Competition, "Id", "Name");
+
             return View(matches);
         }
 
-        public async Task<IActionResult> Search(int? teamId, DateTime? beforeDate, DateTime? afterDate, bool? isAway) {
-            afterDate = afterDate ?? DateTime.MinValue;
-            beforeDate = beforeDate ?? DateTime.MaxValue;
-            return Json(await _context.Match.Where(m =>
-                            (teamId == null || m.TeamId == teamId)
-                         && m.Date >= afterDate
-                         && m.Date <= beforeDate
-                         && (isAway == null || m.isAwayMatch == isAway)
-                   ).ToListAsync());
+        public async Task<IActionResult> Search(int? teamId, int? competitionId, DateTime? fromDate, DateTime? toDate) {
+
+            fromDate ??= DateTime.MinValue;
+            toDate ??= DateTime.MaxValue;
+
+            var matches = await _context.Match.Where(m => (teamId == null        || m.TeamId == teamId)
+                                                       && (competitionId == null || m.CompetitionId == competitionId)
+                                                       && m.Date >= fromDate
+                                                       && m.Date <= toDate).ToListAsync();
+
+            var groupedMatches = matches.OrderByDescending(m => m.Date)
+                                        .GroupBy(m => new MonthGroup { Year = m.Date.Year, Month = m.Date.ToString("MMMM", new CultureInfo("en-US")) }).ToList();
+
+            return Json(groupedMatches);
         }
 
         // GET: Matches/Details/5
