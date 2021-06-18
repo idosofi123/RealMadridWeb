@@ -33,6 +33,17 @@ namespace RealMadridWebApp.Controllers
             return View(matches);
         }
 
+        public async Task<IActionResult> Search(int? teamId, DateTime? beforeDate, DateTime? afterDate, bool? isAway) {
+            afterDate = afterDate ?? DateTime.MinValue;
+            beforeDate = beforeDate ?? DateTime.MaxValue;
+            return Json(await _context.Match.Where(m =>
+                            (teamId == null || m.TeamId == teamId)
+                         && m.Date >= afterDate
+                         && m.Date <= beforeDate
+                         && (isAway == null || m.isAwayMatch == isAway)
+                   ).ToListAsync());
+        }
+
         // GET: Matches/Details/5
         public async Task<IActionResult> Details(int? id) {
 

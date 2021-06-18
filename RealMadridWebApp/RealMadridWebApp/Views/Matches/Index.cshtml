@@ -12,52 +12,67 @@
     <a asp-action="Create">Create New</a>
 </p>
 
-@foreach (var group in ViewBag.GroupedMatches) {
-    <h3 class="monthRow">@group.Key.Year - @group.Key.Month</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Team)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.isAwayMatch)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Date)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HomeGoals)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AwayGoals)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Match item in group) {
+<div class="searchCriteria">
+    <div id="buttonArea">
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#searchArea" aria-expanded="false" aria-controls="collapseExample">
+            Search Criteria
+        </button>
+    </div>
+    <div class="collapse" id="searchArea">
+        <div class="card card-body">
+            <button class="btn btn-success">Search</button>
+        </div>
+    </div>
+</div>
+
+<div id="resultArea">
+    @foreach (var group in ViewBag.GroupedMatches) {
+        <h3 class="monthRow">@group.Key.Year - @group.Key.Month</h3>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Team.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.isAwayMatch)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HomeGoals)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AwayGoals)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details and Ticket Purchasing</a>
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Team)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.isAwayMatch)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.HomeGoals)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AwayGoals)
+                    </th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (Match item in group) {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Team.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.isAwayMatch)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.HomeGoals)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AwayGoals)
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details and Ticket Purchasing</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
