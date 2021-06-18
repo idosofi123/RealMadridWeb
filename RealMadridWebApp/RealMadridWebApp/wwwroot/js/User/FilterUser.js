@@ -6,9 +6,18 @@
 
         var userName = $('#userName').val();
 
+        var fromDate = $('#fromDate').val();
+        var toDate = $('#toDate').val();
+
             $.ajax({
                 url: '/Users/FilterUsers',
-                data: { 'role': role, 'stringRole': role, 'userName': userName }
+                data: {
+                    'role': role,
+                    'stringRole': role,
+                    'userName': userName,
+                    'fromDate': fromDate,
+                    'toDate': toDate
+                }
             }).done(function (data) {
                 setUsersData(data);
             })

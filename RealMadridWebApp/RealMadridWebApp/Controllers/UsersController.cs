@@ -146,9 +146,12 @@ namespace RealMadridWebApp.Controllers
 
         // GET: Users
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> FilterUsers(UserType role, string stringRole, string userName)
+        public async Task<IActionResult> FilterUsers(UserType role, string stringRole, string userName, DateTime fromDate, DateTime toDate)
         {
-            var users = await _context.User.ToListAsync();
+            fromDate = (fromDate == default(DateTime) ? DateTime.MinValue : fromDate);
+            toDate = (toDate == default(DateTime) ? DateTime.MaxValue : toDate);
+
+            var users = await _context.User.Where(u => u.CreationDate >= fromDate && u.CreationDate <= toDate).ToListAsync();
 
             if(stringRole != "No Filter")
             {

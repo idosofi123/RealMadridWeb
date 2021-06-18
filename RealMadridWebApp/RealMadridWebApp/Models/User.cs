@@ -52,7 +52,7 @@ namespace RealMadridWebApp.Models
         public string EmailAddress { get; set; }
 
         [Display(Name = "Creation Date")]
-        [DataType(DataType.Date)]
+        //[DataType(DataType.Date)]
         public DateTime CreationDate { get; set; }
 
         [Required]
