@@ -30,8 +30,10 @@ namespace RealMadridWebApp.Controllers
             ViewData["GroupedMatches"] = matches.OrderByDescending(m => m.Date)
                                                 .GroupBy(m => new MonthGroup{ Year = m.Date.Year, Month = m.Date.ToString("MMMM", new CultureInfo("en-US")) }).ToList();
 
-            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name");
+            ViewData["TeamId"] = new SelectList(_context.Team.Where(t => !t.IsHome), "Id", "Name");
             ViewData["CompetitionId"] = new SelectList(_context.Competition, "Id", "Name");
+
+            ViewData["HomeTeam"] = await _context.Team.Where(t => t.IsHome).FirstOrDefaultAsync();
 
             return View(matches);
         }
@@ -41,7 +43,8 @@ namespace RealMadridWebApp.Controllers
             fromDate ??= DateTime.MinValue;
             toDate ??= DateTime.MaxValue;
 
-            var matches = await _context.Match.Where(m => (teamId == null        || m.TeamId == teamId)
+            var matches = await _context.Match.Include(m => m.Team).Include(m => m.Competition)
+                                              .Where(m => (teamId == null        || m.TeamId == teamId)
                                                        && (competitionId == null || m.CompetitionId == competitionId)
                                                        && m.Date >= fromDate
                                                        && m.Date <= toDate).ToListAsync();
@@ -111,7 +114,7 @@ namespace RealMadridWebApp.Controllers
                 }
             }
 
-            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name", match.TeamId);
+            ViewData["TeamId"] = new SelectList(_context.Team.Where(t => !t.IsHome), "Id", "Name", match.TeamId);
             ViewData["CompetitionId"] = new SelectList(_context.Competition, "Id", "Name", match.CompetitionId);
             return View(match);
         }
@@ -129,7 +132,7 @@ namespace RealMadridWebApp.Controllers
                 return NotFound();
             }
 
-            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name", match.TeamId);
+            ViewData["TeamId"] = new SelectList(_context.Team.Where(t => !t.IsHome), "Id", "Name", match.TeamId);
             ViewData["CompetitionId"] = new SelectList(_context.Competition, "Id", "Name", match.CompetitionId);
             return View(match);
         }
@@ -164,7 +167,7 @@ namespace RealMadridWebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["TeamId"] = new SelectList(_context.Team, "Id", "Name", match.TeamId);
+            ViewData["TeamId"] = new SelectList(_context.Team.Where(t => !t.IsHome), "Id", "Name", match.TeamId);
             ViewData["CompetitionId"] = new SelectList(_context.Competition, "Id", "Name", match.CompetitionId);
             return View(match);
         }

@@ -1,4 +1,38 @@
-﻿.searchCriteria {
+﻿.container {
+    padding: 0px;
+}
+
+.row {
+    margin-bottom: 20px;
+}
+
+.competitionCol {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.scoreCol {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.teamCol {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttonCol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchCriteria {
     padding-bottom: 20px;
 }
 
@@ -13,4 +47,12 @@
     color: white;
     background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 30%, rgba(0,212,255,1) 60%, rgba(0,212,255,0) 100%);
     border-radius: 5px;
+}
+
+.competitionImg {
+    height: 50px;
+}
+
+.teamImg {
+    height: 65px;
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace RealMadridWebApp.Models {
 
@@ -21,6 +22,7 @@ namespace RealMadridWebApp.Models {
 
         public Stadium Stadium { get; set; }
 
+        [JsonIgnore]
         public List<Match> Matches { get; set; }
 
         [Display(Name = "Image Path")]

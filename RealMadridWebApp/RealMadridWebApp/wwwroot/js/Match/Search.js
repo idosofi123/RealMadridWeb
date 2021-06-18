@@ -1,34 +1,81 @@
-﻿$(function () {
+﻿const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+];
+
+const YEAR_OFFSET = 1900;
+
+const DEFAULT_SCORE = "TBD";
+
+$(function () {
+
     $('#searchForm').submit(function (e) {
+
         e.preventDefault();
 
-        var query = $('#query').val();
-
-        //$('tbody').load('/Articles/Search?query=' + query);
+        let teamId = $('#teamId').val();
+        let competitionId = $('#competitionId').val();
+        let fromDate = $('#fromDate').val();
+        let toDate = $('#toDate').val();
 
         $.ajax({
-            // method : 'post',
-            url: '/Articles/Search',
-            data: { 'query': query }
-        }).done(function (data) {
+            url: '/Matches/Search',
+            data: {
+                'teamId': teamId,
+                'competitionId': competitionId,
+                'fromDate': fromDate,
+                'toDate': toDate
+            }
+        }).done(function (result) {
 
-            $('tbody').html('');
+            $('#resultArea').html('');
 
-            var template = $('#hidden-template').html();
+            let groupTemplate = $('#matchGroupTemplate').html();
+            let rowTemplate = $('#matchRowTemplate').html();
 
-            $.each(data, function (i, val) {
+            $.each(result, function (groupIndex, group) {
 
-                var temp = template;
+                let thisGroupTemplate = groupTemplate.replaceAll('{groupTitle}', getMonthTitleOfGroup(group));
 
-                $.each(val, function (key, value) {
-                    temp = temp.replaceAll('{' + key + '}', value);
+                let groupBody = '';
+
+                $.each(group, function (matchIndex, match) {
+                    let rowTemp = rowTemplate;
+
+                    if (match.isAway) {
+                        let temp = match.homeGoals;
+                        match.homeGoals = match.awayGoals;
+                        match.awayGoals = temp;
+                    }
+
+                    match.homeGoals ??= DEFAULT_SCORE;
+                    match.awayGoals ??= DEFAULT_SCORE;
+                    match.date = new Date(match.date).toLocaleString();
+
+                    console.log(match.id);
+
+                    // Replace all direct properties
+                    $.each(match, function (key, value) {
+                        rowTemp = rowTemp.replaceAll('{' + key + '}', value);
+                    });
+
+                    // Replace nested properties
+                    rowTemp = rowTemp.replaceAll('{team.name}', match.team.name);
+                    rowTemp = rowTemp.replaceAll('{team.imagePath}', match.team.imagePath);
+                    rowTemp = rowTemp.replaceAll('{competition.imagePath}', match.competition.imagePath);
+
+                    groupBody += rowTemp;
                 });
 
-                $('tbody').append(temp);
+                thisGroupTemplate = thisGroupTemplate.replaceAll('{groupBody}', groupBody);
+
+                $('#resultArea').append(thisGroupTemplate);
             });
         });
     });
 });
 
 
-
+function getMonthTitleOfGroup(group) {
+    let dateObj = new Date(group[0].date);
+    return `${dateObj.getYear() + YEAR_OFFSET} - ${MONTH_NAMES[dateObj.getMonth()]}`;
+}

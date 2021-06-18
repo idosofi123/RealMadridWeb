@@ -25,19 +25,19 @@
                     <form asp-action="Search" id="searchForm">
                         <div class="form-group">
                             <label class="control-label">@Html.DisplayNameFor(model => model.Team)</label>
-                            <select class="form-control" asp-items="ViewBag.TeamId"></select>
+                            <select id="teamId" class="form-control" asp-items="ViewBag.TeamId"></select>
                         </div>
                         <div class="form-group">
                             <label class="control-label">@Html.DisplayNameFor(model => model.Competition)</label>
-                            <select class="form-control" asp-items="ViewBag.CompetitionId"></select>
+                            <select id="competitionId" class="form-control" asp-items="ViewBag.CompetitionId"></select>
                         </div>
                         <div class="form-group">
                             <label class="control-label">From Date</label>
-                            <input type="datetime-local" class="form-control" />
+                            <input id="fromDate" type="datetime-local" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label class="control-label">To Date</label>
-                            <input type="datetime-local" class="form-control" />
+                            <input id="toDate" type="datetime-local" class="form-control" />
                         </div>
                         <div class="form-group">
                             <button class="btn btn-success" type="submit">Search</button>
@@ -50,57 +50,87 @@
 </div>
 
 <div id="resultArea">
+
     @foreach (var group in ViewBag.GroupedMatches) {
+
         <h3 class="monthRow">@group.Key.Year - @group.Key.Month</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Team)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.isAwayMatch)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Date)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.HomeGoals)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.AwayGoals)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (Match item in group) {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Team.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.isAwayMatch)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Date)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.HomeGoals)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.AwayGoals)
-                        </td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details and Ticket Purchasing</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <div class="container">
+
+            @foreach (Match item in group) {
+
+                <div class="row">
+                    <div class="col-sm-2 competitionCol">
+                        <img class="competitionImg" src="@item.Competition.ImagePath" />
+                        <h6>@Html.DisplayFor(modelItem => item.Date)</h6>
+                    </div>
+                    <div class="col-sm-2 teamCol">
+                        <h5>@ViewBag.HomeTeam.Name</h5>
+                    </div>
+                    <div class="col-sm-1 teamCol">
+                        <img class="teamImg" src="@ViewBag.HomeTeam.ImagePath" />
+                    </div>
+                    <div class="col-sm-2 scoreCol">
+                        @if (item.isAwayMatch) {
+                            <h4>@Html.DisplayFor(modelItem => item.AwayGoals) - @Html.DisplayFor(modelItem => item.HomeGoals)</h4>
+                        } else {
+                            <h4>@Html.DisplayFor(modelItem => item.HomeGoals) - @Html.DisplayFor(modelItem => item.AwayGoals)</h4>
+                        }
+                    </div>
+                    <div class="col-sm-1 teamCol">
+                        <img class="teamImg" src="@item.Team.ImagePath" />
+                    </div>
+                    <div class="col-sm-2 teamCol">
+                        <h5>@item.Team.Name</h5>
+                    </div>
+                    <div class="col-sm-2 buttonCol">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                    </div>
+                </div>
+
+             }
+
+        </div>
     }
 </div>
 
 @section Scripts {
     <script src="~/js/Match/Search.js"></script>
+
+    <script type="text/html" id="matchGroupTemplate">
+
+        <h3 class="monthRow">{groupTitle}</h3>
+        <div class="container">
+            {groupBody}
+        </div>
+
+    </script>
+
+    <script type="text/html" id="matchRowTemplate">
+
+        <div class="row">
+            <div class="col-sm-2 competitionCol">
+                <img class="competitionImg" src="{competition.imagePath}" />
+                <h6>{date}</h6>
+            </div>
+            <div class="col-sm-2 teamCol">
+                <h5>@ViewBag.HomeTeam.Name</h5>
+            </div>
+            <div class="col-sm-1 teamCol">
+                <img class="teamImg" src="@ViewBag.HomeTeam.ImagePath" />
+            </div>
+            <div class="col-sm-2 scoreCol">
+                <h4>{homeGoals} - {awayGoals}</h4>
+            </div>
+            <div class="col-sm-1 teamCol">
+                <img class="teamImg" src="{team.imagePath}" />
+            </div>
+            <div class="col-sm-2 teamCol">
+                <h5>{team.name}</h5>
+            </div>
+            <div class="col-sm-2 buttonCol">
+                <a href="/Matches/Details/{id}" class="btn btn-primary">Details</a>
+            </div>
+        </div>
+
+    </script>
 }
