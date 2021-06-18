@@ -10,6 +10,7 @@
         <select name="role" id="role" class="form-control" asp-items="@Html.GetEnumSelectList<UserType>()">
             <option>No Filter</option>
         </select>
+        <input name="userName" id="userName" class="form-control" placeholder="Enter username..."/>
         <input type="submit" class="btn btn-primary" />
     </form>
 
@@ -85,33 +86,36 @@
         <script src="~/js/User/FilterUser.js"></script>
 
         <script type="text/html" id="user-row-template">
-        <tr>
-            <td>
-                {username}
-            </td>
-            <td>
-                {firstName}
-            </td>
-            <td>
-                {lastName}
-            </td>
-            <td>
-                {birthDate}
-            </td>
-            <td>
-                {phoneNumber}
-            </td>
-            <td>
-                {emailAddress}
-            </td>
-            <td>
-                {type}
-            </td>
-            <td>
-                <a href="/Users/Edit/{id}">Edit</a> |
-                <a href="/Users/Delete/{id}">Delete</a>
-                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
-            </td>
-        </tr>
+                <tr>
+                    <td>
+                        {username}
+                    </td>
+                    <td>
+                        {firstName}
+                    </td>
+                    <td>
+                        {lastName}
+                    </td>
+                    <td>
+                        {birthDate}
+                    </td>
+                    <td>
+                        {phoneNumber}
+                    </td>
+                    <td>
+                        {creationDate}
+                    </td>
+                    <td>
+                        {emailAddress}
+                    </td>
+                    <td>
+                        {type}
+                    </td>
+                    <td>
+                        <a href="/Users/Edit/{id}">Edit</a> |
+                        <a href="/Users/Delete/{id}">Delete</a>
+                        @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                    </td>
+                </tr>
         </script>
     }

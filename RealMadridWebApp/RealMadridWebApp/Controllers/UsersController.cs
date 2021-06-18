@@ -146,10 +146,29 @@ namespace RealMadridWebApp.Controllers
 
         // GET: Users
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> FilterUser(UserType role)
+        public async Task<IActionResult> FilterUsers(UserType role, string stringRole, string userName)
         {
-            return Json(await _context.User.Where(u => u.Type == role).ToListAsync());
+            var users = await _context.User.ToListAsync();
+
+            if(stringRole != "No Filter")
+            {
+                users = users.Where(u => u.Type == role).ToList();
+            }
+            if (userName != null)
+            {
+                users = users.Where(u => u.Username.Contains(userName)).ToList();
+            }
+
+            return Json(users);
         }
+
+        [Authorize]
+        public async Task<IActionResult> GetRolesValue()
+        {
+            string[] roles = new string[] { UserType.Client.ToString(), UserType.Manager.ToString(), UserType.Admin.ToString() } ;
+            return Json(roles);
+        }
+
 
         // GET: Users/Details/5
         [Authorize]
