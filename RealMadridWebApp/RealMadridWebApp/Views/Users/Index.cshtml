@@ -2,51 +2,82 @@
 
 @{
     ViewData["Title"] = "Index";
- }
+}
 
-    <h1>Index</h1>
+<h1>Index</h1>
 
-    <form asp-action="FilterUser">
-        <select name="role" id="role" class="form-control" asp-items="@Html.GetEnumSelectList<UserType>()">
-            <option>No Filter</option>
-        </select>
-        <input name="userName" id="userName" class="form-control" placeholder="Enter username..."/>
-        <input type="submit" class="btn btn-primary" />
-    </form>
+<div class="searchCriteria">
+    <div id="buttonArea">
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#searchArea" aria-expanded="false" aria-controls="collapseExample">
+            Search Criteria
+        </button>
+    </div>
+    <div class="collapse" id="searchArea">
+        <div class="card card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <form asp-action="Search" id="searchForm">
+                        <div class="form-group">
+                            <label class="control-label">@Html.DisplayNameFor(model => model.Type)</label>
+                            <select name="role" id="role" class="form-control" asp-items="@Html.GetEnumSelectList<UserType>()">
+                                <option>No Filter</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">@Html.DisplayNameFor(model => model.Username)</label>
+                            <input name="userName" id="userName" class="form-control" placeholder="Enter username..." />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">From Date</label>
+                            <input name="fromDate" id="fromDate" type="date" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">To Date</label>
+                            <input name="toDate" id="toDate" type="date" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success" type="submit">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Username)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.BirthDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PhoneNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CreationDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EmailAddress)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Type)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BirthDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Username)
@@ -78,44 +109,44 @@
                     @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
                 </td>
             </tr>
-            }
-        </tbody>
-    </table>
+        }   
+    </tbody>
+</table>
 
-    @section Scripts {
-        <script src="~/js/User/FilterUser.js"></script>
+@section Scripts {
+    <script src="~/js/User/FilterUser.js"></script>
 
-        <script type="text/html" id="user-row-template">
-                <tr>
-                    <td>
-                        {username}
-                    </td>
-                    <td>
-                        {firstName}
-                    </td>
-                    <td>
-                        {lastName}
-                    </td>
-                    <td>
-                        {birthDate}
-                    </td>
-                    <td>
-                        {phoneNumber}
-                    </td>
-                    <td>
-                        {creationDate}
-                    </td>
-                    <td>
-                        {emailAddress}
-                    </td>
-                    <td>
-                        {type}
-                    </td>
-                    <td>
-                        <a href="/Users/Edit/{id}">Edit</a> |
-                        <a href="/Users/Delete/{id}">Delete</a>
-                        @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
-                    </td>
-                </tr>
-        </script>
-    }
+    <script type="text/html" id="user-row-template">
+        <tr>
+            <td>
+                {username}
+            </td>
+            <td>
+                {firstName}
+            </td>
+            <td>
+                {lastName}
+            </td>
+            <td>
+                {birthDate}
+            </td>
+            <td>
+                {phoneNumber}
+            </td>
+            <td>
+                {creationDate}
+            </td>
+            <td>
+                {emailAddress}
+            </td>
+            <td>
+                {type}
+            </td>
+            <td>
+                <a href="/Users/Edit/{id}">Edit</a> |
+                <a href="/Users/Delete/{id}">Delete</a>
+                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+            </td>
+        </tr>
+    </script>
+}
