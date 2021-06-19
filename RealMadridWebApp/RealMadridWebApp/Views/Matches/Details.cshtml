@@ -79,12 +79,21 @@
     <div class='col-sm-12 col-md-6 col-lg-4'>
         <div class="card detailsCard">
             <h5 class="card-header">Previous Matches</h5>
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+            <div class="card-body cardCentered">
+                <h5 class="card-title">Win/Lose Ratio</h5>
+                @if (ViewBag.MatchesWon > 0 || ViewBag.MatchesLost > 0 || ViewBag.MatchesDrew > 0) {
+                    <div id="winLoseChart" won=@ViewBag.MatchesWon lost=@ViewBag.MatchesLost drew=@ViewBag.MatchesDrew></div>
+                } else {
+                    <h4>N/A</h4>
+                }
+                <p><span class="winText">Won: @ViewBag.MatchesWon</span> / <span class="loseText">Lost: @ViewBag.MatchesLost</span> / <span class="drawText">Drew: @ViewBag.MatchesDrew</span></p>
             </div>
         </div>
     </div>
 
 </div>
+
+@section Scripts {
+    <script src="~/lib/d3/d3.js"></script>
+    <script src="~/js/Match/Details.js"></script>
+}

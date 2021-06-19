@@ -86,6 +86,17 @@ namespace RealMadridWebApp.Controllers
 
             ViewData["HasAlreadyPurchased"] = match.Users.Contains(loggedInUser);
 
+            // Collect match history statistics -
+            ViewData["MatchesWon"] = await _context.Match.Where(m => m.TeamId == match.TeamId
+                                                                  && ((m.isAwayMatch && m.AwayGoals > m.HomeGoals) || (!m.isAwayMatch && m.HomeGoals > m.AwayGoals))).CountAsync();
+
+            ViewData["MatchesLost"] = await _context.Match.Where(m => m.TeamId == match.TeamId
+                                                                  && ((m.isAwayMatch && m.AwayGoals < m.HomeGoals) || (!m.isAwayMatch && m.HomeGoals < m.AwayGoals))).CountAsync();
+
+            ViewData["MatchesDrew"] = await _context.Match.Where(m => m.TeamId == match.TeamId
+                                                                   && m.Date < DateTime.Now
+                                                                   && m.HomeGoals == m.AwayGoals).CountAsync();
+
             return View(match);
         }
 

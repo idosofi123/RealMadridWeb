@@ -28,3 +28,23 @@
 .stadiumImage {
     margin-bottom: 20px;
 }
+
+.cardCentered {
+    text-align: center;
+}
+
+#winLoseChart {
+    margin-bottom: 10px;
+}
+
+.winText {
+    color: #009933;
+}
+
+.loseText {
+    color: #990000;
+}
+
+.drawText {
+    color: #669999;
+}
