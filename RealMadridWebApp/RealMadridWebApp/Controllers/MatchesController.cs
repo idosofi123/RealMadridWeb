@@ -68,6 +68,8 @@ namespace RealMadridWebApp.Controllers
                 return NotFound();
             }
 
+            ViewData["HomeTeam"] = await _context.Team.Where(t => t.IsHome).FirstOrDefaultAsync();
+
             return View(match);
         }
 
@@ -210,34 +212,38 @@ namespace RealMadridWebApp.Controllers
 
                 var loggedInUser = await _context.User.Where(u => u.Username == HttpContext.User.Identity.Name).FirstOrDefaultAsync();
 
-                // First, validate that the user have not already purchased a ticket.
+                // First, validate that the user have not already purchased a ticket, and the match has not occured yet.
                 if (match.Users.Contains(loggedInUser)) {
 
                     TempData["Error"] = "You have already purchased a ticket for this match.";
 
+                } else if (match.Date < DateTime.Now) {
+
+                    TempData["Error"] = "Match has already occured.";
+
                 } else {
 
-                    // Validate that there are tickets available - in accordance to the amount of tickets purchased so far,
-                    // and the amount of seats in the intended stadium.
-                    Team homeTeam;
+                // Validate that there are tickets available - in accordance to the amount of tickets purchased so far,
+                // and the amount of seats in the intended stadium.
+                Team homeTeam;
 
-                    if (match.isAwayMatch) {
-                        homeTeam = match.Team;
-                    } else {
-                        homeTeam = await _context.Team.Include(t => t.Stadium).Where(t => t.IsHome).FirstOrDefaultAsync();
-                    }
-
-                    int availableSeats = homeTeam.Stadium.Capacity - match.Users.Count();
-
-                    // If there is a ticket available, add the logged in user to the match.
-                    if (availableSeats > 0) {
-                        match.Users.Add(loggedInUser);
-                        await _context.SaveChangesAsync();
-                        TempData["Success"] = "Ticket purchased successfully";
-                    } else {
-                        TempData["Error"] = "No tickets available.";
-                    }
+                if (match.isAwayMatch) {
+                    homeTeam = match.Team;
+                } else {
+                    homeTeam = await _context.Team.Include(t => t.Stadium).Where(t => t.IsHome).FirstOrDefaultAsync();
                 }
+
+                int availableSeats = homeTeam.Stadium.Capacity - match.Users.Count();
+
+                // If there is a ticket available, add the logged in user to the match.
+                if (availableSeats > 0) {
+                    match.Users.Add(loggedInUser);
+                    await _context.SaveChangesAsync();
+                    TempData["Success"] = "Ticket purchased successfully";
+                } else {
+                    TempData["Error"] = "No tickets available.";
+                }
+            }
             }
 
             return RedirectToAction(nameof(Details), new { Id = id });

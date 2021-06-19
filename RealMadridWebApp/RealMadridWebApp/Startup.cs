@@ -62,7 +62,7 @@ namespace RealMadridWebApp {
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Matches}/{action=Index}/{id?}");
             });
         }
     }

@@ -1,0 +1,18 @@
+﻿.matchCol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.competitionCol {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.teamImg {
+    height: 100px;
+}
+
+.matchCard {
+    padding: 20px;
+}

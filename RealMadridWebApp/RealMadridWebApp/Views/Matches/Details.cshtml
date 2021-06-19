@@ -1,4 +1,6 @@
-﻿@model RealMadridWebApp.Models.Match
+﻿<link rel="stylesheet" href="~/css/Match/Details.css" />
+
+@model RealMadridWebApp.Models.Match
 
 @{
     ViewData["Title"] = "Details";
@@ -6,48 +8,42 @@
 
 <h1>Match Details</h1>
 
-<div>
-    <h4>Match</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Team)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Team.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Competition)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Competition.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.isAwayMatch)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.isAwayMatch)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HomeGoals)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HomeGoals)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.AwayGoals)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.AwayGoals)
-        </dd>
-    </dl>
+<hr />
+
+<div class="card cardBody matchCard">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <h5>@Html.DisplayFor(model => model.Date)</h5>
+            </div>
+            <div class="col-sm-6 competitionCol">
+                <h5>@Html.DisplayFor(model => model.Competition.Name)</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 matchCol">
+                <h4>@ViewBag.HomeTeam.Name</h4>
+            </div>
+            <div class="col-sm-2 matchCol">
+                <img class="teamImg" src="@ViewBag.HomeTeam.ImagePath" />
+            </div>
+            <div class="col-sm-2 matchCol">
+                @if (Model.isAwayMatch) {
+                    <h4>@Html.DisplayFor(model => model.AwayGoals) - @Html.DisplayFor(model => model.HomeGoals)</h4>
+                } else {
+                    <h4>@Html.DisplayFor(model => model.HomeGoals) - @Html.DisplayFor(model => model.AwayGoals)</h4>
+                }
+            </div>
+            <div class="col-sm-2 matchCol">
+                <img class="teamImg" src="@Model.Team.ImagePath" />
+            </div>
+            <div class="col-sm-3 matchCol">
+                <h4>@Model.Team.Name</h4>
+            </div>
+        </div>
+    </div>
 </div>
+
 <div>
     <form asp-action="PurchaseTicket" asp-route-id="@Model.Id">
         <button type="submit" class="btn btn-success">Purchase a Ticket</button>
