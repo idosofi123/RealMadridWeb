@@ -52,6 +52,7 @@
             <h5 class="card-header">Tickets</h5>
             <div class="card-body">
                 <h5 class="card-title">@ViewBag.TicketsLeft tickets left.</h5>
+                <h6>Price: @Html.DisplayFor(model => model.Competition.TicketPrice)</h6>
                 @if (Model.Date < DateTime.Now) {
                     <p class="card-text">Match has already occured.</p>
                 } else if (ViewBag.HasAlreadyPurchased) {
