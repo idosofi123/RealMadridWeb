@@ -16,3 +16,15 @@
 .matchCard {
     padding: 20px;
 }
+
+#detailsCardsArea {
+    margin-top: 30px;
+}
+
+.detailsCard {
+    margin-bottom: 30px;
+}
+
+.stadiumImage {
+    margin-bottom: 20px;
+}

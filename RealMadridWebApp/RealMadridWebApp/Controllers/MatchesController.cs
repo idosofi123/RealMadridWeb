@@ -62,13 +62,29 @@ namespace RealMadridWebApp.Controllers
                 return NotFound();
             }
 
-            var match = await _context.Match.Include(m => m.Team).Include(m => m.Competition).FirstOrDefaultAsync(m => m.Id == id);
+            var match = await _context.Match.Include(m => m.Users)
+                                            .Include(m => m.Competition)
+                                            .Include(m => m.Team).ThenInclude(t => t.Stadium)
+                                            .FirstOrDefaultAsync(m => m.Id == id);
 
             if (match == null) {
                 return NotFound();
             }
 
-            ViewData["HomeTeam"] = await _context.Team.Where(t => t.IsHome).FirstOrDefaultAsync();
+            var homeTeam = await _context.Team.Include(t => t.Stadium).Where(t => t.IsHome).FirstOrDefaultAsync();
+
+            // Derive the stadium that match will occur at.
+            var stadium = (match.isAwayMatch) ? match.Team.Stadium : homeTeam.Stadium;
+
+            ViewData["HomeTeam"] = homeTeam;
+            ViewData["Stadium"] = stadium;
+
+            // Calculate the amount of tickets left.
+            ViewData["TicketsLeft"] = stadium.Capacity - match.Users.Count;
+
+            var loggedInUser = await _context.User.Where(u => u.Username == HttpContext.User.Identity.Name).FirstOrDefaultAsync();
+
+            ViewData["HasAlreadyPurchased"] = match.Users.Contains(loggedInUser);
 
             return View(match);
         }
