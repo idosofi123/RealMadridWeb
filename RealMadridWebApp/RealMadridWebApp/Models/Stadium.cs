@@ -26,6 +26,8 @@ namespace RealMadridWebApp.Models {
         [Range(-180, 180, ErrorMessage = "Please enter a value between 180 and -180.")]
         public double Longitude { get; set; }
 
+        public Team Team { get; set; }
+
         [Display(Name = "Image Path")]
         public string ImagePath { get; set; }
     }

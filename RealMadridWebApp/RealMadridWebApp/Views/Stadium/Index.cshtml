@@ -9,24 +9,35 @@
 <h1>Stadiums</h1>
 
 <p>
+    Take a peek at the different stadiums our team's matches take place.
+    <br />
     <a asp-action="Create">Create New</a>
 </p>
 
 <div class="container">
     <div class="row">
         @foreach (var item in Model) {
-        <div class="col-4 col-lg-3 cardCol">
-            <div class="card h-100">
-                <img class="card-img-top" src="@item.ImagePath" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                </div>
-                <div class="card-body">
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">See more...</a>
+
+            <div class="col-4 col-lg-3 cardCol">
+                <div class="card h-100">
+
+                    <img class="card-img-top" src="@item.ImagePath" alt="Card image cap">
+
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
+                        @if (item.Team != null) {
+                            <h6 class="card-text">Home Team: </h6>
+                            <p><img class="teamImage" src="@item.Team.ImagePath" />@item.Team.Name</p>
+                        }
+                    </div>
+
+                    <div class="card-body">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">See more...</a>
+                    </div>
+
                 </div>
             </div>
-        </div>
+
         }
     </div>
 </div>
