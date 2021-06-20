@@ -12,11 +12,8 @@ namespace RealMadridWebApp.Models
 {
     public enum UserType
     {
-        [EnumMember(Value="Client")]
         Client,
-        [EnumMember(Value = "Manager")]
         Manager,
-        [EnumMember(Value = "Admin")]
         Admin
     }
 
@@ -59,7 +56,6 @@ namespace RealMadridWebApp.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
         public UserType Type { get; set; } = UserType.Client;
     }
 }
