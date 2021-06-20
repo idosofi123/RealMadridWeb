@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealMadridWebApp.Data;
 
 namespace RealMadridWebApp.Migrations
 {
     [DbContext(typeof(RealMadridWebAppContext))]
-    partial class RealMadridWebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20210617184127_CompetitionInitMatch")]
+    partial class CompetitionInitMatch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,8 +84,6 @@ namespace RealMadridWebApp.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CompetitionId");
 
                     b.HasIndex("TeamId");
 
@@ -160,9 +160,6 @@ namespace RealMadridWebApp.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -194,6 +191,7 @@ namespace RealMadridWebApp.Migrations
 
                     b.ToTable("User");
                 });
+
             modelBuilder.Entity("MatchUser", b =>
                 {
                     b.HasOne("RealMadridWebApp.Models.Match", null)
@@ -211,19 +209,11 @@ namespace RealMadridWebApp.Migrations
 
             modelBuilder.Entity("RealMadridWebApp.Models.Match", b =>
                 {
-                    b.HasOne("RealMadridWebApp.Models.Competition", "Competition")
-                        .WithMany()
-                        .HasForeignKey("CompetitionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RealMadridWebApp.Models.Team", "Team")
                         .WithMany("Matches")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Competition");
 
                     b.Navigation("Team");
                 });

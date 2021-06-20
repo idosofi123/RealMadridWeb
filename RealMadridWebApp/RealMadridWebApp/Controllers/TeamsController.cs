@@ -8,82 +8,86 @@ using Microsoft.EntityFrameworkCore;
 using RealMadridWebApp.Data;
 using RealMadridWebApp.Models;
 
-namespace RealMadridWebApp.Controllers {
-
-    public class StadiumController : Controller {
-
+namespace RealMadridWebApp.Controllers
+{
+    public class TeamsController : Controller
+    {
         private readonly RealMadridWebAppContext _context;
 
-        public StadiumController(RealMadridWebAppContext context) {
+        public TeamsController(RealMadridWebAppContext context) {
             _context = context;
         }
 
-        // GET: Stadium
+        // GET: Teams
         public async Task<IActionResult> Index() {
-            return View(await _context.Stadium.Include((s) => s.Team).ToListAsync());
+            var realMadridWebAppContext = _context.Team.Include(t => t.Stadium);
+            return View(await realMadridWebAppContext.ToListAsync());
         }
 
-        // GET: Stadium/Details/5
+        // GET: Teams/Details/5
         public async Task<IActionResult> Details(int? id) {
 
             if (id == null) {
                 return NotFound();
             }
 
-            var stadium = await _context.Stadium.FirstOrDefaultAsync(m => m.Id == id);
+            var team = await _context.Team.Include(t => t.Stadium).FirstOrDefaultAsync(m => m.Id == id);
 
-            if (stadium == null) {
+            if (team == null) {
                 return NotFound();
             }
 
-            return View(stadium);
+            return View(team);
         }
 
-        // GET: Stadium/Create
+        // GET: Teams/Create
         public IActionResult Create() {
+            ViewData["StadiumId"] = new SelectList(_context.Stadium, "Id", "Name");
             return View();
         }
 
-        // POST: Stadium/Create
+        // POST: Teams/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Capacity,Latitude,Longitude,ImagePath")] Stadium stadium) {
+        public async Task<IActionResult> Create([Bind("Id,Name,StadiumId,ImagePath")] Team team) {
 
             if (ModelState.IsValid) {
-                _context.Add(stadium);
+                _context.Add(team);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(stadium);
+            ViewData["StadiumId"] = new SelectList(_context.Stadium, "Id", "Name", team.StadiumId);
+            return View(team);
         }
 
-        // GET: Stadium/Edit/5
+        // GET: Teams/Edit/5
         public async Task<IActionResult> Edit(int? id) {
 
             if (id == null) {
                 return NotFound();
             }
 
-            var stadium = await _context.Stadium.FindAsync(id);
+            var team = await _context.Team.FindAsync(id);
 
-            if (stadium == null) {
+            if (team == null) {
                 return NotFound();
             }
 
-            return View(stadium);
+            ViewData["StadiumId"] = new SelectList(_context.Stadium, "Id", "Name", team.StadiumId);
+            return View(team);
         }
 
-        // POST: Stadium/Edit/5
+        // POST: Teams/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Capacity,Latitude,Longitude,ImagePath")] Stadium stadium) {
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StadiumId,ImagePath")] Team team) {
 
-            if (id != stadium.Id) {
+            if (id != team.Id) {
                 return NotFound();
             }
 
@@ -91,12 +95,12 @@ namespace RealMadridWebApp.Controllers {
 
                 try {
 
-                    _context.Update(stadium);
+                    _context.Update(team);
                     await _context.SaveChangesAsync();
 
                 } catch (DbUpdateConcurrencyException) {
 
-                    if (!StadiumExists(stadium.Id)) {
+                    if (!TeamExists(team.Id)) {
                         return NotFound();
                     } else {
                         throw;
@@ -106,37 +110,39 @@ namespace RealMadridWebApp.Controllers {
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(stadium);
+            ViewData["StadiumId"] = new SelectList(_context.Stadium, "Id", "Name", team.StadiumId);
+            return View(team);
         }
 
-        // GET: Stadium/Delete/5
+        // GET: Teams/Delete/5
         public async Task<IActionResult> Delete(int? id) {
 
             if (id == null) {
                 return NotFound();
             }
 
-            var stadium = await _context.Stadium.FirstOrDefaultAsync(m => m.Id == id);
+            var team = await _context.Team.Include(t => t.Stadium).FirstOrDefaultAsync(m => m.Id == id);
 
-            if (stadium == null) {
+            if (team == null) {
                 return NotFound();
             }
 
-            return View(stadium);
+            return View(team);
         }
 
-        // POST: Stadium/Delete/5
+        // POST: Teams/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id) {
-            var stadium = await _context.Stadium.FindAsync(id);
-            _context.Stadium.Remove(stadium);
+
+            var team = await _context.Team.FindAsync(id);
+            _context.Team.Remove(team);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StadiumExists(int id) {
-            return _context.Stadium.Any(e => e.Id == id);
+        private bool TeamExists(int id) {
+            return _context.Team.Any(e => e.Id == id);
         }
     }
 }

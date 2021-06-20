@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealMadridWebApp.Data;
 
 namespace RealMadridWebApp.Migrations
 {
     [DbContext(typeof(RealMadridWebAppContext))]
-    partial class RealMadridWebAppContextModelSnapshot : ModelSnapshot
+    [Migration("20210612144053_TeamIsHomeIndex")]
+    partial class TeamIsHomeIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,28 +36,6 @@ namespace RealMadridWebApp.Migrations
                     b.ToTable("MatchUser");
                 });
 
-            modelBuilder.Entity("RealMadridWebApp.Models.Competition", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ImagePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("TicketPrice")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Competition");
-                });
-
             modelBuilder.Entity("RealMadridWebApp.Models.Match", b =>
                 {
                     b.Property<int>("Id")
@@ -64,9 +44,6 @@ namespace RealMadridWebApp.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("AwayGoals")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompetitionId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -82,8 +59,6 @@ namespace RealMadridWebApp.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CompetitionId");
 
                     b.HasIndex("TeamId");
 
@@ -160,9 +135,6 @@ namespace RealMadridWebApp.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -194,6 +166,7 @@ namespace RealMadridWebApp.Migrations
 
                     b.ToTable("User");
                 });
+
             modelBuilder.Entity("MatchUser", b =>
                 {
                     b.HasOne("RealMadridWebApp.Models.Match", null)
@@ -211,19 +184,11 @@ namespace RealMadridWebApp.Migrations
 
             modelBuilder.Entity("RealMadridWebApp.Models.Match", b =>
                 {
-                    b.HasOne("RealMadridWebApp.Models.Competition", "Competition")
-                        .WithMany()
-                        .HasForeignKey("CompetitionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RealMadridWebApp.Models.Team", "Team")
                         .WithMany("Matches")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Competition");
 
                     b.Navigation("Team");
                 });

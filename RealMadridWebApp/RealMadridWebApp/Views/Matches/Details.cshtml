@@ -1,0 +1,99 @@
+﻿<link rel="stylesheet" href="~/css/Match/Details.css" />
+
+@model RealMadridWebApp.Models.Match
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Match Details</h1>
+<a asp-action="Index">Back to List</a>
+
+<hr />
+
+<div class="card cardBody matchCard">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <h5>@Html.DisplayFor(model => model.Date)</h5>
+            </div>
+            <div class="col-sm-6 competitionCol">
+                <h5>@Html.DisplayFor(model => model.Competition.Name)</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 matchCol">
+                <h4>@ViewBag.HomeTeam.Name</h4>
+            </div>
+            <div class="col-sm-2 matchCol">
+                <img class="teamImg" src="@ViewBag.HomeTeam.ImagePath" />
+            </div>
+            <div class="col-sm-2 matchCol">
+                @if (Model.isAwayMatch) {
+                    <h4>@Html.DisplayFor(model => model.AwayGoals) - @Html.DisplayFor(model => model.HomeGoals)</h4>
+                } else {
+                    <h4>@Html.DisplayFor(model => model.HomeGoals) - @Html.DisplayFor(model => model.AwayGoals)</h4>
+                }
+            </div>
+            <div class="col-sm-2 matchCol">
+                <img class="teamImg" src="@Model.Team.ImagePath" />
+            </div>
+            <div class="col-sm-3 matchCol">
+                <h4>@Model.Team.Name</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="detailsCardsArea" class="row">
+
+    <div class='col-sm-12 col-md-6 col-lg-4'>
+        <div class="card detailsCard">
+            <h5 class="card-header">Tickets</h5>
+            <div class="card-body">
+                <h5 class="card-title">@ViewBag.TicketsLeft tickets left.</h5>
+                <h6>Price: @Html.DisplayFor(model => model.Competition.TicketPrice)</h6>
+                @if (Model.Date < DateTime.Now) {
+                    <p class="card-text">Match has already occured.</p>
+                } else if (ViewBag.HasAlreadyPurchased) {
+                    <p class="card-text">You have already purchased a ticket for this match.</p>
+                } else {
+                    <p class="card-text">Hurry up and get your ticket now!</p>
+                }
+                <form asp-action="PurchaseTicket" asp-route-id="@Model.Id">
+                    <button type="submit" class="btn btn-success" disabled="@(ViewBag.HasAlreadyPurchased || Model.Date < DateTime.Now)">Purchase a Ticket</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class='col-sm-12 col-md-6 col-lg-4'>
+        <div class="card detailsCard">
+            <h5 class="card-header">Stadium</h5>
+            <div class="card-body">
+                <h5 class="card-title">@ViewBag.Stadium.Name</h5>
+                <img class="card-img stadiumImage" src="@ViewBag.Stadium.ImagePath" />
+                <a asp-controller="Stadium" asp-action="Details" asp-route-id="@ViewBag.Stadium.Id" class="btn btn-primary">Details</a>
+            </div>
+        </div>
+    </div>
+    <div class='col-sm-12 col-md-6 col-lg-4'>
+        <div class="card detailsCard">
+            <h5 class="card-header">Previous Matches</h5>
+            <div class="card-body cardCentered">
+                <h5 class="card-title">Win/Lose Ratio</h5>
+                @if (ViewBag.MatchesWon > 0 || ViewBag.MatchesLost > 0 || ViewBag.MatchesDrew > 0) {
+                    <div id="winLoseChart" won=@ViewBag.MatchesWon lost=@ViewBag.MatchesLost drew=@ViewBag.MatchesDrew></div>
+                } else {
+                    <h4>N/A</h4>
+                }
+                <p><span class="winText">Won: @ViewBag.MatchesWon</span> / <span class="loseText">Lost: @ViewBag.MatchesLost</span> / <span class="drawText">Drew: @ViewBag.MatchesDrew</span></p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/lib/d3/d3.js"></script>
+    <script src="~/js/Match/Details.js"></script>
+}

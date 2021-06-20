@@ -61,5 +61,7 @@ namespace RealMadridWebApp.Models
 
         [JsonConverter(typeof(StringEnumConverter))]
         public UserType Type { get; set; } = UserType.Client;
+
+        public List<Match> Matches { get; set; }
     }
 }
