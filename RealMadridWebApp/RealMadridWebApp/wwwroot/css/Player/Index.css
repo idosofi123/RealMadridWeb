@@ -1,0 +1,31 @@
+﻿.shirtNumberBox {
+    left: 0;
+    position: absolute;
+    top: 0;
+    background-color: #001489bd;
+    color: white;
+    z-index: 1;
+    text-align: center;
+    font-size: 2rem;
+    width: 3rem;
+}
+
+.country-photo {
+    position: absolute;
+    width: 4rem;
+    height: 3rem;
+    right: 0;
+    top: 0;
+}
+
+.position-block {
+    border-top: 2px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    padding: -5px;
+    padding: 2vh;
+    margin-bottom: 3vh;
+}
+
+.player-card {
+    margin-bottom: 1vh;
+}
