@@ -1,14 +1,22 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
+//using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace RealMadridWebApp.Models
 {
     public enum UserType
     {
+        [EnumMember(Value="Client")]
         Client,
+        [EnumMember(Value = "Manager")]
+        Manager,
+        [EnumMember(Value = "Admin")]
         Admin
     }
 
@@ -20,28 +28,38 @@ namespace RealMadridWebApp.Models
         public string Username { get; set; }
 
         [Required]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         [Required]
+        [Display(Name = "Birth Date")]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
         [Required]
+        [Display(Name = "Phone Number")]
         [DataType(DataType.PhoneNumber)]
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
         public string PhoneNumber { get; set; }
 
         [Required]
+        [Display(Name = "Email Address")]
         [DataType(DataType.EmailAddress)]
         public string EmailAddress { get; set; }
+
+        [Display(Name = "Creation Date")]
+        //[DataType(DataType.Date)]
+        public DateTime CreationDate { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public UserType Type { get; set; } = UserType.Client;
     }
 }
