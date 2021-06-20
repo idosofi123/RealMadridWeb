@@ -160,6 +160,9 @@ namespace RealMadridWebApp.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -191,7 +194,6 @@ namespace RealMadridWebApp.Migrations
 
                     b.ToTable("User");
                 });
-
             modelBuilder.Entity("MatchUser", b =>
                 {
                     b.HasOne("RealMadridWebApp.Models.Match", null)

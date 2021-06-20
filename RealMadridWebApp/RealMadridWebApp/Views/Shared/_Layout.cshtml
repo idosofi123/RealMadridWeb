@@ -29,12 +29,23 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Details">My Profile</a>
+                            </li>
                         }
                         else
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
                             </li>
+                        }
+                        @{
+                            if (Context.User.IsInRole(UserType.Admin.ToString()))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>
