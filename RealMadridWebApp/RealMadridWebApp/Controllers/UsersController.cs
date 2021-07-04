@@ -115,17 +115,13 @@ namespace RealMadridWebApp.Controllers
             if (ModelState.IsValid)
             {
                 var q = _context.User.FirstOrDefault(u => u.Username == user.Username);
-
                 if (q == null)
                 {
                     user.CreationDate = DateTime.Now;
                     _context.Add(user);
                     await _context.SaveChangesAsync();
-
                     var u = _context.User.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
-
                     Signin(u);
-
                     return RedirectToAction(nameof(Index), "Home");
                 }
                 else
