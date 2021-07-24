@@ -1,5 +1,25 @@
 ﻿const INITIAL_ZOOM = 4;
 
+const MEDIUM_TEMP = 20;
+const HOT_TEMP = 30;
+
+// Decide appropriate temperature image on mount.
+$(function () {
+
+    const temperature = parseFloat($('#tempIcon').attr('temperature'));
+    let iconClass;
+
+    if (temperature >= HOT_TEMP) {
+        iconClass = "bi-sun-fill";
+    } else if (temperature >= MEDIUM_TEMP) {
+        iconClass = 'bi-cloud-sun-fill';
+    } else {
+        iconClass = 'bi-cloud-fill';
+    }
+
+    $('#tempIcon').addClass(iconClass);
+});
+
 // Initialize and add the map.
 function initMap() {
 

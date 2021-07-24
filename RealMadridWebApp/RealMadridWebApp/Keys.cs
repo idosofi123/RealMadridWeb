@@ -9,5 +9,8 @@ namespace RealMadridWebApp {
         public static readonly string TweeterToken        = "2570687706-4gJgcZSYok26o1yqNtuAHpzAqQk85E64ewz0rY6";
         public static readonly string TweeterSecretToken  = "QYZkQdsgucYwtKHF9jvPSeBTHucnYBpnOvaKPcJZfOEkr";
 
+        // Weather API Constants -
+        public static readonly string WeatherAPIKey = "oe5bOZxXnb2QPAgrGGkkrNLYFtp4pSCP";
+
     }
 }
