@@ -56,5 +56,7 @@ namespace RealMadridWebApp.Models
         public string Password { get; set; }
 
         public UserType Type { get; set; } = UserType.Client;
+
+        public List<Match> Matches { get; set; }
     }
 }

@@ -3,6 +3,21 @@
     height: 50vh;
 }
 
+#temperatureDisplay {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#tempTitle {
+    margin-bottom: 0px;
+}
+
+#tempIcon {
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
 .detailsContainer {
     padding-right: 0;
     padding-left: 0;

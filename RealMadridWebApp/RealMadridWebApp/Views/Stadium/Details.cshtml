@@ -1,5 +1,4 @@
-﻿<script src="~/js/Stadium/Details.js"></script>
-<link rel="stylesheet" href="~/css/Stadium/Details.css" />
+﻿<link rel="stylesheet" href="~/css/Stadium/Details.css" />
 
 @model RealMadridWebApp.Models.Stadium
 
@@ -29,10 +28,22 @@
                         <dd class="col-sm-9">
                             @Html.DisplayFor(model => model.Capacity)
                         </dd>
+                        <dt class="col-sm-12">
+                            Current Temperature
+                        </dt>
+                        <dd id="temperatureDisplay" class="col-sm-12">
+                            @if (@ViewBag.temperature != null) {
+                                <i id="tempIcon" temperature="@ViewBag.temperature" class="bi"></i>
+                                <h3 id="tempTitle">@ViewBag.temperature °C</h3>
+                            } else { 
+                                <h3>N/A</h3>
+                            }
+                        </dd>
+
                     </dl>
                     <div class="row">
                         <div class="col-12">
-                            <img class="stadiumImage" src="@Model.ImagePath"/>
+                            <img class="stadiumImage" src="@Model.ImagePath" />
                         </div>
                     </div>
                 </div>
@@ -49,5 +60,8 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-<!-- Bing Maps API script -->
-<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=initMap&key=AoCfRwsXujp9SsMt-PzqwDbn9_ZZ942gAPuKWvSvCfT_3KCMXuKb1LoWPIsxN7Wi' async defer></script>
+@section Scripts {
+    <!-- Bing Maps API script -->
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=initMap&key=AoCfRwsXujp9SsMt-PzqwDbn9_ZZ942gAPuKWvSvCfT_3KCMXuKb1LoWPIsxN7Wi' async defer></script>
+    <script src="~/js/Stadium/Details.js"></script>
+}
