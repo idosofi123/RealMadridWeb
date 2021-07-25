@@ -28,6 +28,18 @@
                         <dd class="col-sm-9">
                             @Html.DisplayFor(model => model.Capacity)
                         </dd>
+                        <dt class="col-sm-12">
+                            Current Temperature
+                        </dt>
+                        <dd id="temperatureDisplay" class="col-sm-12">
+                            @if (@ViewBag.temperature != null) {
+                                <i id="tempIcon" temperature="@ViewBag.temperature" class="bi"></i>
+                                <h3 id="tempTitle">@ViewBag.temperature °C</h3>
+                            } else { 
+                                <h3>N/A</h3>
+                            }
+                        </dd>
+
                     </dl>
                     <div class="row">
                         <div class="col-12">

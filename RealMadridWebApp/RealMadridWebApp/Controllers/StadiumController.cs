@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RealMadridWebApp.Data;
 using RealMadridWebApp.Models;
+using RealMadridWebApp.ExternalServices;
 
 namespace RealMadridWebApp.Controllers {
 
@@ -35,6 +36,13 @@ namespace RealMadridWebApp.Controllers {
             if (stadium == null) {
                 return NotFound();
             }
+
+            // Get the current temperature at the selected stadium's location.
+            try {
+
+                ViewData["temperature"] = await WeatherAPIService.GetCurrentTemperature(stadium.Latitude, stadium.Longitude);
+
+            } catch (Exception e) { }
 
             return View(stadium);
         }
