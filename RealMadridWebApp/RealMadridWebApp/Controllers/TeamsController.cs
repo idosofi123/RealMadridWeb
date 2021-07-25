@@ -30,13 +30,10 @@ namespace RealMadridWebApp.Controllers
             if (id == null) {
                 return NotFound();
             }
-
             var team = await _context.Team.Include(t => t.Stadium).FirstOrDefaultAsync(m => m.Id == id);
-
             if (team == null) {
                 return NotFound();
             }
-
             return View(team);
         }
 
@@ -71,7 +68,6 @@ namespace RealMadridWebApp.Controllers
             }
 
             var team = await _context.Team.FindAsync(id);
-
             if (team == null) {
                 return NotFound();
             }
@@ -109,7 +105,6 @@ namespace RealMadridWebApp.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-
             ViewData["StadiumId"] = new SelectList(_context.Stadium, "Id", "Name", team.StadiumId);
             return View(team);
         }

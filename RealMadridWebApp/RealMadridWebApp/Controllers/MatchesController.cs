@@ -34,7 +34,6 @@ namespace RealMadridWebApp.Controllers
             ViewData["CompetitionId"] = new SelectList(_context.Competition, "Id", "Name");
 
             ViewData["HomeTeam"] = await _context.Team.Where(t => t.IsHome).FirstOrDefaultAsync();
-
             return View(matches);
         }
 
@@ -61,7 +60,6 @@ namespace RealMadridWebApp.Controllers
             if (id == null) {
                 return NotFound();
             }
-
             var match = await _context.Match.Include(m => m.Users)
                                             .Include(m => m.Competition)
                                             .Include(m => m.Team).ThenInclude(t => t.Stadium)
@@ -154,9 +152,7 @@ namespace RealMadridWebApp.Controllers
             if (id == null) {
                 return NotFound();
             }
-
             var match = await _context.Match.FindAsync(id);
-
             if (match == null) {
                 return NotFound();
             }
