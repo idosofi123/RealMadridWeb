@@ -16,49 +16,77 @@
     <form asp-action="Search" method="get">
         <div class="form-group">
             <label class="control-label"> @Html.DisplayNameFor(model => model.PreferedFoot)</label>
-            <select name="prefferedFoot" class="form-control" asp-items="@Html.GetEnumSelectList<Foot>()">
+            <select name="prefferedFoot" id="prefferedFoot" class="form-control" asp-items="@Html.GetEnumSelectList<Foot>()">
             </select>
         </div>
         <div class="form-group">
             <label class="control-label"> @Html.DisplayNameFor(model => model.BirthCountry)</label>
-            <select name="country" multiple class="form-control" asp-items="ViewBag.countries">
+            <select name="country" id="country" multiple class="form-control" asp-items="ViewBag.countries">
             </select>
         </div>
         <label class="form-label" id="minAgeLabel">Min Age: </label>
-        <input name="minAge" type="range" class="form-range" min="1" max="100" step="1" id="minAgeRange">
+        <input name="minAge" id="minAge" type="range" class="form-range" min="1" max="100" step="1">
         <label class="form-label" id="maxAgeLabel">Max Age: </label>
-        <input name="maxAge" type="range" class="form-range" min="1" max="100" step="1" id="maxAgeRange">
+        <input name="maxAge" id="maxAge" type="range" class="form-range" min="1" max="100" step="1">
         <div class="form-group">
             <input type="submit" value="Search" class="btn btn-primary" />
         </div>
     </form>
 
-    @foreach (var group in ViewBag.GroupedPlayers)
-    {
-        <h2>@group.position.Key.PositionName : @group.count</h2>
-        <div class="row position-block">
-            @foreach (RealMadridWebApp.Models.Player player in group.position)
-            {
-                <div class="col-4 col-lg-3 cardCol player-card">
-                    <div class="card h-100">
-                        <img src="@player.ImagePath" alt="Card image cap">
-                        <img class="country-photo" src="@player.BirthCountry.ImagePath" alt="Card image cap">
-                        <div class="shirtNumberBox"><span>@Html.DisplayFor(modelItem => player.ShirtNumber)</span></div>
-                        <div class="card-body">
-                            <center><h5 class="card-title">@Html.DisplayFor(modelItem => player.FirstName) @Html.DisplayFor(modelItem => player.LastName)</h5></center>
-                        </div>
-                        <div class="card-body">
-                            <a asp-action="Details" asp-route-id="@player.PlayerId" class="btn btn-primary">See more...</a>
+    <div id="renderHere">
+
+        @foreach (var group in ViewBag.GroupedPlayers)
+        {
+            <h2>@group.position.Key.PositionName : @group.count</h2>
+            <div class="row position-block">
+                @foreach (RealMadridWebApp.Models.Player player in group.position)
+                {
+                    <div class="col-4 col-lg-3 cardCol player-card">
+                        <div class="card h-100">
+                            <img src="@player.ImagePath" alt="Card image cap">
+                            <img class="country-photo" src="@player.BirthCountry.ImagePath" alt="Card image cap">
+                            <div class="shirtNumberBox"><span>@Html.DisplayFor(modelItem => player.ShirtNumber)</span></div>
+                            <div class="card-body">
+                                <center><h5 class="card-title">@Html.DisplayFor(modelItem => player.FirstName) @Html.DisplayFor(modelItem => player.LastName)</h5></center>
+                            </div>
+                            <div class="card-body">
+                                <a asp-action="Details" asp-route-id="@player.PlayerId" class="btn btn-primary">See more...</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
-        </div>
-    }
+                }
+            </div>
+        }
+    </div>
 </div>
 
 @section Scripts {
-<script src="~/js/Player/Index.js"></script>
+    <script src="~/js/Player/Index.js"></script>
+    <script src="~/js/Player/Search.js"></script>
+
+
+    <script type="text/html" id="overall-template">
+        <h2>{PositionName} : {count}</h2>
+        <div class="row position-block">
+            {innerHTML}
+        </div>
+    </script>
+
+    <script type="text/html" id="player-template">
+        <div class="col-4 col-lg-3 cardCol player-card">
+            <div class="card h-100">
+                <img src="{player.ImagePath}" alt="Card image cap">
+                <img class="country-photo" src="{player.BirthCountry.ImagePath}" alt="Card image cap">
+                <div class="shirtNumberBox"><span>{player.ShirtNumber}</span></div>
+                <div class="card-body">
+                    <center><h5 class="card-title">{player.FirstName} {player.LastName}</h5></center>
+                </div>
+                <div class="card-body">
+                    <a asp-action="Details" asp-route-id="{player.PlayerId}" class="btn btn-primary">See more...</a>
+                </div>
+            </div>
+        </div>
+    </script>
 }
 
 

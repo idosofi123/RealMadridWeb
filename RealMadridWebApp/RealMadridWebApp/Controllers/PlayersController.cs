@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -68,10 +70,17 @@ namespace RealMadridWebApp.Controllers
                                                             ( prefferedFoot == null || p.PreferedFoot == prefferedFoot) &&
                                                             ( p.BirthDate <= minDate && p.BirthDate >= maxDate)).Include(p => p.BirthCountry).Include(p => p.Position).ToListAsync();
             var groupedPlayersByPosition = players.GroupBy(p => p.Position).Select(p => new { position = p, count = p.Count() }).ToExpando().ToList();
+            /*
+                        var json = JsonSerializer.Serialize(groupedPlayersByPosition, new JsonSerializerOptions()
+                        {
+                            WriteIndented = true,
+                            ReferenceHandler = ReferenceHandler.Preserve
+                        });*/
 
             ViewData["countries"] = new SelectList(_context.Country, nameof(Country.CountryID), nameof(Country.CountryName));
             ViewData["GroupedPlayers"] = groupedPlayersByPosition;
 
+/*            return Json(json);*/
             return View("Index");
         }
 
