@@ -179,7 +179,7 @@ namespace RealMadridWebApp.Controllers
         {
             User user = null;
 
-            if (id != null)
+            if (id != null) // From URL
             {
                 var currentUserName = HttpContext.User.Identity.Name;
 
