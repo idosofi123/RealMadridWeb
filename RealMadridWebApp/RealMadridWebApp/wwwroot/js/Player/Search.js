@@ -1,5 +1,5 @@
 ﻿$(function () {
- /*   $('form').submit(function (e) {
+    $('form').submit(function (e) {
         e.preventDefault();
 
         var prefferedFoot = $('#prefferedFoot').val();
@@ -12,22 +12,34 @@
             url: '/Players/Search',
             data: { prefferedFoot, country: country.join(), minAge, maxAge  }
         }).done(function (data) {
-            $('#renderHere').html('');
+            $('#playersSection').html('');
 
-            var template = $('#overall-template').html();
+            var positionGrpTemplate = $('#positionGroupTemplate').html();
+            var playerTemplate = $('#playerTemplate').html();
 
-            $.each(data, function (i, val) {
+            if (data.length === 0) $('#playersSection').append($('#noDataFound').html())
 
-                var temp = template;
+            $.each(data, function (i, group) {
 
-                $.each(val, function (key, value) {
-                    temp = temp.replaceAll('{' + key + '}', value);
+                var positionTemp = positionGrpTemplate.replace('{PositionName}', group.key.positionName).replace('{count}', group.count);
+                let groupBody = '';
+
+                $.each(group.players, function (i, player) {
+                    var tempPlayerTemplate = playerTemplate;
+                    $.each(player, function (key, value) {
+                    tempPlayerTemplate = tempPlayerTemplate.replaceAll('{' + key + '}', value);
+                    });
+                    groupBody += tempPlayerTemplate.replaceAll('{birthCountry.imagePath}', player.birthCountry.imagePath); // nested prop
                 });
 
-                $('#renderHere').append(temp);
+
+                positionTemp = positionTemp.replaceAll('{groupBody}', groupBody);
+
+                $('#playersSection').append(positionTemp);
+
             });
         });
-    });*/
+    });
 });
 
 
