@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +53,11 @@ namespace RealMadridWebApp.Controllers
                                         .GroupBy(m => new MonthGroup { Year = m.Date.Year, Month = m.Date.ToString("MMMM", new CultureInfo("en-US")) }).ToList();
 
             return Json(groupedMatches);
+        }
+
+        public async Task<IActionResult> GetNextMatch()
+        {
+            return Json(await _context.Match.Include(m => m.Team).Include(m => m.Competition).Where(m => m.Date >= DateTime.Now).OrderBy(m => m.Date).FirstAsync());
         }
 
         // GET: Matches/Details/5

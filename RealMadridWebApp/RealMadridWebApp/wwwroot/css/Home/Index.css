@@ -1,0 +1,25 @@
+﻿.row {
+    margin-bottom: 20px;
+}
+
+.teamImg {
+    height: 50px;
+}
+
+.video {
+    width: 500px;
+}
+
+.counter {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.title {
+    text-decoration: underline;
+    font-size: 15px;
+}
+
+.cardsArea {
+    margin-top: 10px;
+}

@@ -36,10 +36,6 @@ namespace RealMadridWebApp {
                     options.AccessDeniedPath = "/Users/AccessDenied";
                 });
 
-            //services.AddAuthentication().AddFacebook(options => {
-            //    options.AppId = Configuration["App:FacebookClientId"];
-            //    options.ClientSecret = Configuration["App:FacebookClientSecret"];
-            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
