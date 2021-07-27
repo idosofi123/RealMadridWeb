@@ -13,33 +13,43 @@
 </p>
 
 <div class="container">
-    <form asp-action="Search" method="get">
-        <div class="form-group">
-            <label class="control-label"> @Html.DisplayNameFor(model => model.PreferedFoot)</label>
-            <select name="prefferedFoot" id="prefferedFoot" class="form-control" asp-items="@Html.GetEnumSelectList<Foot>()">
-            </select>
-        </div>
-        <div class="form-group">
-            <label class="control-label"> @Html.DisplayNameFor(model => model.BirthCountry)</label>
-            <select name="country" id="country" multiple class="form-control" asp-items="ViewBag.countries">
-            </select>
-        </div>
-        <label class="form-label" id="minAgeLabel">Min Age: </label>
-        <input name="minAge" id="minAge" type="range" class="form-range" min="1" max="100" step="1">
-        <label class="form-label" id="maxAgeLabel">Max Age: </label>
-        <input name="maxAge" id="maxAge" type="range" class="form-range" min="1" max="100" step="1">
-        <div class="form-group">
-            <input type="submit" value="Search" class="btn btn-primary" />
-        </div>
-    </form>
+<div id="buttonArea">
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#searchArea" aria-expanded="false" aria-controls="collapseExample">
+        Search Criteria
+    </button>
+</div>
+<div class="collapse" id="searchArea">
+    <div class="card card-body">
+        <form asp-action="Search" method="get">
+            <div class="form-group">
+                <label class="control-label"> @Html.DisplayNameFor(model => model.PreferedFoot)</label>
+                <select name="prefferedFoot" id="prefferedFoot" class="form-control" asp-items="@Html.GetEnumSelectList<Foot>()">
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label"> @Html.DisplayNameFor(model => model.BirthCountry)</label>
+                <select name="country" id="country" multiple class="form-control" asp-items="ViewBag.countries">
+                </select>
+            </div>
+            <label class="form-label" id="minAgeLabel">Min Age: </label>
+            <input name="minAge" id="minAge" type="range" class="form-range" min="1" max="100" step="1">
+            <label class="form-label" id="maxAgeLabel">Max Age: </label>
+            <input name="maxAge" id="maxAge" type="range" class="form-range" min="1" max="100" step="1">
+            <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
 
-    <div id="renderHere">
 
-        @foreach (var group in ViewBag.GroupedPlayers)
+    <div id="playersSection">
+
+        @foreach (PositionGroup group in ViewBag.GroupedPlayers)
         {
-            <h2>@group.position.Key.PositionName : @group.count</h2>
+            <h2>@group.Key.PositionName : @group.count</h2>
             <div class="row position-block">
-                @foreach (RealMadridWebApp.Models.Player player in group.position)
+                @foreach (RealMadridWebApp.Models.Player player in group.Players)
                 {
                     <div class="col-4 col-lg-3 cardCol player-card">
                         <div class="card h-100">
@@ -50,7 +60,7 @@
                                 <center><h5 class="card-title">@Html.DisplayFor(modelItem => player.FirstName) @Html.DisplayFor(modelItem => player.LastName)</h5></center>
                             </div>
                             <div class="card-body">
-                                <a asp-action="Details" asp-route-id="@player.PlayerId" class="btn btn-primary">See more...</a>
+                                <a asp-action="Details" asp-route-id="@player.PlayerId" class="btn btn-primary">To Player Page..</a>
                             </div>
                         </div>
                     </div>
@@ -65,24 +75,32 @@
     <script src="~/js/Player/Search.js"></script>
 
 
-    <script type="text/html" id="overall-template">
+    <script type="text/html" id="positionGroupTemplate">
         <h2>{PositionName} : {count}</h2>
         <div class="row position-block">
-            {innerHTML}
+            {groupBody}
         </div>
     </script>
 
-    <script type="text/html" id="player-template">
+    <script type="text/html" id="noDataFound">
+        <div>
+            No players found with these search conditions...
+        </div>
+    </script>
+
+
+
+    <script type="text/html" id="playerTemplate">
         <div class="col-4 col-lg-3 cardCol player-card">
             <div class="card h-100">
-                <img src="{player.ImagePath}" alt="Card image cap">
-                <img class="country-photo" src="{player.BirthCountry.ImagePath}" alt="Card image cap">
-                <div class="shirtNumberBox"><span>{player.ShirtNumber}</span></div>
+                <img src="{imagePath}" alt="Card image cap">
+                <img class="country-photo" src="{birthCountry.imagePath}" alt="Card image cap">
+                <div class="shirtNumberBox"><span>{shirtNumber}</span></div>
                 <div class="card-body">
-                    <center><h5 class="card-title">{player.FirstName} {player.LastName}</h5></center>
+                    <center><h5 class="card-title">{firstName} {lastName}</h5></center>
                 </div>
                 <div class="card-body">
-                    <a asp-action="Details" asp-route-id="{player.PlayerId}" class="btn btn-primary">See more...</a>
+                    <a asp-action="Details" asp-route-id="{playerId}" class="btn btn-primary">To Player Page..</a>
                 </div>
             </div>
         </div>
