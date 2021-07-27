@@ -23,3 +23,8 @@
 .cardsArea {
     margin-top: 10px;
 }
+
+.headerTitle {
+    text-decoration: underline;
+    margin-bottom: 5px;
+}
