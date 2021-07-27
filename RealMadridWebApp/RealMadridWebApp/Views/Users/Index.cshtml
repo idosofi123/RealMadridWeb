@@ -6,9 +6,45 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="searchCriteria">
+    <div id="buttonArea">
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#searchArea" aria-expanded="false" aria-controls="collapseExample">
+            Search Criteria
+        </button>
+    </div>
+    <div class="collapse" id="searchArea">
+        <div class="card card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <form asp-action="Search" id="searchForm">
+                        <div class="form-group">
+                            <label class="control-label">@Html.DisplayNameFor(model => model.Type)</label>
+                            <select name="role" id="role" class="form-control" asp-items="@Html.GetEnumSelectList<UserType>()">
+                                <option>No Filter</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">@Html.DisplayNameFor(model => model.Username)</label>
+                            <input name="userName" id="userName" class="form-control" placeholder="Enter username..." />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">From Date</label>
+                            <input name="fromDate" id="fromDate" type="date" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">To Date</label>
+                            <input name="toDate" id="toDate" type="date" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success" type="submit">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <table class="table">
     <thead>
         <tr>
@@ -28,10 +64,10 @@
                 @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmailAddress)
+                @Html.DisplayNameFor(model => model.CreationDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Password)
+                @Html.DisplayNameFor(model => model.EmailAddress)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Type)
@@ -40,38 +76,77 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Username)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BirthDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmailAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BirthDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                </td>
+            </tr>
+        }   
     </tbody>
 </table>
+
+@section Scripts {
+    <script src="~/js/User/FilterUser.js"></script>
+
+    <script type="text/html" id="user-row-template">
+        <tr>
+            <td>
+                {username}
+            </td>
+            <td>
+                {firstName}
+            </td>
+            <td>
+                {lastName}
+            </td>
+            <td>
+                {birthDate}
+            </td>
+            <td>
+                {phoneNumber}
+            </td>
+            <td>
+                {creationDate}
+            </td>
+            <td>
+                {emailAddress}
+            </td>
+            <td>
+                {type}
+            </td>
+            <td>
+                <a href="/Users/Edit/{id}">Edit</a> |
+                <a href="/Users/Delete/{id}">Delete</a>
+                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+            </td>
+        </tr>
+    </script>
+}
