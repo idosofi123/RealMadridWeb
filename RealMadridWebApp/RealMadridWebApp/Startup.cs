@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RealMadridWebApp.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Text.Json.Serialization;
 
 namespace RealMadridWebApp {
     public class Startup {
@@ -35,6 +36,9 @@ namespace RealMadridWebApp {
                     options.LoginPath = "/Users/Login";
                     options.AccessDeniedPath = "/Users/AccessDenied";
                 });
+
+            services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
         }
 
