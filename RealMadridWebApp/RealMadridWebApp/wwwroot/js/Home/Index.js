@@ -1,12 +1,12 @@
 ﻿$(function () {
 
-    //$("#refresh").click(function () {
-    //    $.ajax({
-    //        url: '/Players/GetRandomPlayer',
-    //    }).done(function (player) {
-    //        updateRandomPlayer(player);
-    //    })
-    //});
+    $("#refresh").click(function () {
+        $.ajax({
+            url: '/Players/GetRandomPlayer',
+        }).done(function (player) {
+            updateRandomPlayer(player);
+        })
+    });
 
         $.ajax({
             url: '/Matches/GetNextMatch',
@@ -14,11 +14,11 @@
             updateNextMatch(match);
             setCounter(match.date);
 
-            //$.ajax({
-            //    url: '/Players/GetRandomPlayer',
-            //}).done(function (player) {
-            //    updateRandomPlayer(player);
-            //})
+            $.ajax({
+                url: '/Players/GetRandomPlayer',
+            }).done(function (player) {
+                updateRandomPlayer(player);
+            })
 
         })
 });
