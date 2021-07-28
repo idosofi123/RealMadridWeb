@@ -81,3 +81,8 @@ body {
 #layoutLogo {
     width: 30px;
 }
+
+#realMadridCanvas {
+    left: 10px;
+    position: absolute
+}
