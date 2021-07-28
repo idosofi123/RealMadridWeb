@@ -3,15 +3,12 @@
 @model RealMadridWebApp.Models.Player
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.FirstName + ' ' + Model.LastName;
 }
 
 <h1>Details</h1>
 
 <div>
-    <h4>Player</h4>
-    <hr />
-
     <div class="card mb-10" style="max-width: 1000px;">
         <div class="row g-0">
             <div class="col-md-6">
