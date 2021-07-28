@@ -133,10 +133,15 @@ namespace RealMadridWebApp.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int id, [Bind("PlayerId,FirstName,LastName,ShirtNumber,ImagePath,PositionId,BirthDate,PreferedFoot,CountryId,BirthCountryId,Height,Weight")] Player player)
         {
+
             if (id != player.PlayerId)
             {
                 return NotFound();
             }
+
+
+            ModelState.Remove(nameof(Player.Position));
+            ModelState.Remove(nameof(Player.BirthCountry));
 
             if (ModelState.IsValid)
             {
