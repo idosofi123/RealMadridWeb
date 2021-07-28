@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -76,6 +77,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Players/Create
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create()
         {
             ViewData["BirthCountryId"] = new SelectList(_context.Set<Country>(), "CountryID", nameof(Country.CountryName));
@@ -88,6 +90,7 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Create([Bind("PlayerId,FirstName,LastName,ShirtNumber,ImagePath,PositionId,BirthDate,PreferedFoot,CountryId,BirthCountryId,Height,Weight")] Player player)
         {
             ModelState.Remove(nameof(Player.Position));
@@ -104,6 +107,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Players/Edit/5
+        [Authorize(Roles = "Admin,Manager" )]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -126,6 +130,7 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int id, [Bind("PlayerId,FirstName,LastName,ShirtNumber,ImagePath,PositionId,BirthDate,PreferedFoot,CountryId,BirthCountryId,Height,Weight")] Player player)
         {
             if (id != player.PlayerId)
@@ -159,6 +164,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Players/Delete/5
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -181,6 +187,7 @@ namespace RealMadridWebApp.Controllers
         // POST: Players/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager" )]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var player = await _context.Player.FindAsync(id);
