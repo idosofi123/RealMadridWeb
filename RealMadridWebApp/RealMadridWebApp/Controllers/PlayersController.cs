@@ -57,6 +57,13 @@ namespace RealMadridWebApp.Controllers
 
             return View();
         }
+        public async Task<IActionResult> GetRandomPlayer()
+        {
+            var players = await _context.Player.Include(p => p.BirthCountry).Include(p => p.Position).ToListAsync();
+            Random rnd = new Random();
+            int playerNumber = rnd.Next(0, players.Count());
+            return Json(players.ElementAt(playerNumber));
+        }
 
         public async Task<IActionResult> Search(Foot? prefferedFoot, int[]? country, int minAge, int maxAge)
         {
