@@ -1,13 +1,35 @@
 ﻿$(function () {
 
+    //$("#refresh").click(function () {
+    //    $.ajax({
+    //        url: '/Players/GetRandomPlayer',
+    //    }).done(function (player) {
+    //        updateRandomPlayer(player);
+    //    })
+    //});
+
         $.ajax({
             url: '/Matches/GetNextMatch',
         }).done(function (match) {
             updateNextMatch(match);
+            setCounter(match.date);
 
-            setCounter(match.date)
+            //$.ajax({
+            //    url: '/Players/GetRandomPlayer',
+            //}).done(function (player) {
+            //    updateRandomPlayer(player);
+            //})
+
         })
 });
+
+function updateRandomPlayer(player) {
+
+    document.getElementById("player").textContent = "Player - " + player.firstName + " " + player.lastName;
+    document.getElementById("playerText").textContent = player.firstName + " was born in " + player.birthCountry.countryName;
+    $("#playerImage").attr("src", player.imagePath);
+    $("#routePlayerId").attr("href", "/Players/Details/" + player.playerId);
+}
 
 function updateNextMatch(match) {
 
@@ -17,7 +39,7 @@ function updateNextMatch(match) {
     document.getElementById("awayTeam").textContent = match.team.name;
     $("#homeImage").attr("src", "/Images/Teams/RealMadrid.png");
     $("#awayImage").attr("src", match.team.imagePath);
-    $("#routeId").attr("href","/Matches/Details/" + match.id);
+    $("#routeGameId").attr("href","/Matches/Details/" + match.id);
 }
 
 function setCounter(matchDate) {
