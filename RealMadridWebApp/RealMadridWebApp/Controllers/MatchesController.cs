@@ -114,30 +114,42 @@ namespace RealMadridWebApp.Controllers
 
             if (ModelState.IsValid) {
 
-                // Validate that the given team ID does not represent our home team.
-                Team givenTeam = await _context.Team.FirstOrDefaultAsync(t => t.Id == match.TeamId);
+                // Validate that a score was not supplied if a game has not occured yet, and vice versa.
+                if (match.Date > DateTime.Now && (match.HomeGoals != null || match.AwayGoals != null)) {
 
-                if (givenTeam.IsHome == false) {
+                    ViewData["Error"] = "Cannot specify a score for a match that has not occured yet.";
 
-                    _context.Add(match);
-                    await _context.SaveChangesAsync();
+                } else if (match.Date <= DateTime.Now && (match.HomeGoals == null || match.AwayGoals == null)) {
 
-                    // If the created match is an upcoming match, post an announcement tweet about it.
-                    if (match.Date > DateTime.Now) {
-
-                        // Read the newly saved match data, including the data of the corresponding team.
-                        Match savedMatch = await _context.Match.Include(m => m.Team).FirstOrDefaultAsync(m => m.Id == match.Id);
-
-                        if (savedMatch != null) {
-
-                            TwitterAPIService.SendTweet($"Real Madrid will match against {savedMatch.Team.Name} on {savedMatch.Date.ToShortDateString()}. Order your tickets now!");
-                        }
-                    }
-
-                    return RedirectToAction(nameof(Index));
+                    ViewData["Error"] = "Please specify the score of the match.";
 
                 } else {
-                    ViewData["Error"] = "A match against our home team cannot be created.";
+
+                    // Validate that the given team ID does not represent our home team.
+                    Team givenTeam = await _context.Team.FirstOrDefaultAsync(t => t.Id == match.TeamId);
+
+                    if (givenTeam.IsHome == false) {
+
+                        _context.Add(match);
+                        await _context.SaveChangesAsync();
+
+                        // If the created match is an upcoming match, post an announcement tweet about it.
+                        if (match.Date > DateTime.Now) {
+
+                            // Read the newly saved match data, including the data of the corresponding team.
+                            Match savedMatch = await _context.Match.Include(m => m.Team).FirstOrDefaultAsync(m => m.Id == match.Id);
+
+                            if (savedMatch != null) {
+
+                                TwitterAPIService.SendTweet($"Real Madrid will match against {savedMatch.Team.Name} on {savedMatch.Date.ToShortDateString()}. Order your tickets now!");
+                            }
+                        }
+
+                        return RedirectToAction(nameof(Index));
+
+                    } else {
+                        ViewData["Error"] = "A match against our home team cannot be created.";
+                    }
                 }
             }
 

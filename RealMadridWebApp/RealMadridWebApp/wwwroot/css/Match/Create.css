@@ -1,0 +1,34 @@
+﻿@keyframes slideIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.goalField {
+    margin-left: 10px;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    transform: scale(0);
+}
+
+.hideAnimation {
+    animation: slideIn 0.5s ease reverse;
+}
+
+.showAnimation {
+    /*animation: slideIn 0.5s ease;*/
+    transform: scale(1);
+}
+
+.horizontalForm {
+    display: flex;
+    flex-direction: row;
+}
