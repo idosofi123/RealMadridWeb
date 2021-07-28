@@ -69,9 +69,14 @@
                 </div>
             </div>
         </div>
-    </div>>
+    </div>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.PlayerId">Edit</a> |
+    @{
+        if (Context.User.IsInRole(UserType.Admin.ToString()) || Context.User.IsInRole(UserType.Manager.ToString()))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.PlayerId">Edit </a>
+        }
+    }
     <a asp-action="Index">Back to List</a>
 </div>
