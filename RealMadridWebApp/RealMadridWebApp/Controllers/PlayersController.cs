@@ -1,39 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using RealMadridWebApp.Data;
+using RealMadridWebApp.ExternalServices;
 using RealMadridWebApp.Models;
 
 namespace RealMadridWebApp.Controllers
 {
-    public static class Extension
-    {
-        public static IEnumerable<dynamic> ToExpando(this IEnumerable<object> anonymousObject)
-        {
-            IList<dynamic> list = new List<dynamic>();
-
-            foreach (var item in anonymousObject)
-            {
-                IDictionary<string, object> anonymousDictionary = HtmlHelper.AnonymousObjectToHtmlAttributes(item);
-                IDictionary<string, object> expando = new ExpandoObject();
-
-                foreach (var nestedItem in anonymousDictionary)
-                    expando.Add(nestedItem);
-
-                list.Add(expando);
-            }
-
-            return list.AsEnumerable();
-        }
-    }
-
-
     public class PlayersController : Controller
     {
         private readonly RealMadridWebAppContext _context;
@@ -48,9 +27,10 @@ namespace RealMadridWebApp.Controllers
         // GET: Players
         public async Task<IActionResult> Index()
         {
-            //var groupedPlayers = _context.Player.GroupBy(p => p.PositionId);
             var players = await _context.Player.Include(p => p.BirthCountry).Include(p => p.Position).ToListAsync();
-            var groupedPlayersByPosition = players.GroupBy(p => p.Position).Select(p => new { position = p, count = p.Count() }).ToExpando().ToList();
+            var groupedPlayersByPosition = players.OrderByDescending(p => p.PositionId).GroupBy(p => p.Position).Select(
+                n => new PositionGroup { Key = n.Key, Players = n.Key.Players, count = n.Count() }).ToList();
+
 
             ViewData["countries"] = new SelectList(_context.Country, nameof(Country.CountryID), nameof(Country.CountryName));
             ViewData["GroupedPlayers"] = groupedPlayersByPosition;
@@ -63,16 +43,17 @@ namespace RealMadridWebApp.Controllers
             DateTime today = DateTime.Today;
             DateTime minDate = today.AddYears(-minAge);
             DateTime maxDate = today.AddYears(-maxAge);
-            //var groupedPlayers = _context.Player.GroupBy(p => p.PositionId);
-            var players = await _context.Player.Where(p =>  (country.Length == 0 || country.Contains(p.BirthCountryId) ) &&
+            var players = await _context.Player.Include(p => p.BirthCountry).Include(p => p.Position)
+                                                .Where(p =>  (country.Length == 0 || country.Contains(p.BirthCountryId) ) &&
                                                             ( prefferedFoot == null || p.PreferedFoot == prefferedFoot) &&
-                                                            ( p.BirthDate <= minDate && p.BirthDate >= maxDate)).Include(p => p.BirthCountry).Include(p => p.Position).ToListAsync();
-            var groupedPlayersByPosition = players.GroupBy(p => p.Position).Select(p => new { position = p, count = p.Count() }).ToExpando().ToList();
+                                                            ( p.BirthDate <= minDate && p.BirthDate >= maxDate)).ToListAsync();
 
-            ViewData["countries"] = new SelectList(_context.Country, nameof(Country.CountryID), nameof(Country.CountryName));
-            ViewData["GroupedPlayers"] = groupedPlayersByPosition;
+            /*var groupedPlayersByPosition = players.OrderByDescending(p=> p.PositionId).GroupBy(p => new PositionGroup { PositionId = p.Position.Id, PositionName = p.Position.PositionName }).ToList();*/
+            var groupedPlayersByPosition = players.OrderByDescending(p => p.PositionId).GroupBy(p => p.Position).Select(
+                n => new PositionGroup { Key = n.Key, Players = n.Key.Players, count = n.Count() }).ToList();
 
-            return View("Index");
+            return Json(groupedPlayersByPosition);
+
         }
 
         // GET: Players/Details/5
@@ -96,6 +77,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Players/Create
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create()
         {
             ViewData["BirthCountryId"] = new SelectList(_context.Set<Country>(), "CountryID", nameof(Country.CountryName));
@@ -108,6 +90,7 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Create([Bind("PlayerId,FirstName,LastName,ShirtNumber,ImagePath,PositionId,BirthDate,PreferedFoot,CountryId,BirthCountryId,Height,Weight")] Player player)
         {
             ModelState.Remove(nameof(Player.Position));
@@ -124,6 +107,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Players/Edit/5
+        [Authorize(Roles = "Admin,Manager" )]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -146,12 +130,18 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int id, [Bind("PlayerId,FirstName,LastName,ShirtNumber,ImagePath,PositionId,BirthDate,PreferedFoot,CountryId,BirthCountryId,Height,Weight")] Player player)
         {
+
             if (id != player.PlayerId)
             {
                 return NotFound();
             }
+
+
+            ModelState.Remove(nameof(Player.Position));
+            ModelState.Remove(nameof(Player.BirthCountry));
 
             if (ModelState.IsValid)
             {
@@ -179,6 +169,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Players/Delete/5
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -201,6 +192,7 @@ namespace RealMadridWebApp.Controllers
         // POST: Players/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager" )]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var player = await _context.Player.FindAsync(id);

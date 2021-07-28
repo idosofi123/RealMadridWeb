@@ -3,15 +3,12 @@
 @model RealMadridWebApp.Models.Player
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.FirstName + ' ' + Model.LastName;
 }
 
 <h1>Details</h1>
 
 <div>
-    <h4>Player</h4>
-    <hr />
-
     <div class="card mb-10" style="max-width: 1000px;">
         <div class="row g-0">
             <div class="col-md-6">
@@ -69,9 +66,14 @@
                 </div>
             </div>
         </div>
-    </div>>
+    </div>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.PlayerId">Edit</a> |
+    @{
+        if (Context.User.IsInRole(UserType.Admin.ToString()) || Context.User.IsInRole(UserType.Manager.ToString()))
+        {
+            <a asp-action="Edit" asp-route-id="@Model.PlayerId">Edit </a>
+        }
+    }
     <a asp-action="Index">Back to List</a>
 </div>
