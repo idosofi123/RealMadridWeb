@@ -1,0 +1,54 @@
+﻿body {
+    text-align: center;
+    color: #006476;
+}
+
+
+h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    h1 span {
+        font-size: 18vw;
+        line-height: 1em;
+        margin: 20px 0;
+    }
+
+h2 {
+    transition: font-size 4s ease-in-out;
+}
+
+h2:hover {
+    font-size: 3rem;
+}
+
+
+h1 span:nth-child(even) {
+    animation: oops-animation-even 2s linear infinite;
+}
+
+h1 span:nth-child(odd) {
+    animation: oops-animation-odd 2s linear infinite;
+}
+
+@keyframes oops-animation-odd {
+    0%, 100% {
+        transform: translateY(-10px);
+    }
+
+    50% {
+        transform: translateY(10px);
+    }
+}
+
+@keyframes oops-animation-even {
+    0%, 100% {
+        transform: translateY(10px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
