@@ -30,6 +30,7 @@
                         <div class="form-group">
                             <label class="control-label"> @Html.DisplayNameFor(model => model.PreferedFoot)</label>
                             <select name="prefferedFoot" id="prefferedFoot" class="form-control" asp-items="@Html.GetEnumSelectList<Foot>()">
+                            <option value="">Both</option>
                             </select>
                         </div>
                         <div class="form-group">
