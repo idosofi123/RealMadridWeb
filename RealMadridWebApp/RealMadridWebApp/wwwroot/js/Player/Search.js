@@ -10,7 +10,8 @@
 
         $.ajax({
             url: '/Players/Search',
-            data: { prefferedFoot, country: country.join(), minAge, maxAge  }
+            traditional: true,
+            data: { prefferedFoot, country, minAge, maxAge  }
         }).done(function (data) {
             $('#playersSection').html('');
 
