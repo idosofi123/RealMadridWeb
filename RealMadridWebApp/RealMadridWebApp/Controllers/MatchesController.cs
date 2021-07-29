@@ -23,6 +23,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Matches
+        [Authorize]
         public async Task<IActionResult> Index() {
 
             var matches = await _context.Match.Include(m => m.Team).Include(m => m.Competition).ToListAsync();
@@ -39,6 +40,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Search matches
+        [Authorize]
         public async Task<IActionResult> Search(int? teamId, int? competitionId, DateTime? fromDate, DateTime? toDate) {
 
             fromDate ??= DateTime.MinValue;
@@ -57,6 +59,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Matches/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id) {
 
             if (id == null) {
@@ -252,6 +255,7 @@ namespace RealMadridWebApp.Controllers
         // POST: Matches/PurchaseTicket/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> PurchaseTicket(int id) {
 
             var match = await _context.Match.Include(m => m.Users).Include(m => m.Team).ThenInclude(t => t.Stadium).Where(m => m.Id == id).FirstAsync();
