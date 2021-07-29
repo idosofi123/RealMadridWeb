@@ -48,13 +48,24 @@
                         <button id="refresh" class="btn btn-primary"><i class="fa"></i>refresh</button>
                     </div>
                 </div>
-                    <img id="playerImage" class="playerImg" />
-                    <div class="card-body">
-                        <h5 id="player" class="card-title title"></h5>
-                        <p id="playerText" class="card-text"></p>
-                        <a id="routePlayerId" class="btn btn-primary">Player Details</a>
-                    </div>
+                <img id="playerImage" class="playerImg" />
+                <div class="card-body">
+                    <h5 id="player" class="card-title title"></h5>
+                    <p id="playerText" class="card-text"></p>
+                    <a id="routePlayerId" class="btn btn-primary">Player Details</a>
                 </div>
+            </div>
+        </div>
+
+        <div class='col-sm-12 col-md-6 col-lg-4'>
+            <div class="card detailsCard">
+                <h5 class="card-header">Goals per month</h5>
+                <div class="card-body">
+                    <h5 class="card-title">Win/Lose Ratio</h5>
+                    <div id="goalsGraph"></div>
+                  @*  <p><span class="winText">Won: @ViewBag.MatchesWon</span> / <span class="loseText">Lost: @ViewBag.MatchesLost</span> / <span class="drawText">Drew: @ViewBag.MatchesDrew</span></p>*@
+                </div>
+            </div>
         </div>
 
     </div>
@@ -62,5 +73,6 @@
 
 
     @section Scripts {
+        <script src="~/lib/d3/d3.js"></script>
         <script src="~/js/Home/Index.js"></script>
     }
