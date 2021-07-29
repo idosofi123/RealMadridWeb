@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using RealMadridWebApp.Data;
 using RealMadridWebApp.ExternalServices;
@@ -37,6 +38,7 @@ namespace RealMadridWebApp.Controllers
             return View(matches);
         }
 
+        // GET: Search matches
         public async Task<IActionResult> Search(int? teamId, int? competitionId, DateTime? fromDate, DateTime? toDate) {
 
             fromDate ??= DateTime.MinValue;
@@ -99,6 +101,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Matches/Create
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create() {
             ViewData["TeamId"] = new SelectList(_context.Team.Where(t => t.IsHome == false), "Id", "Name");
             ViewData["CompetitionId"] = new SelectList(_context.Competition, "Id", "Name");
@@ -110,47 +113,27 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Create([Bind("Id,TeamId,CompetitionId,isAwayMatch,Date,HomeGoals,AwayGoals")] Match match) {
 
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid && await IsMatchValid(match)) {
 
-                // Validate that a score was not supplied if a game has not occured yet, and vice versa.
-                if (match.Date > DateTime.Now && (match.HomeGoals != null || match.AwayGoals != null)) {
+                _context.Add(match);
+                await _context.SaveChangesAsync();
 
-                    ViewData["Error"] = "Cannot specify a score for a match that has not occured yet.";
+                // If the created match is an upcoming match, post an announcement tweet about it.
+                if (match.Date > DateTime.Now) {
 
-                } else if (match.Date <= DateTime.Now && (match.HomeGoals == null || match.AwayGoals == null)) {
+                    // Read the newly saved match data, including the data of the corresponding team.
+                    Match savedMatch = await _context.Match.Include(m => m.Team).FirstOrDefaultAsync(m => m.Id == match.Id);
 
-                    ViewData["Error"] = "Please specify the score of the match.";
+                    if (savedMatch != null) {
 
-                } else {
-
-                    // Validate that the given team ID does not represent our home team.
-                    Team givenTeam = await _context.Team.FirstOrDefaultAsync(t => t.Id == match.TeamId);
-
-                    if (givenTeam.IsHome == false) {
-
-                        _context.Add(match);
-                        await _context.SaveChangesAsync();
-
-                        // If the created match is an upcoming match, post an announcement tweet about it.
-                        if (match.Date > DateTime.Now) {
-
-                            // Read the newly saved match data, including the data of the corresponding team.
-                            Match savedMatch = await _context.Match.Include(m => m.Team).FirstOrDefaultAsync(m => m.Id == match.Id);
-
-                            if (savedMatch != null) {
-
-                                TwitterAPIService.SendTweet($"Real Madrid will match against {savedMatch.Team.Name} on {savedMatch.Date.ToShortDateString()}. Order your tickets now!");
-                            }
-                        }
-
-                        return RedirectToAction(nameof(Index));
-
-                    } else {
-                        ViewData["Error"] = "A match against our home team cannot be created.";
+                        TwitterAPIService.SendTweet($"Real Madrid will match against {savedMatch.Team.Name} on {savedMatch.Date.ToShortDateString()}. Order your tickets now!");
                     }
                 }
+
+                return RedirectToAction(nameof(Index));
             }
 
             ViewData["TeamId"] = new SelectList(_context.Team.Where(t => !t.IsHome), "Id", "Name", match.TeamId);
@@ -159,6 +142,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Matches/Edit/5
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int? id) {
 
             if (id == null) {
@@ -179,13 +163,14 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,TeamId,CompetitionId,isAwayMatch,Date,HomeGoals,AwayGoals")] Match match) {
 
             if (id != match.Id) {
                 return NotFound();
             }
 
-            if (ModelState.IsValid) {
+            if (ModelState.IsValid && await IsMatchValid(match)) {
 
                 try {
 
@@ -209,7 +194,34 @@ namespace RealMadridWebApp.Controllers
             return View(match);
         }
 
+        // Validates the given match and updates the ViewData["Error"] in accordance.
+        private async Task<bool> IsMatchValid(Match match) {
+
+            Team givenTeam = await _context.Team.FirstOrDefaultAsync(t => t.Id == match.TeamId);
+
+            // Validate that a score was not supplied if a game has not occured yet, and vice versa.
+            if (match.Date > DateTime.Now && (match.HomeGoals != null || match.AwayGoals != null)) {
+
+                ViewData["Error"] = "Cannot specify a score for a match that has not occured yet.";
+                return false;
+
+            } else if (match.Date <= DateTime.Now && (match.HomeGoals == null || match.AwayGoals == null)) {
+
+                ViewData["Error"] = "Please specify the score of the match.";
+                return false;
+
+            // Validate that the given team ID does not represent our home team.
+            } else if (givenTeam.IsHome) {
+
+                ViewData["Error"] = "A match against our home team cannot be created.";
+                return false;
+            }
+
+            return true;
+        }
+
         // GET: Matches/Delete/5
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Delete(int? id) {
 
             if (id == null) {
@@ -228,6 +240,7 @@ namespace RealMadridWebApp.Controllers
         // POST: Matches/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteConfirmed(int id) {
 
             var match = await _context.Match.FindAsync(id);

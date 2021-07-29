@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using RealMadridWebApp.Data;
 using RealMadridWebApp.Models;
 using RealMadridWebApp.ExternalServices;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RealMadridWebApp.Controllers {
 
@@ -46,6 +47,7 @@ namespace RealMadridWebApp.Controllers {
         }
 
         // GET: Stadium/Create
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create() {
             return View();
         }
@@ -55,6 +57,7 @@ namespace RealMadridWebApp.Controllers {
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Create([Bind("Id,Name,Capacity,Latitude,Longitude,ImagePath")] Stadium stadium) {
 
             if (ModelState.IsValid) {
@@ -67,6 +70,7 @@ namespace RealMadridWebApp.Controllers {
         }
 
         // GET: Stadium/Edit/5
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int? id) {
 
             if (id == null) {
@@ -87,6 +91,7 @@ namespace RealMadridWebApp.Controllers {
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Capacity,Latitude,Longitude,ImagePath")] Stadium stadium) {
 
             if (id != stadium.Id) {
@@ -116,6 +121,7 @@ namespace RealMadridWebApp.Controllers {
         }
 
         // GET: Stadium/Delete/5
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Delete(int? id) {
 
             if (id == null) {
@@ -134,6 +140,7 @@ namespace RealMadridWebApp.Controllers {
         // POST: Stadium/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteConfirmed(int id) {
             var stadium = await _context.Stadium.FindAsync(id);
             _context.Stadium.Remove(stadium);
