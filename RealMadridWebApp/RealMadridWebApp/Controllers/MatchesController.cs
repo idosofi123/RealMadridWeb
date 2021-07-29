@@ -17,8 +17,6 @@ namespace RealMadridWebApp.Controllers
 {
     public struct GraphData
     {
-        public string DateTime { get; set; }
-
         public DateTime FullDate { get; set; }
         public int? HomeGoals { get; set; }
         public int? AwayGoals { get; set; }
@@ -84,7 +82,6 @@ namespace RealMadridWebApp.Controllers
             foreach (var grpMatch in groupedMatches)
             {
                 GraphData item = new GraphData();
-                item.DateTime = grpMatch.Key.Month.ToString() + " - " + grpMatch.Key.Year.ToString();
                 item.HomeGoals = 0;
                 item.AwayGoals = 0;
                 foreach (Match match in grpMatch)
