@@ -79,10 +79,10 @@ function initGraph(gamesData) {
 
     gamesData = gamesData.reverse();
 
-    var margin = { top: 10, right: 100, bottom: 30, left: 30 },
+    var margin = { top: 10, right: 120, bottom: 60, left: 35 },
         width = 550 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
-
+        
     var svg = d3.select("#goalsGraph")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
