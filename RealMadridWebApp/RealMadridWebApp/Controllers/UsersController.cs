@@ -209,7 +209,7 @@ namespace RealMadridWebApp.Controllers
                 return NotFound();
             }
 
-            ViewData["ReadOnly"] = false;
+            ViewData["ReadOnly"] = "false";
 
             var currentUserName = HttpContext.User.Identity.Name;
 
@@ -219,7 +219,7 @@ namespace RealMadridWebApp.Controllers
             {
                 if (HttpContext.User.IsInRole(UserType.Admin.ToString()))
                 {
-                    ViewData["ReadOnly"] = true;
+                    ViewData["ReadOnly"] = "true";
                 }
                 else
                 {

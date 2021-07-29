@@ -3,11 +3,11 @@
 @{
     ViewData["Title"] = "Edit";
 
-    var DisabledStyle = "";
-    if(ViewBag.ReadOnly)
-    {
-        DisabledStyle = "background-color: #dddddd; pointer-events: none";
-    }
+    //var DisabledStyle = "";
+    //if(ViewBag.ReadOnly)
+    //{
+    //    DisabledStyle = "background-color: #dddddd; pointer-events: none";
+    //}
 }
 
 <h1>Edit</h1>
@@ -21,44 +21,42 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" style="background-color: #dddddd;
-                                                                       pointer-events: none" />
+                <input id="userName" asp-for="Username" class="form-control" disabled />
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" style=@DisabledStyle />
+                <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" style=@DisabledStyle />
+                <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="BirthDate" class="control-label"></label>
-                <input asp-for="BirthDate" class="form-control" style=@DisabledStyle />
+                <input asp-for="BirthDate" class="form-control" />
                 <span asp-validation-for="BirthDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" style=@DisabledStyle />
+                <input asp-for="PhoneNumber" class="form-control"  />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control"  style="background-color: #dddddd;
-                                                                       pointer-events: none" />
+                <input id="creationDate" asp-for="CreationDate" class="form-control" disabled />
                 <span asp-validation-for="CreationDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EmailAddress" class="control-label"></label>
-                <input asp-for="EmailAddress" class="form-control" style=@DisabledStyle />
+                <input asp-for="EmailAddress" class="form-control"  />
                 <span asp-validation-for="EmailAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" value="@Model.Password" style=@DisabledStyle />
+                <input asp-for="Password" class="form-control" value="@Model.Password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             @if (Context.User.IsInRole(UserType.Admin.ToString()))
@@ -77,5 +75,14 @@
 </div>
 
 @section Scripts {
+
+    <script>
+        if (@ViewBag.ReadOnly) {
+            $("input:not(#userName):not(#creationDate)").attr('disabled', 'disabled');
+        } else {
+            $("input:not(#userName):not(#creationDate)").removeAttr('disabled');
+        }
+    </script>
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
