@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,22 +11,22 @@ using RealMadridWebApp.Models;
 
 namespace RealMadridWebApp.Controllers
 {
-    public class CompetitionsController : Controller
-    {
+    public class CompetitionsController : Controller {
         private readonly RealMadridWebAppContext _context;
 
-        public CompetitionsController(RealMadridWebAppContext context)
-        {
+        public CompetitionsController(RealMadridWebAppContext context) {
             _context = context;
         }
 
         // GET: Competitions
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Competition.ToListAsync());
         }
 
         // GET: Competitions/Details/5
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,6 +45,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Competitions/Create
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +56,7 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Create([Bind("Id,Name,TicketPrice,ImagePath")] Competition competition)
         {
             if (ModelState.IsValid)
@@ -66,6 +69,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Competitions/Edit/5
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +90,7 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,TicketPrice,ImagePath")] Competition competition)
         {
             if (id != competition.Id)
@@ -117,6 +122,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Competitions/Delete/5
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,6 +143,7 @@ namespace RealMadridWebApp.Controllers
         // POST: Competitions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var competition = await _context.Competition.FindAsync(id);

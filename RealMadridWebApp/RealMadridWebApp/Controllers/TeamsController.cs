@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +20,14 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Teams
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Index() {
             var realMadridWebAppContext = _context.Team.Include(t => t.Stadium);
             return View(await realMadridWebAppContext.ToListAsync());
         }
 
         // GET: Teams/Details/5
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Details(int? id) {
 
             if (id == null) {
@@ -38,6 +41,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Teams/Create
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create() {
             ViewData["StadiumId"] = new SelectList(_context.Stadium, "Id", "Name");
             return View();
@@ -48,6 +52,7 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Create([Bind("Id,Name,StadiumId,ImagePath")] Team team) {
 
             if (ModelState.IsValid) {
@@ -61,6 +66,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Teams/Edit/5
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int? id) {
 
             if (id == null) {
@@ -81,6 +87,7 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StadiumId,ImagePath")] Team team) {
 
             if (id != team.Id) {
@@ -110,6 +117,7 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Teams/Delete/5
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Delete(int? id) {
 
             if (id == null) {
@@ -128,6 +136,7 @@ namespace RealMadridWebApp.Controllers
         // POST: Teams/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteConfirmed(int id) {
 
             var team = await _context.Team.FindAsync(id);

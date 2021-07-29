@@ -7,8 +7,14 @@
 }
 
 <h1>Match Details</h1>
+@if (Context.User.IsInRole(UserType.Admin.ToString())
+   || Context.User.IsInRole(UserType.Manager.ToString())) {
+    <div class="actionDiv">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+    </div>
+}
 <a asp-action="Index">Back to List</a>
-
 <hr />
 
 <div class="card cardBody matchCard">

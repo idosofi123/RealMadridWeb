@@ -56,7 +56,11 @@
 </div>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    @if (Context.User.IsInRole(UserType.Admin.ToString())
+    || Context.User.IsInRole(UserType.Manager.ToString())) {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a> @:|
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a> @:|
+    }
     <a asp-action="Index">Back to List</a>
 </div>
 

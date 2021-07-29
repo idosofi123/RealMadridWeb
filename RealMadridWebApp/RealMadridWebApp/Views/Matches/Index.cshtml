@@ -8,9 +8,12 @@
 
 <h1>Matches</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (Context.User.IsInRole(UserType.Admin.ToString())
+ || Context.User.IsInRole(UserType.Manager.ToString())) {
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 
 <div class="searchCriteria">
     <div id="buttonArea">
