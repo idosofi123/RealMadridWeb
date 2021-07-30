@@ -9,7 +9,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace RealMadridWebApp.Controllers {
+
     public class HomeController : Controller {
+
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -17,7 +19,7 @@ namespace RealMadridWebApp.Controllers {
             _logger = logger;
         }
 
-      //  [Authorize]
+        [Authorize]
         public IActionResult Index()
         {
             return View();
