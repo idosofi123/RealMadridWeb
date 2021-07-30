@@ -183,7 +183,7 @@ namespace RealMadridWebApp.Controllers
 
                 if (userDB.Id != id && !HttpContext.User.IsInRole(UserType.Admin.ToString()))
                 {
-                    return RedirectToAction(nameof(AccessDenied));
+                    return RedirectToAction(nameof(Index), nameof(Unauthorized));
                 }
                  user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
             }
@@ -223,7 +223,7 @@ namespace RealMadridWebApp.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(nameof(AccessDenied));
+                    return RedirectToAction(nameof(Index), nameof(Unauthorized));
                 }
             }
               
