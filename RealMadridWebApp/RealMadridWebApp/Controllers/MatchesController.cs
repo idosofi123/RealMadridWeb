@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -74,8 +75,8 @@ namespace RealMadridWebApp.Controllers
 
         public async Task<IActionResult> getGraphValues()
         {
-            List<GraphData> data = new List<GraphData>();
-           
+
+            List<GraphData> data = new List<GraphData>(); 
 
             var matches = await _context.Match.Include(m => m.Team).Include(m => m.Competition).Where(m => m.Date <= DateTime.Now && m.Date >= DateTime.Now.AddMonths(-5)).OrderBy(m => m.Date).ToListAsync();
 
