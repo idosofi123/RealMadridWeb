@@ -58,15 +58,10 @@ html {
   min-height: 100%;
 }
 
-@font-face {
-    font-family: 'RajdhaniLocal';
-    src: url('../fonts/Rajdhani.ttf') format('truetype');
-}
-
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    font-family: 'RajdhaniLocal';
+    font-family: 'Rajdhani', sans-serif;
     background-color: #d5fefd;
     background-image: linear-gradient(315deg, #d5fefd 0%, #fffcff 74%);
     background-repeat: no-repeat;
