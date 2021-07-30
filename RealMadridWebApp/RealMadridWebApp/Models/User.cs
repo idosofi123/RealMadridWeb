@@ -7,8 +7,8 @@ using System.Runtime.Serialization;
 //using System.Text.Json.Serialization;
 
 
-namespace RealMadridWebApp.Models
-{
+namespace RealMadridWebApp.Models { 
+
     public enum UserType
     {
         Client,
@@ -34,6 +34,7 @@ namespace RealMadridWebApp.Models
         [Required]
         [Display(Name = "Birth Date")]
         [DataType(DataType.Date)]
+        [CustomBirthDateValidation(ErrorMessage = "Birth Date must be less than Today's Date")]
         public DateTime BirthDate { get; set; }
 
         [Required]
