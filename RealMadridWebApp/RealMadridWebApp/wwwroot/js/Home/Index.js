@@ -1,4 +1,4 @@
-﻿var MIN_GOALS_CHART = 8;
+﻿var MIN_GOALS_CHART = 6;
 
 $(function () {
 
@@ -24,7 +24,7 @@ $(function () {
         })
 
         $.ajax({
-            url: '/Matches/getGraphValues',
+            url: '/Matches/GetGraphValues',
         }).done(function (gamesData) {
             initGraph(gamesData);
         })
@@ -63,8 +63,8 @@ function setCounter(matchDate) {
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
         // Output the result in an element with id="demo"
-        document.getElementById("counter").innerHTML = "The game starts in: " +days + "d:" + hours + "h:"
-            + minutes + "m:" + seconds + "s";
+        document.getElementById("counter").innerHTML = "The game starts in: " + days + " days, " + hours + " hours, "
+            + minutes + " minutes and " + seconds + " seconds!";
 
         // If the count down is over, write some text 
         if (distance < 0) {
@@ -80,8 +80,8 @@ function initGraph(gamesData) {
     gamesData = gamesData.reverse();
 
     var margin = { top: 10, right: 120, bottom: 60, left: 35 },
-        width = 550 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+        width = 750 - margin.left - margin.right,
+        height = 300 - margin.top - margin.bottom;
         
     var svg = d3.select("#goalsGraph")
         .append("svg")
@@ -129,8 +129,9 @@ function initGraph(gamesData) {
         .domain([0, maxGoals])
         .range([height, 0]);
 
-    svg.append("g")
-        .call(d3.axisLeft(y));
+    const yAxisTicks = y.ticks().filter(tick => Number.isInteger(tick));
+
+    svg.append("g").call(d3.axisLeft(y).tickValues(yAxisTicks).tickFormat(d3.format('d')));
 
     // Add the lines
     var line = d3.line()

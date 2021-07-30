@@ -67,18 +67,29 @@ namespace RealMadridWebApp.Controllers
             return Json(groupedMatches);
         }
 
-        public async Task<IActionResult> GetNextMatch()
-        {
+        public async Task<IActionResult> GetNextMatch() {
             return Json(await _context.Match.Include(m => m.Team).Include(m => m.Competition).Where(m => m.Date >= DateTime.Now).OrderBy(m => m.Date).FirstAsync());
         }
 
 
-        public async Task<IActionResult> getGraphValues()
-        {
+        public async Task<IActionResult> GetGraphValues() {
 
-            List<GraphData> data = new List<GraphData>(); 
+            const int MONTH_LIMIT = 5;
 
-            var matches = await _context.Match.Include(m => m.Team).Include(m => m.Competition).Where(m => m.Date <= DateTime.Now && m.Date >= DateTime.Now.AddMonths(-5)).OrderBy(m => m.Date).ToListAsync();
+            List<GraphData> data = new List<GraphData>();
+
+            // Calculate the date of the 1st day in the lower limit month.
+            DateTime lowerLimit = new DateTime(
+                DateTime.Now.AddMonths(-MONTH_LIMIT).Year,
+                DateTime.Now.AddMonths(-MONTH_LIMIT).Month,
+                1
+            );
+
+            var matches = await _context.Match
+                                    .Include(m => m.Team)
+                                    .Include(m => m.Competition)
+                                    .Where(m => m.Date <= DateTime.Now && m.Date >= lowerLimit)
+                                    .OrderBy(m => m.Date).ToListAsync();
 
             var groupedMatches = matches.OrderByDescending(m => m.Date)
                                                 .GroupBy(m => new MonthGroup { Year = m.Date.Year, Month = m.Date.ToString("MMMM", new CultureInfo("en-US")) }).ToList();
