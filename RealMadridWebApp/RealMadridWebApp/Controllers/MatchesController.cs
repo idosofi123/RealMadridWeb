@@ -12,8 +12,16 @@ using RealMadridWebApp.ExternalServices;
 using RealMadridWebApp.Models;
 using TweetSharp;
 
+
 namespace RealMadridWebApp.Controllers
 {
+    public struct GraphData
+    {
+        public DateTime FullDate { get; set; }
+        public int? HomeGoals { get; set; }
+        public int? AwayGoals { get; set; }
+    }
+
     public class MatchesController : Controller {
 
         private readonly RealMadridWebAppContext _context;
@@ -56,6 +64,47 @@ namespace RealMadridWebApp.Controllers
                                         .GroupBy(m => new MonthGroup { Year = m.Date.Year, Month = m.Date.ToString("MMMM", new CultureInfo("en-US")) }).ToList();
 
             return Json(groupedMatches);
+        }
+
+        public async Task<IActionResult> GetNextMatch()
+        {
+            return Json(await _context.Match.Include(m => m.Team).Include(m => m.Competition).Where(m => m.Date >= DateTime.Now).OrderBy(m => m.Date).FirstAsync());
+        }
+
+
+        public async Task<IActionResult> getGraphValues()
+        {
+            List<GraphData> data = new List<GraphData>();
+           
+
+            var matches = await _context.Match.Include(m => m.Team).Include(m => m.Competition).Where(m => m.Date <= DateTime.Now && m.Date >= DateTime.Now.AddMonths(-5)).OrderBy(m => m.Date).ToListAsync();
+
+            var groupedMatches = matches.OrderByDescending(m => m.Date)
+                                                .GroupBy(m => new MonthGroup { Year = m.Date.Year, Month = m.Date.ToString("MMMM", new CultureInfo("en-US")) }).ToList();
+
+            foreach (var grpMatch in groupedMatches)
+            {
+                GraphData item = new GraphData();
+                item.HomeGoals = 0;
+                item.AwayGoals = 0;
+                foreach (Match match in grpMatch)
+                {
+                    item.FullDate = (item.FullDate == default(DateTime)) ? new DateTime(match.Date.Year, match.Date.Month, 1) : item.FullDate;
+
+                    if(match.isAwayMatch)
+                    {
+                        item.AwayGoals += (match.AwayGoals == null)? 0 : match.AwayGoals;
+                    }
+                    else
+                    {
+                        item.HomeGoals += (match.HomeGoals == null) ? 0 :match.HomeGoals;
+                    }
+                    
+                }
+                data.Add(item);
+            }
+
+            return Json(data.ToArray());
         }
 
         // GET: Matches/Details/5

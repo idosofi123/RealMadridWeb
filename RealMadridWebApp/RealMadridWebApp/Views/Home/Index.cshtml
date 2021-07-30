@@ -1,8 +1,77 @@
-﻿@{
+﻿<link rel="stylesheet" href="~/css/Home/Index.css" />
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Real Madrid CF</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+    <div class="text-center">
+        <h1 class="headerTitle">Welcome to Real Madrid CF offical page!</h1>
+        <video class="video" controls loop>
+            <source src="https://descargawebrealmadrid.akamaized.net/StaticFiles/Media/448/803/ed5545d5-dc9c-4f9b-ab09-ef8bb60ea7e9.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+    </div>
+
+    <div id="cardsArea" class="row cardsArea">
+        <div class='col-sm-12 col-md-6 col-lg-4'>
+            <div class="card detailsCard">
+                <h5 class="card-header">Upcoming Match</h5>
+                <div class="card-body">
+                    <h5 id="competition" class="card-title title"></h5>
+                    <div class="row">
+                        <div class="col-sm-5 text-center">
+                            <h5 id="homeTeam"></h5>
+                            <img id="homeImage" class="teamImg" />
+                        </div>
+                        <div class="col-sm-2 text-center">
+                            vs
+                        </div>
+                        <div class="col-sm-5 text-center">
+                            <h5 id="awayTeam"></h5>
+                            <img id="awayImage" class="teamImg" />
+                        </div>
+                    </div>
+                    <p id="counter" class="counter"></p>
+                    <a id="routeGameId" class="btn btn-primary">Game Details</a>
+                </div>
+            </div>
+        </div>
+
+        <div class='col-sm-12 col-md-6 col-lg-4'>
+            <div class="card detailsCard">
+                <div class="card-header row">
+                    <div class="col-sm-6 text-left">
+                        <h5>Random Player</h5>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <button id="refresh" class="btn btn-primary"><i class="fa"></i>refresh</button>
+                    </div>
+                </div>
+                <img id="playerImage" class="playerImg" />
+                <div class="card-body">
+                    <h5 id="player" class="card-title title"></h5>
+                    <p id="playerText" class="card-text"></p>
+                    <a id="routePlayerId" class="btn btn-primary">Player Details</a>
+                </div>
+            </div>
+        </div>
+
+        <div class='col-sm-12 col-md-6 col-lg-4'>
+            <div class="card detailsCard">
+                <h5 class="card-header">Goals per month</h5>
+                <div class="card-body">
+                    <div id="goalsGraph"></div>
+                  @*  <p><span class="winText">Won: @ViewBag.MatchesWon</span> / <span class="loseText">Lost: @ViewBag.MatchesLost</span> / <span class="drawText">Drew: @ViewBag.MatchesDrew</span></p>*@
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
+
+
+    @section Scripts {
+        <script src="~/lib/d3/d3.js"></script>
+        <script src="~/js/Home/Index.js"></script>
+    }

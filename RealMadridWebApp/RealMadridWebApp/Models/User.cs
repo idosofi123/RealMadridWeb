@@ -5,18 +5,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 //using System.Text.Json.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+
 
 namespace RealMadridWebApp.Models
 {
     public enum UserType
     {
-        [EnumMember(Value="Client")]
         Client,
-        [EnumMember(Value = "Manager")]
         Manager,
-        [EnumMember(Value = "Admin")]
         Admin
     }
 
@@ -59,7 +55,6 @@ namespace RealMadridWebApp.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
         public UserType Type { get; set; } = UserType.Client;
 
         public List<Match> Matches { get; set; }
