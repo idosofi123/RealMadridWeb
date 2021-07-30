@@ -49,7 +49,7 @@ namespace RealMadridWebApp.Models {
         public string EmailAddress { get; set; }
 
         [Display(Name = "Creation Date")]
-        //[DataType(DataType.Date)]
+        [DataType(DataType.Date)]
         public DateTime CreationDate { get; set; }
 
         [Required]
@@ -59,5 +59,22 @@ namespace RealMadridWebApp.Models {
         public UserType Type { get; set; } = UserType.Client;
 
         public List<Match> Matches { get; set; }
+
+        public override bool Equals(Object obj)
+        {
+            //Check for null and compare run-time types.
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                User u = (User)obj;
+                return (FirstName == u.FirstName) && (LastName == u.LastName) &&
+                       (BirthDate == u.BirthDate) && (PhoneNumber == u.PhoneNumber) &&
+                       (EmailAddress == u.EmailAddress) && (Password == u.Password) &&
+                       (Type == u.Type);
+            }
+        }
     }
 }
