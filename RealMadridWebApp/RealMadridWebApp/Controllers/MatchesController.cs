@@ -104,7 +104,7 @@ namespace RealMadridWebApp.Controllers
                 data.Add(item);
             }
 
-            return Json(data.ToArray());
+            return Json(data);
         }
 
         // GET: Matches/Details/5

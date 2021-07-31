@@ -158,7 +158,7 @@ namespace RealMadridWebApp.Controllers
                 users = users.Where(u => u.Username.Contains(userName)).ToList();
             }
 
-            return Json(users.ToArray());
+            return Json(users);
         }
 
         [Authorize]

@@ -37,8 +37,8 @@ namespace RealMadridWebApp {
                     options.AccessDeniedPath = "/Unauthorized/Index";
                 });
 
-            services.AddControllers().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+            //services.AddControllers().AddJsonOptions(x =>
+            //    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
         }
 
