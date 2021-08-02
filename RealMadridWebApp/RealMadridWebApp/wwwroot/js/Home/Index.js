@@ -34,18 +34,18 @@ $(function () {
 function updateRandomPlayer(player) {
 
     document.getElementById("player").textContent = "Player - " + player.firstName + " " + player.lastName;
-    document.getElementById("playerText").textContent = player.firstName + " was born in " + player.birthCountry.countryName;
-    $("#playerImage").attr("src", player.imagePath);
+    document.getElementById("playerText").textContent = player.firstName + " was born in " + player.countryName;
+    $("#playerImage").attr("src", player.playerImage);
     $("#routePlayerId").attr("href", "/Players/Details/" + player.playerId);
 }
 
 function updateNextMatch(match) {
 
-    document.getElementById("competition").textContent = "Competition - " +match.competition.name;
+    document.getElementById("competition").textContent = "Competition - " + match.competitionName;
     document.getElementById("homeTeam").textContent = "Real Madrid";
-    document.getElementById("awayTeam").textContent = match.team.name;
+    document.getElementById("awayTeam").textContent = match.teamName;
     $("#homeImage").attr("src", "/Images/Teams/RealMadrid.png");
-    $("#awayImage").attr("src", match.team.imagePath);
+    $("#awayImage").attr("src", match.teamImagePath);
     $("#routeGameId").attr("href","/Matches/Details/" + match.id);
 }
 

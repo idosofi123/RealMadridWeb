@@ -32,8 +32,9 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Users/Login
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
@@ -48,8 +49,10 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([Bind("Id,Username,Password")] User user)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([Bind("Id,Username,Password")] User user, string returnUrl)
         {
+            
             ModelState.Remove("FirstName");
             ModelState.Remove("PhoneNumber");
             ModelState.Remove("LastName");
@@ -58,14 +61,12 @@ namespace RealMadridWebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                var q = _context.User.FirstOrDefault(u => u.Username.Equals(user.Username) && u.Password.Equals(user.Password));
+                var q = await _context.User.FirstOrDefaultAsync(u => u.Username.Equals(user.Username) && u.Password.Equals(user.Password));
 
                 if (q != null) 
                 {
-
                     Signin(q);
-
-                    return RedirectToAction(nameof(Index), "Home");
+                    return Redirect(returnUrl == null ? "/" : returnUrl);
                 }
                 else
                 {
@@ -82,8 +83,6 @@ namespace RealMadridWebApp.Controllers
                     new Claim(ClaimTypes.Name, account.Username),
                     new Claim(ClaimTypes.Role, account.Type.ToString()),
                 };
-
-            //HttpContext.Items["UserId"] = account.Id;
 
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);

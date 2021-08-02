@@ -1,41 +1,44 @@
-﻿@model IEnumerable<RealMadridWebApp.Models.Position>
+﻿<link rel="stylesheet" href="~/css/General/List.css" />
+
+@model IEnumerable<RealMadridWebApp.Models.Position>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Positions";
 }
 
-<h1>Index</h1>
+<h1>Positions</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table table-bordered">
     <thead>
-        <tr>
+        <tr class="bg-info">
             <th>
                 @Html.DisplayNameFor(model => model.ImagePath)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PositionName)
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImagePath)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PositionName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImagePath)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PositionName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
