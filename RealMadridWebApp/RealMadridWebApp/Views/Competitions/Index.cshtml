@@ -1,4 +1,6 @@
-﻿@model IEnumerable<RealMadridWebApp.Models.Competition>
+﻿<link rel="stylesheet" href="~/css/General/List.css" />
+
+@model IEnumerable<RealMadridWebApp.Models.Competition>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,9 +11,9 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table table-bordered">
     <thead>
-        <tr>
+        <tr class="bg-info">
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -21,7 +23,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.ImagePath)
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
