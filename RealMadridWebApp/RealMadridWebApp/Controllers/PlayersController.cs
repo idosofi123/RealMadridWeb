@@ -220,5 +220,9 @@ namespace RealMadridWebApp.Controllers
         {
             return _context.Player.Any(e => e.PlayerId == id);
         }
+        public IActionResult NotFound()
+        {
+            return RedirectToAction(nameof(Index), nameof(NotFound));
+        }
     }
 }

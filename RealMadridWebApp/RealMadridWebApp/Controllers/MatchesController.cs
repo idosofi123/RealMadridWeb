@@ -279,5 +279,9 @@ namespace RealMadridWebApp.Controllers
         private bool MatchExists(int id) {
             return _context.Match.Any(e => e.Id == id);
         }
+        public IActionResult NotFound()
+        {
+            return RedirectToAction(nameof(Index), nameof(NotFound));
+        }
     }
 }

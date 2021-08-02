@@ -138,5 +138,9 @@ namespace RealMadridWebApp.Controllers {
         private bool StadiumExists(int id) {
             return _context.Stadium.Any(e => e.Id == id);
         }
+        public IActionResult NotFound()
+        {
+            return RedirectToAction(nameof(Index), nameof(NotFound));
+        }
     }
 }
