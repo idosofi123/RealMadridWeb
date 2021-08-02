@@ -1,6 +1,6 @@
 ﻿<link rel="stylesheet" href="~/css/General/Form.css" />
 
-@model RealMadridWebApp.Models.Team
+@model RealMadridWebApp.Models.Position
 
 @{
     ViewData["Title"] = "Edit";
@@ -8,7 +8,7 @@
 
 <h1>Edit</h1>
 
-<h4>Team</h4>
+<h4>Position</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -16,19 +16,14 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StadiumId" class="control-label"></label>
-                <select asp-for="StadiumId" class="form-control" asp-items="ViewBag.StadiumId"></select>
-                <span asp-validation-for="StadiumId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="ImagePath" class="control-label"></label>
                 <input asp-for="ImagePath" class="form-control" />
                 <span asp-validation-for="ImagePath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PositionName" class="control-label"></label>
+                <input asp-for="PositionName" class="form-control" />
+                <span asp-validation-for="PositionName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -41,6 +36,3 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

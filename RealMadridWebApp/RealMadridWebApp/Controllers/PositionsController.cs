@@ -11,22 +11,24 @@ using RealMadridWebApp.Models;
 
 namespace RealMadridWebApp.Controllers
 {
-    public class CompetitionsController : Controller {
+
+    [Authorize(Roles = "Admin,Manager")]
+    public class PositionsController : Controller
+    {
         private readonly RealMadridWebAppContext _context;
 
-        public CompetitionsController(RealMadridWebAppContext context) {
+        public PositionsController(RealMadridWebAppContext context)
+        {
             _context = context;
         }
 
-        // GET: Competitions
-        [Authorize(Roles = "Admin,Manager")]
+        // GET: Positions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Competition.ToListAsync());
+            return View(await _context.Position.ToListAsync());
         }
 
-        // GET: Competitions/Details/5
-        [Authorize(Roles = "Admin,Manager")]
+        // GET: Positions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +36,39 @@ namespace RealMadridWebApp.Controllers
                 return NotFound();
             }
 
-            var competition = await _context.Competition
+            var position = await _context.Position
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (competition == null)
+            if (position == null)
             {
                 return NotFound();
             }
 
-            return View(competition);
+            return View(position);
         }
 
-        // GET: Competitions/Create
-        [Authorize(Roles = "Admin,Manager")]
+        // GET: Positions/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Competitions/Create
+        // POST: Positions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,Manager")]
-        public async Task<IActionResult> Create([Bind("Id,Name,TicketPrice,ImagePath")] Competition competition)
+        public async Task<IActionResult> Create([Bind("Id,ImagePath,PositionName")] Position position)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(competition);
+                _context.Add(position);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(competition);
+            return View(position);
         }
 
-        // GET: Competitions/Edit/5
-        [Authorize(Roles = "Admin,Manager")]
+        // GET: Positions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +76,22 @@ namespace RealMadridWebApp.Controllers
                 return NotFound();
             }
 
-            var competition = await _context.Competition.FindAsync(id);
-            if (competition == null)
+            var position = await _context.Position.FindAsync(id);
+            if (position == null)
             {
                 return NotFound();
             }
-            return View(competition);
+            return View(position);
         }
 
-        // POST: Competitions/Edit/5
+        // POST: Positions/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,Manager")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,TicketPrice,ImagePath")] Competition competition)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ImagePath,PositionName")] Position position)
         {
-            if (id != competition.Id)
+            if (id != position.Id)
             {
                 return NotFound();
             }
@@ -102,12 +100,12 @@ namespace RealMadridWebApp.Controllers
             {
                 try
                 {
-                    _context.Update(competition);
+                    _context.Update(position);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CompetitionExists(competition.Id))
+                    if (!PositionExists(position.Id))
                     {
                         return NotFound();
                     }
@@ -118,11 +116,10 @@ namespace RealMadridWebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(competition);
+            return View(position);
         }
 
-        // GET: Competitions/Delete/5
-        [Authorize(Roles = "Admin,Manager")]
+        // GET: Positions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,33 +127,31 @@ namespace RealMadridWebApp.Controllers
                 return NotFound();
             }
 
-            var competition = await _context.Competition
+            var position = await _context.Position
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (competition == null)
+            if (position == null)
             {
                 return NotFound();
             }
 
-            return View(competition);
+            return View(position);
         }
 
-        // POST: Competitions/Delete/5
+        // POST: Positions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var competition = await _context.Competition.FindAsync(id);
-            _context.Competition.Remove(competition);
+            var position = await _context.Position.FindAsync(id);
+            _context.Position.Remove(position);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CompetitionExists(int id)
+        private bool PositionExists(int id)
         {
-            return _context.Competition.Any(e => e.Id == id);
+            return _context.Position.Any(e => e.Id == id);
         }
-
         public IActionResult NotFound()
         {
             return RedirectToAction(nameof(Index), nameof(NotFound));

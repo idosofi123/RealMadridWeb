@@ -34,5 +34,7 @@ namespace RealMadridWebApp.Data {
 
         public DbSet<RealMadridWebApp.Models.Competition> Competition { get; set; }
 
+        public DbSet<RealMadridWebApp.Models.Position> Position { get; set; }
+
     }
 }

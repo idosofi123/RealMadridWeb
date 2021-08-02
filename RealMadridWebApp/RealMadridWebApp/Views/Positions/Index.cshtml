@@ -1,12 +1,12 @@
 ﻿<link rel="stylesheet" href="~/css/General/List.css" />
 
-@model IEnumerable<RealMadridWebApp.Models.Team>
+@model IEnumerable<RealMadridWebApp.Models.Position>
 
 @{
-    ViewData["Title"] = "Teams";
+    ViewData["Title"] = "Positions";
 }
 
-<h1>Teams</h1>
+<h1>Positions</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -15,15 +15,12 @@
     <thead>
         <tr class="bg-info">
             <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Stadium)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.ImagePath)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.PositionName)
+            </th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -31,13 +28,10 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Stadium.Name)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.ImagePath)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PositionName)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

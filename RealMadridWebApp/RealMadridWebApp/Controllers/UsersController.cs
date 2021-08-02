@@ -32,8 +32,9 @@ namespace RealMadridWebApp.Controllers
         }
 
         // GET: Users/Login
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
@@ -48,8 +49,10 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([Bind("Id,Username,Password")] User user)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([Bind("Id,Username,Password")] User user, string returnUrl)
         {
+            
             ModelState.Remove("FirstName");
             ModelState.Remove("PhoneNumber");
             ModelState.Remove("LastName");
@@ -58,14 +61,12 @@ namespace RealMadridWebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                var q = _context.User.FirstOrDefault(u => u.Username.Equals(user.Username) && u.Password.Equals(user.Password));
+                var q = await _context.User.FirstOrDefaultAsync(u => u.Username.Equals(user.Username) && u.Password.Equals(user.Password));
 
                 if (q != null) 
                 {
-
                     Signin(q);
-
-                    return RedirectToAction(nameof(Index), "Home");
+                    return Redirect(returnUrl == null ? "/" : returnUrl);
                 }
                 else
                 {
@@ -82,8 +83,6 @@ namespace RealMadridWebApp.Controllers
                     new Claim(ClaimTypes.Name, account.Username),
                     new Claim(ClaimTypes.Role, account.Type.ToString()),
                 };
-
-            //HttpContext.Items["UserId"] = account.Id;
 
             var claimsIdentity = new ClaimsIdentity(
                 claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -117,7 +116,7 @@ namespace RealMadridWebApp.Controllers
                 var q = _context.User.FirstOrDefault(u => u.Username == user.Username);
                 if (q == null)
                 {
-                    user.CreationDate = DateTime.Now;
+                    user.CreationDate = DateTime.Now.Date;
                     _context.Add(user);
                     await _context.SaveChangesAsync();
                     var u = _context.User.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
@@ -183,7 +182,7 @@ namespace RealMadridWebApp.Controllers
 
                 if (userDB.Id != id && !HttpContext.User.IsInRole(UserType.Admin.ToString()))
                 {
-                    return RedirectToAction(nameof(AccessDenied));
+                    return RedirectToAction(nameof(Index), nameof(Unauthorized));
                 }
                  user = await _context.User.Include(u => u.Matches).FirstOrDefaultAsync(m => m.Id == id);
             }
@@ -226,7 +225,7 @@ namespace RealMadridWebApp.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(nameof(AccessDenied));
+                    return RedirectToAction(nameof(Index), nameof(Unauthorized));
                 }
             }
               
@@ -245,32 +244,39 @@ namespace RealMadridWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Username,FirstName,LastName,BirthDate,PhoneNumber,EmailAddress,Password,Type")] User user)
         {
-            if (id != user.Id)
-            {
-                return NotFound();
-            }
+            ViewData["EditError"] = null;
 
             if (ModelState.IsValid)
             {
-                try
+                var EditedUser = await _context.User.AsNoTracking().Where(u => u.Id == id).FirstAsync();
+
+                if(user.Equals(EditedUser))
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
+                    ViewData["EditError"] = "No changes were made";
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!UserExists(user.Id))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(user);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!UserExists(user.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    string targetController = HttpContext.User.IsInRole(UserType.Admin.ToString()) ? "Users" : "Home";
+                    return RedirectToAction(nameof(Index), targetController);
                 }
-                string targetController = HttpContext.User.IsInRole(UserType.Admin.ToString()) ? "Users" : "Home";
-                return RedirectToAction(nameof(Index), targetController);
             }
+            ViewData["ReadOnly"] = (HttpContext.User.IsInRole(UserType.Admin.ToString()) && user.Username != HttpContext.User.Identity.Name) ? "true" : "false";
             return View(user);
         }
 
@@ -307,6 +313,10 @@ namespace RealMadridWebApp.Controllers
         private bool UserExists(int id)
         {
             return _context.User.Any(e => e.Id == id);
+        }
+        public IActionResult NotFound()
+        {
+            return RedirectToAction(nameof(Index), nameof(NotFound));
         }
     }
 }

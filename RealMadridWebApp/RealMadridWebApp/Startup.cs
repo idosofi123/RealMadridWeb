@@ -37,6 +37,7 @@ namespace RealMadridWebApp {
                     options.AccessDeniedPath = "/Unauthorized/Index";
                 });
 
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,7 +65,17 @@ namespace RealMadridWebApp {
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Matches}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.Use(async (context, next) =>
+            {
+                await next.Invoke();
+                if (context.Response.StatusCode == 404)
+                {
+                    context.Response.Redirect("/NotFound/Index");
+                }        
+
             });
         }
     }

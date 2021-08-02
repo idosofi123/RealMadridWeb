@@ -19,14 +19,7 @@ namespace RealMadridWebApp.Controllers {
             _logger = logger;
         }
 
-        [Authorize]
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        [Authorize(Roles = "Admin")]
-        public IActionResult Privacy()
         {
             return View();
         }

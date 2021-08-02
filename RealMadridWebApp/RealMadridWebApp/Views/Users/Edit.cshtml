@@ -1,4 +1,6 @@
-﻿@model RealMadridWebApp.Models.User
+﻿<link rel="stylesheet" href="~/css/General/Form.css" />
+
+@model RealMadridWebApp.Models.User
 
 @{
     ViewData["Title"] = "Edit";
@@ -18,10 +20,10 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input id="userId" type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Username" class="control-label"></label>
-                <input id="userName" asp-for="Username" class="form-control" disabled />
+                <input id="userName" asp-for="Username" class="form-control" readonly />
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -41,17 +43,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control"  />
+                <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CreationDate" class="control-label"></label>
-                <input id="creationDate" asp-for="CreationDate" class="form-control" disabled />
+                <input id="creationDate" asp-for="CreationDate" class="form-control" readonly />
                 <span asp-validation-for="CreationDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EmailAddress" class="control-label"></label>
-                <input asp-for="EmailAddress" class="form-control"  />
+                <input asp-for="EmailAddress" class="form-control" />
                 <span asp-validation-for="EmailAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -68,9 +70,13 @@
                 </div>
             }
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input id="submit" type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
+        @if (ViewBag.EditError != null)
+        {
+            <div class="text-danger">@ViewBag.EditError</div>
+        }
     </div>
 </div>
 
@@ -78,9 +84,9 @@
 
     <script>
         if (@ViewBag.ReadOnly) {
-            $("input:not(#userName):not(#creationDate)").attr('disabled', 'disabled');
+            $("input:not(#userName):not(#creationDate):not(#submit):not(#userId)").attr('readonly', 'readonly');
         } else {
-            $("input:not(#userName):not(#creationDate)").removeAttr('disabled');
+            $("input:not(#userName):not(#creationDate):not(#submit):not(#userId)").removeAttr('readonly');
         }
     </script>
 

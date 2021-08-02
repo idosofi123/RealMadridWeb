@@ -68,7 +68,22 @@ namespace RealMadridWebApp.Controllers
         }
 
         public async Task<IActionResult> GetNextMatch() {
-            return Json(await _context.Match.Include(m => m.Team).Include(m => m.Competition).Where(m => m.Date >= DateTime.Now).OrderBy(m => m.Date).FirstAsync());
+
+            var result = await (from m in _context.Match
+                       join t in _context.Team on m.TeamId equals t.Id
+                       join c in _context.Competition on m.CompetitionId equals c.Id
+                       where m.Date >= DateTime.Now
+                       orderby m.Date ascending
+                       select new
+                       {
+                           Id = m.Id,
+                           Date = m.Date,
+                           CompetitionName = c.Name,
+                           TeamName = t.Name,
+                           TeamImagePath = t.ImagePath
+                       }).FirstAsync();
+
+            return Json(result);
         }
 
 
@@ -364,6 +379,10 @@ namespace RealMadridWebApp.Controllers
 
         private bool MatchExists(int id) {
             return _context.Match.Any(e => e.Id == id);
+        }
+        public IActionResult NotFound()
+        {
+            return RedirectToAction(nameof(Index), nameof(NotFound));
         }
     }
 }

@@ -7,8 +7,8 @@ using System.Runtime.Serialization;
 //using System.Text.Json.Serialization;
 
 
-namespace RealMadridWebApp.Models
-{
+namespace RealMadridWebApp.Models { 
+
     public enum UserType
     {
         Client,
@@ -25,15 +25,18 @@ namespace RealMadridWebApp.Models
 
         [Required]
         [Display(Name = "First Name")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First name must contain only letters")]
         public string FirstName { get; set; }
 
         [Required]
         [Display(Name = "Last Name")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Last name must contain only letters")]
         public string LastName { get; set; }
 
         [Required]
         [Display(Name = "Birth Date")]
         [DataType(DataType.Date)]
+        [CustomBirthDateValidation(ErrorMessage = "Birth Date must be less than Today's Date")]
         public DateTime BirthDate { get; set; }
 
         [Required]
@@ -48,15 +51,33 @@ namespace RealMadridWebApp.Models
         public string EmailAddress { get; set; }
 
         [Display(Name = "Creation Date")]
-        //[DataType(DataType.Date)]
+        [DataType(DataType.Date)]
         public DateTime CreationDate { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
+        /*[StringLength(14,MinimumLength = 7, ErrorMessage = "Password must be at least 7 chars and max 14 chras")]*/
         public string Password { get; set; }
 
         public UserType Type { get; set; } = UserType.Client;
 
         public List<Match> Matches { get; set; }
+
+        public override bool Equals(Object obj)
+        {
+            //Check for null and compare run-time types.
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                User u = (User)obj;
+                return (FirstName == u.FirstName) && (LastName == u.LastName) &&
+                       (BirthDate == u.BirthDate) && (PhoneNumber == u.PhoneNumber) &&
+                       (EmailAddress == u.EmailAddress) && (Password == u.Password) &&
+                       (Type == u.Type);
+            }
+        }
     }
 }
