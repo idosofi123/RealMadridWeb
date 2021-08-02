@@ -1,0 +1,5 @@
+﻿.logo {
+    width: 100px;
+    height: 100px;
+    animation: zoom 5s ease-in-out infinite;
+}
