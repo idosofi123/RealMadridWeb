@@ -100,13 +100,23 @@ namespace RealMadridWebApp.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Create([Bind("PlayerId,FirstName,LastName,ShirtNumber,ImagePath,PositionId,BirthDate,PreferedFoot,CountryId,BirthCountryId,Height,Weight")] Player player)
         {
-            ModelState.Remove(nameof(Player.Position));
-            ModelState.Remove(nameof(Player.BirthCountry));
-            if (ModelState.IsValid)
+
+            // All model based validations
+            if (ModelState.IsValid) 
             {
-                _context.Add(player);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));          
+
+            var playerWithShirt = await _context.Player.FirstOrDefaultAsync(m => m.ShirtNumber == player.ShirtNumber);
+
+                // Checking if shirt number not taken and 
+                if (playerWithShirt == null)
+                {
+                    _context.Add(player);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                } else
+                {
+                    ViewData["Error"] = "The shirt number you chose is already taken.";
+                }
             }
             ViewData["BirthCountryId"] = new SelectList(_context.Set<Country>(), "CountryID", nameof(Country.CountryName), player.BirthCountryId);
             ViewData["PositionId"] = new SelectList(_context.Set<Position>(), "Id", nameof(Position.PositionName), player.PositionId);
@@ -138,7 +148,7 @@ namespace RealMadridWebApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<IActionResult> Edit(int id, [Bind("PlayerId,FirstName,LastName,ShirtNumber,ImagePath,PositionId,BirthDate,PreferedFoot,CountryId,BirthCountryId,Height,Weight")] Player player)
+        public async Task<IActionResult> Edit(int id, [Bind("PlayerId,FirstName,LastName,ShirtNumber,ImagePath,PositionId,BirthDate,PreferedFoot,BirthCountryId,Height,Weight")] Player player)
         {
 
             if (id != player.PlayerId)
@@ -146,29 +156,34 @@ namespace RealMadridWebApp.Controllers
                 return NotFound();
             }
 
-
-            ModelState.Remove(nameof(Player.Position));
-            ModelState.Remove(nameof(Player.BirthCountry));
-
             if (ModelState.IsValid)
             {
-                try
+                var playerWithShirt = await _context.Player.AsNoTracking().FirstOrDefaultAsync(m => m.ShirtNumber == player.ShirtNumber);
+
+                // Checking if shirt number not taken and 
+                if (playerWithShirt == null || playerWithShirt.PlayerId == player.PlayerId)
                 {
-                    _context.Update(player);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
+                    try
+                    {
+                        _context.Update(player);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!PlayerExists(player.PlayerId))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                } else
                 {
-                    if (!PlayerExists(player.PlayerId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ViewData["Error"] = "The shirt number you chose is already taken by another player.";
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["BirthCountryId"] = new SelectList(_context.Set<Country>(), "CountryID", nameof(Country.CountryName), player.BirthCountryId);
             ViewData["PositionId"] = new SelectList(_context.Set<Position>(), "Id", nameof(Position.PositionName), player.PositionId);

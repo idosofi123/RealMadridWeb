@@ -67,6 +67,10 @@
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
+        @if (ViewBag.Error != null)
+        {
+            <div class="text-danger">@ViewBag.Error</div>
+        }
     </div>
 </div>
 

@@ -1,0 +1,15 @@
+﻿.ticketImage {
+    width: 50px
+}
+
+table {
+}
+
+.tableDiv {
+    max-height: 50vh;
+    overflow: auto;
+}
+
+.table td {
+    vertical-align: middle;
+}

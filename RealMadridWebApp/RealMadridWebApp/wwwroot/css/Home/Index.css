@@ -1,4 +1,55 @@
-﻿.row {
+﻿@keyframes growInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-1000px);
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes growInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(1000px);
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.growItemRight {
+    animation-fill-mode: both;
+    animation: growInFromRight 1.5s ease;
+    
+}
+
+.growItemLeft {
+    animation-fill-mode: forwards;
+    animation: growInFromLeft 1.5s ease;
+    
+}
+
+#logo {
+    animation: growInFromLeft 1s ease;
+    background-image: url(../../Images/Home/Jumbotron.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.marginBotGrid {
+    margin-bottom: 30px;
+}
+
+video {
+    width: 100% !important;
+    height: auto !important;
+}
+
+#teamDiv {
     margin-bottom: 20px;
 }
 
@@ -7,11 +58,9 @@
 }
 
 .playerImg {
-    
-}
-
-.video {
-    width: 500px;
+    margin: 20px auto;
+    margin-bottom: 0;
+    width: 70%;
 }
 
 .counter {
@@ -21,7 +70,6 @@
 
 .title {
     text-decoration: underline;
-    font-size: 15px;
 }
 
 .cardsArea {

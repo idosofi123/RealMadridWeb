@@ -185,15 +185,18 @@ namespace RealMadridWebApp.Controllers
                 {
                     return RedirectToAction(nameof(Index), nameof(Unauthorized));
                 }
-                 user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
-            }
-            else // From Layout
-            {
-                user = await _context.User.FirstOrDefaultAsync(m => m.Username == HttpContext.User.Identity.Name);
+                 user = await _context.User.Include(u => u.Matches).FirstOrDefaultAsync(m => m.Id == id);
             }
 
-            if (user == null)
-            {
+            // From Layout
+            else {
+                user = await _context.User.Include(u => u.Matches)
+                                            .ThenInclude(m => m.Team)
+                                          .Include(u => u.Matches)
+                                            .ThenInclude(m => m.Competition).FirstOrDefaultAsync(m => m.Username == HttpContext.User.Identity.Name);
+            }
+
+            if (user == null) {
                 return NotFound();
             }
 
