@@ -315,5 +315,9 @@ namespace RealMadridWebApp.Controllers
         {
             return _context.User.Any(e => e.Id == id);
         }
+        public IActionResult NotFound()
+        {
+            return RedirectToAction(nameof(Index), nameof(NotFound));
+        }
     }
 }

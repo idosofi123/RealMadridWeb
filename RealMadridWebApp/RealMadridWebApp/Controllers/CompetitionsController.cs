@@ -156,5 +156,10 @@ namespace RealMadridWebApp.Controllers
         {
             return _context.Competition.Any(e => e.Id == id);
         }
+
+        public IActionResult NotFound()
+        {
+            return RedirectToAction(nameof(Index), nameof(NotFound));
+        }
     }
 }
