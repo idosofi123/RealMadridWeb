@@ -22,7 +22,7 @@
                         <div class="form-group">
                             <label class="control-label">@Html.DisplayNameFor(model => model.Type)</label>
                             <select name="role" id="role" class="form-control" asp-items="@Html.GetEnumSelectList<UserType>()">
-                                <option>No Filter</option>
+                                <option value="">No Filter</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -150,9 +150,8 @@
                 {type}
             </td>
             <td>
-                <a href="/Users/Edit/{id}">Edit</a> |
-                <a href="/Users/Delete/{id}">Delete</a>
-                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                <a rel="tooltip" title="Edit"href="/Users/Edit/{id}"><i class="bi-pencil-square"></i></a> |
+                <a rel="tooltip" title="Delete" href="/Users/Delete/{id}"><i class="bi-trash"></i></a>
             </td>
         </tr>
     </script>

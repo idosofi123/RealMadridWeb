@@ -13,7 +13,6 @@
                 url: '/Users/FilterUsers',
                 data: {
                     'role': role,
-                    'stringRole': role,
                     'userName': userName,
                     'fromDate': fromDate,
                     'toDate': toDate

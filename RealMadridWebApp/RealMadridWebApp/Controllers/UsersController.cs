@@ -28,19 +28,13 @@ namespace RealMadridWebApp.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return RedirectToAction("Login");
+            return RedirectToAction(nameof(Login));
         }
 
         // GET: Users/Login
         public IActionResult Login(string returnUrl)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            return View();
-        }
-
-        // GET: Users/AccessDenied
-        public IActionResult AccessDenied()
-        {
             return View();
         }
 
@@ -52,7 +46,6 @@ namespace RealMadridWebApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([Bind("Id,Username,Password")] User user, string returnUrl)
         {
-            
             ModelState.Remove("FirstName");
             ModelState.Remove("PhoneNumber");
             ModelState.Remove("LastName");
@@ -141,29 +134,22 @@ namespace RealMadridWebApp.Controllers
 
         // GET: Users
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> FilterUsers(UserType role, string stringRole, string userName, DateTime fromDate, DateTime toDate)
+        public async Task<IActionResult> FilterUsers(UserType? role, string? userName, DateTime? fromDate, DateTime? toDate)
         {
-            fromDate = (fromDate == default(DateTime) ? DateTime.MinValue : fromDate);
-            toDate = (toDate == default(DateTime) ? DateTime.MaxValue : toDate);
+            fromDate = (fromDate == null ? DateTime.MinValue : fromDate);
+            toDate = (toDate == null ? DateTime.MaxValue : toDate);
 
-            var users = await _context.User.Where(u => u.CreationDate >= fromDate && u.CreationDate <= toDate).ToListAsync();
-
-            if(stringRole != "No Filter")
-            {
-                users = users.Where(u => u.Type == role).ToList();
-            }
-            if (userName != null)
-            {
-                users = users.Where(u => u.Username.Contains(userName)).ToList();
-            }
+            var users = await _context.User.Where(u => u.CreationDate >= fromDate && u.CreationDate <= toDate &&
+                                                        (role == null || u.Type == role) &&
+                                                        (userName == null || u.Username.Contains(userName))).ToListAsync();
 
             return Json(users);
         }
 
         [Authorize]
-        public async Task<IActionResult> GetRolesValue()
+        public JsonResult GetRolesValue()
         {
-            string[] roles = new string[] { UserType.Client.ToString(), UserType.Manager.ToString(), UserType.Admin.ToString() } ;
+            string[] roles = (string[])Enum.GetNames(typeof(UserType));
             return Json(roles);
         }
 
@@ -241,8 +227,8 @@ namespace RealMadridWebApp.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Username,FirstName,LastName,BirthDate,PhoneNumber,EmailAddress,Password,Type")] User user)
+        [ValidateAntiForgeryToken]                          
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Username,FirstName,LastName,BirthDate,PhoneNumber,EmailAddress,CreationDate,Password,Type")] User user)
         {
             ViewData["EditError"] = null;
 
