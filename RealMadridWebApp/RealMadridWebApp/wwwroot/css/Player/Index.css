@@ -29,12 +29,25 @@
 .player-card {
     margin-bottom: 1vh;
     min-width: 200px;
+    transition: all 1s ease-in-out;
 }
 
+.player-card:hover {
+    transform: scale(1.05);
+}
 .card-body {
     text-align: center;
     margin-bottom: 15px;
 }
+
+.player-card .card {
+    transition: all 1s ease-in-out;
+}
+
+    .player-card .card:hover {
+        background-color: #c4c4ff26;
+    }
+
 
 .searchCriteria {
     padding-bottom: 20px;

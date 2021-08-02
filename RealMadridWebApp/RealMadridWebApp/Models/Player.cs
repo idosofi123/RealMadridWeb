@@ -20,10 +20,12 @@ namespace RealMadridWebApp.Models
 
         [Required]
         [Display(Name = "First Name")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First name must contain only letters")]
         public string FirstName { get; set; }
 
         [Required]
         [Display(Name = "Last Name")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Last name must contain only letters")]
         public string LastName { get; set; }
 
         [Required]
@@ -38,7 +40,6 @@ namespace RealMadridWebApp.Models
         [Display(Name = "Position")]
         public int PositionId { get; set; }
 
-        [Required]
         public Position Position { get; set; }
 
         [Required]
@@ -50,7 +51,6 @@ namespace RealMadridWebApp.Models
         [EnumDataType(typeof(Foot))]
         public Foot PreferedFoot { get; set; }
 
-        [Required]
         public Country BirthCountry { get; set; }
 
         [Required]
