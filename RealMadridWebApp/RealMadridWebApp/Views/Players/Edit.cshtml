@@ -1,4 +1,6 @@
-﻿@model RealMadridWebApp.Models.Player
+﻿<link rel="stylesheet" href="~/css/General/Form.css" />
+
+@model RealMadridWebApp.Models.Player
 
 @{
     ViewData["Title"] = "Edit";
@@ -67,10 +69,6 @@
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
-        @if (ViewBag.Error != null)
-        {
-            <div class="text-danger">@ViewBag.Error</div>
-        }
     </div>
 </div>
 

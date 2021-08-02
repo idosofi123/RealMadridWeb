@@ -39,7 +39,19 @@ namespace RealMadridWebApp.Controllers
         }
         public async Task<IActionResult> GetRandomPlayer()
         {
-            var players = await _context.Player.Include(p => p.BirthCountry).Include(p => p.Position).ToListAsync();
+            var players = await _context.Player.Join(_context.Country,
+                p => p.BirthCountryId,
+                c => c.CountryID,
+                (player, country) => new
+                {
+                    FirstName = player.FirstName,
+                    LastName = player.LastName,
+                    CountryName = country.CountryName,
+                    PlayerImage = player.ImagePath,
+                    PlayerId = player.PlayerId
+                }).ToListAsync();
+
+                /*Include(p => p.BirthCountry).Include(p => p.Position).ToListAsync();*/
             Random rnd = new Random();
             int playerNumber = rnd.Next(0, players.Count());
             return Json(players.ElementAt(playerNumber));
