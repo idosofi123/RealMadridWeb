@@ -28,11 +28,15 @@
                     <form asp-action="Search" id="searchForm">
                         <div class="form-group">
                             <label class="control-label">@Html.DisplayNameFor(model => model.Team)</label>
-                            <select id="teamId" class="form-control" asp-items="ViewBag.TeamId"></select>
+                            <select id="teamId" class="form-control" asp-items="ViewBag.TeamId">
+                                <option value="">Any</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label class="control-label">@Html.DisplayNameFor(model => model.Competition)</label>
-                            <select id="competitionId" class="form-control" asp-items="ViewBag.CompetitionId"></select>
+                            <select id="competitionId" class="form-control" asp-items="ViewBag.CompetitionId">
+                                <option value="">Any</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label class="control-label">From Date</label>
