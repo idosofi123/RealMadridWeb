@@ -1,0 +1,19 @@
+﻿.container {
+    padding: 0px;
+}
+
+.row {
+    margin-bottom: 20px;
+}
+
+.searchCriteria {
+    padding-bottom: 20px;
+}
+
+#buttonArea {
+    margin-bottom: 20px;
+}
+
+.titleRow {
+    background-color: yellow;
+}

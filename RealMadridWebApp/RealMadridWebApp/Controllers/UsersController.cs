@@ -117,7 +117,7 @@ namespace RealMadridWebApp.Controllers
                 var q = _context.User.FirstOrDefault(u => u.Username == user.Username);
                 if (q == null)
                 {
-                    user.CreationDate = DateTime.Now;
+                    user.CreationDate = DateTime.Now.Date;
                     _context.Add(user);
                     await _context.SaveChangesAsync();
                     var u = _context.User.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
@@ -183,7 +183,7 @@ namespace RealMadridWebApp.Controllers
 
                 if (userDB.Id != id && !HttpContext.User.IsInRole(UserType.Admin.ToString()))
                 {
-                    return RedirectToAction(nameof(AccessDenied));
+                    return RedirectToAction(nameof(Index), nameof(Unauthorized));
                 }
                  user = await _context.User.Include(u => u.Matches).FirstOrDefaultAsync(m => m.Id == id);
             }
@@ -226,7 +226,7 @@ namespace RealMadridWebApp.Controllers
                 }
                 else
                 {
-                    return RedirectToAction(nameof(AccessDenied));
+                    return RedirectToAction(nameof(Index), nameof(Unauthorized));
                 }
             }
               
@@ -245,32 +245,39 @@ namespace RealMadridWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Username,FirstName,LastName,BirthDate,PhoneNumber,EmailAddress,Password,Type")] User user)
         {
-            if (id != user.Id)
-            {
-                return NotFound();
-            }
+            ViewData["EditError"] = null;
 
             if (ModelState.IsValid)
             {
-                try
+                var EditedUser = await _context.User.AsNoTracking().Where(u => u.Id == id).FirstAsync();
+
+                if(user.Equals(EditedUser))
                 {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
+                    ViewData["EditError"] = "No changes were made";
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!UserExists(user.Id))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(user);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!UserExists(user.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    string targetController = HttpContext.User.IsInRole(UserType.Admin.ToString()) ? "Users" : "Home";
+                    return RedirectToAction(nameof(Index), targetController);
                 }
-                string targetController = HttpContext.User.IsInRole(UserType.Admin.ToString()) ? "Users" : "Home";
-                return RedirectToAction(nameof(Index), targetController);
             }
+            ViewData["ReadOnly"] = (HttpContext.User.IsInRole(UserType.Admin.ToString()) && user.Username != HttpContext.User.Identity.Name) ? "true" : "false";
             return View(user);
         }
 

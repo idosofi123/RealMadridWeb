@@ -1,4 +1,6 @@
-﻿@model IEnumerable<RealMadridWebApp.Models.User>
+﻿<link rel="stylesheet" href="~/css/User/Index.css" />
+
+@model IEnumerable<RealMadridWebApp.Models.User>
 
 @{
     ViewData["Title"] = "Index";
@@ -45,9 +47,9 @@
     </div>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
+<table class="table  align-items-center table-hover">
+    <thead class="thead-light">
+        <tr class="titleRow">
             <th>
                 @Html.DisplayNameFor(model => model.Username)
             </th>
@@ -71,6 +73,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                Actions
             </th>
             <th></th>
         </tr>
@@ -104,12 +109,14 @@
                     @Html.DisplayFor(modelItem => item.Type)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    
+                   
+                    <a rel="tooltip" title="Edit" asp-action="Edit" asp-route-id="@item.Id"><i class="bi-pencil-square"></i></a> |
+                    <a rel="tooltip" title="Delete" asp-action="Delete" asp-route-id="@item.Id"><i class="bi-trash"></i></a>
                     @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
                 </td>
             </tr>
-        }   
+        }
     </tbody>
 </table>
 
