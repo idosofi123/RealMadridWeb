@@ -21,6 +21,7 @@ namespace RealMadridWebApp.Models {
         public int Id { get; set; }
 
         [Required]
+        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Username must contains only letters and/or numbers")]
         public string Username { get; set; }
 
         [Required]
@@ -56,7 +57,7 @@ namespace RealMadridWebApp.Models {
 
         [Required]
         [DataType(DataType.Password)]
-        /*[StringLength(14,MinimumLength = 7, ErrorMessage = "Password must be at least 7 chars and max 14 chras")]*/
+        [StringLength(14, MinimumLength = 7, ErrorMessage = "Password must be at least 7 chars and max 14 chras")]
         public string Password { get; set; }
 
         public UserType Type { get; set; } = UserType.Client;
