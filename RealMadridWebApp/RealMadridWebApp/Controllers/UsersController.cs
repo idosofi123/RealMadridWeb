@@ -43,20 +43,18 @@ namespace RealMadridWebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AllowAnonymous]
         public async Task<IActionResult> Login([Bind("Id,Username,Password")] User user, string returnUrl)
         {
-            ModelState.Remove("FirstName");
-            ModelState.Remove("PhoneNumber");
-            ModelState.Remove("LastName");
-            ModelState.Remove("EmailAddress");
-            ModelState.Remove("CreationDate");
-
-            if (ModelState.IsValid)
+            if (user.Password == null || user.Username == null)
             {
+                ViewData["Error"] = "Username and passwords are required fields.";
+            }
+            else
+            {
+
                 var q = await _context.User.FirstOrDefaultAsync(u => u.Username.Equals(user.Username) && u.Password.Equals(user.Password));
 
-                if (q != null) 
+                if (q != null)
                 {
                     Signin(q);
                     return Redirect(returnUrl == null ? "/" : returnUrl);
