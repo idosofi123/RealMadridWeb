@@ -36,7 +36,7 @@ namespace RealMadridWebApp.Models {
         [Required]
         [Display(Name = "Birth Date")]
         [DataType(DataType.Date)]
-        [CustomBirthDateValidation(ErrorMessage = "Birth Date must be less than Today's Date")]
+        [UserBirthDateValidation(ErrorMessage = "Oops your are not born yet...")]
         public DateTime BirthDate { get; set; }
 
         [Required]

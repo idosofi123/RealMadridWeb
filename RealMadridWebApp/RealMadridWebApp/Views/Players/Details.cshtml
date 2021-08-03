@@ -6,7 +6,16 @@
     ViewData["Title"] = Model.FirstName + ' ' + Model.LastName;
 }
 
-<h1>Details</h1>
+<h1>@Html.DisplayFor(model => model.FirstName) Details</h1>
+@if (Context.User.IsInRole(UserType.Admin.ToString())
+  || Context.User.IsInRole(UserType.Manager.ToString()))
+{
+    <div class="actionDiv">
+        <a asp-action="Edit" asp-route-id="@Model.PlayerId" class="btn btn-primary">Edit</a>
+        <a asp-action="Delete" asp-route-id="@Model.PlayerId" class="btn btn-danger">Delete</a>
+    </div>
+}
+
 
 <div>
     <div class="card mb-10" style="max-width: 1000px;">
@@ -69,12 +78,5 @@
     </div>
 </div>
 <div>
-    @{
-        if (Context.User.IsInRole(UserType.Admin.ToString()) || Context.User.IsInRole(UserType.Manager.ToString()))
-        {
-            <a asp-action = "Edit" asp-route-id="@Model.PlayerId">Edit </a> @:|
-            <a asp-action = "Delete" asp-route-id = "@Model.PlayerId" > Delete </a>
-        }
-    }
     <a asp-action="Index">Back to List</a>
 </div>

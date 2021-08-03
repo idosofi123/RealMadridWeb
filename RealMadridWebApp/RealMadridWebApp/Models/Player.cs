@@ -44,7 +44,7 @@ namespace RealMadridWebApp.Models
 
         [Required]
         [DataType(DataType.Date)]
-        [CustomBirthDateValidation(ErrorMessage = "Birth Date must be less than Today's Date")]
+        [PlayerBirthDateValidation(ErrorMessage = "Official player must be at least 16 years old")]
         [Display(Name = "Birth Date")]
         public DateTime BirthDate { get; set; }
 

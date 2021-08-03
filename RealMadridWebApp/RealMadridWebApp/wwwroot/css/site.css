@@ -83,6 +83,9 @@ body {
 }
 
 #realMadridCanvas {
-    left: 10px;
-    position: absolute
+    margin: auto;
+}
+
+#canvas-div {
+    text-align: center;
 }
