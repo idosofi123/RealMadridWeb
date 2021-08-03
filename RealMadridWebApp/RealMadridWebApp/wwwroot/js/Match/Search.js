@@ -32,6 +32,8 @@ $(function () {
             let groupTemplate = $('#matchGroupTemplate').html();
             let rowTemplate = $('#matchRowTemplate').html();
 
+            if (result.length === 0) $('#resultArea').append($('#noDataFound').html())
+
             $.each(result, function (groupIndex, group) {
 
                 let thisGroupTemplate = groupTemplate.replaceAll('{groupTitle}', getMonthTitleOfGroup(group));

@@ -75,6 +75,7 @@ namespace RealMadridWebApp.Models {
             {
                 User u = (User)obj;
                 return (FirstName == u.FirstName) && (LastName == u.LastName) &&
+                    (CreationDate == u.CreationDate) && (Username == u.Username) &&
                        (BirthDate == u.BirthDate) && (PhoneNumber == u.PhoneNumber) &&
                        (EmailAddress == u.EmailAddress) && (Password == u.Password) &&
                        (Type == u.Type);

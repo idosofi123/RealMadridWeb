@@ -9,7 +9,8 @@
 <h1>Matches</h1>
 
 @if (Context.User.IsInRole(UserType.Admin.ToString())
- || Context.User.IsInRole(UserType.Manager.ToString())) {
+|| Context.User.IsInRole(UserType.Manager.ToString()))
+{
     <p>
         <a asp-action="Create">Create New</a>
     </p>
@@ -58,12 +59,14 @@
 
 <div id="resultArea">
 
-    @foreach (var group in ViewBag.GroupedMatches) {
+    @foreach (var group in ViewBag.GroupedMatches)
+    {
 
         <h3 class="monthRow">@group.Key.Year - @group.Key.Month</h3>
         <div class="container">
 
-            @foreach (Match item in group) {
+            @foreach (Match item in group)
+            {
 
                 <div class="row">
                     <div class="col-sm-2 competitionCol">
@@ -77,9 +80,12 @@
                         <img class="teamImg" src="@ViewBag.HomeTeam.ImagePath" />
                     </div>
                     <div class="col-sm-2 scoreCol">
-                        @if (item.isAwayMatch) {
+                        @if (item.isAwayMatch)
+                        {
                             <h4>@Html.DisplayFor(modelItem => item.AwayGoals) - @Html.DisplayFor(modelItem => item.HomeGoals)</h4>
-                        } else {
+                        }
+                        else
+                        {
                             <h4>@Html.DisplayFor(modelItem => item.HomeGoals) - @Html.DisplayFor(modelItem => item.AwayGoals)</h4>
                         }
                     </div>
@@ -94,7 +100,7 @@
                     </div>
                 </div>
 
-             }
+            }
 
         </div>
     }
@@ -110,6 +116,13 @@
             {groupBody}
         </div>
 
+    </script>
+
+
+    <script type="text/html" id="noDataFound">
+        <div>
+            No matches found with these search conditions...
+        </div>
     </script>
 
     <script type="text/html" id="matchRowTemplate">

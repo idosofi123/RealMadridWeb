@@ -11,8 +11,12 @@
 <p>
     Take a peek at the different stadiums our team's matches take place.
     <br />
-    <a asp-action="Create">Create New</a>
-</p>
+    @if (Context.User.IsInRole(UserType.Admin.ToString())
+|| Context.User.IsInRole(UserType.Manager.ToString()))
+    {
+        <a asp-action="Create">Create New</a>
+    }
+    </p>
 
 <div class="container">
     <div class="row">

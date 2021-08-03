@@ -109,8 +109,8 @@
                     @Html.DisplayFor(modelItem => item.Type)
                 </td>
                 <td>
-                    
-                   
+
+
                     <a rel="tooltip" title="Edit" asp-action="Edit" asp-route-id="@item.Id"><i class="bi-pencil-square"></i></a> |
                     <a rel="tooltip" title="Delete" asp-action="Delete" asp-route-id="@item.Id"><i class="bi-trash"></i></a>
                     @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
@@ -150,9 +150,16 @@
                 {type}
             </td>
             <td>
-                <a rel="tooltip" title="Edit"href="/Users/Edit/{id}"><i class="bi-pencil-square"></i></a> |
+                <a rel="tooltip" title="Edit" href="/Users/Edit/{id}"><i class="bi-pencil-square"></i></a> |
                 <a rel="tooltip" title="Delete" href="/Users/Delete/{id}"><i class="bi-trash"></i></a>
             </td>
         </tr>
+    </script>
+
+
+    <script type="text/html" id="noDataFound">
+        <div>
+            No users found with these search conditions...
+        </div>
     </script>
 }

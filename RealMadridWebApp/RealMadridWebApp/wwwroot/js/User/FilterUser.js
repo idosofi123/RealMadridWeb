@@ -36,6 +36,8 @@ function setUsersData(data) {
     
         var template = $('#user-row-template').html();
 
+        if (data.length === 0) $('tbody').append($('#noDataFound').html())
+
         $.each(data, function (i, val) {
             var temp = template;
 

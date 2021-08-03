@@ -54,7 +54,7 @@ namespace RealMadridWebApp.Controllers
 
                 var q = await _context.User.FirstOrDefaultAsync(u => u.Username.Equals(user.Username) && u.Password.Equals(user.Password));
 
-                if (q != null)
+                if (q != null && q.Username.Equals(user.Username))
                 {
                     Signin(q);
                     return Redirect(returnUrl == null ? "/" : returnUrl);
@@ -232,16 +232,37 @@ namespace RealMadridWebApp.Controllers
 
             if (ModelState.IsValid)
             {
+
                 var EditedUser = await _context.User.AsNoTracking().Where(u => u.Id == id).FirstAsync();
 
-                if(user.Equals(EditedUser))
+                if (user.Equals(EditedUser))
                 {
                     ViewData["EditError"] = "No changes were made";
+
                 }
                 else
                 {
                     try
                     {
+
+                        if (EditedUser.Username == HttpContext.User.Identity.Name)
+                        {
+                            user.CreationDate = EditedUser.CreationDate;
+                            user.Username = EditedUser.Username;
+
+                        }
+                        else if (HttpContext.User.IsInRole(UserType.Admin.ToString()))
+                        {
+                            var role = user.Type;
+                            user = EditedUser;
+                            user.Type = role;
+
+                        // A non-admin user is trying to change an other user - unauthorized!
+                        } else
+                        {
+                            return RedirectToAction(nameof(Index), nameof(Unauthorized));
+                        }
+
                         _context.Update(user);
                         await _context.SaveChangesAsync();
                     }

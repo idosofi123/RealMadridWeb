@@ -159,7 +159,7 @@ namespace RealMadridWebApp.Controllers
             ViewData["Stadium"] = stadium;
 
             // Calculate the amount of tickets left.
-            ViewData["TicketsLeft"] = stadium.Capacity - match.Users.Count;
+            ViewData["TicketsLeft"] = Math.Max(stadium.Capacity - match.Users.Count, 0);
 
             var loggedInUser = await _context.User.Where(u => u.Username == HttpContext.User.Identity.Name).FirstOrDefaultAsync();
 
@@ -278,8 +278,15 @@ namespace RealMadridWebApp.Controllers
 
             Team givenTeam = await _context.Team.FirstOrDefaultAsync(t => t.Id == match.TeamId);
 
+            var matchAtDay = await _context.Match.Include(m => m.Team).FirstOrDefaultAsync(m => m.Date.Date == match.Date.Date);
+
+            if(matchAtDay!= null)
+            {
+                ViewData["Error"] = "There has alreay a game against " + matchAtDay.Team.Name + " at this day" ;
+                return false;
+            }
             // Validate that a score was not supplied if a game has not occured yet, and vice versa.
-            if (match.Date > DateTime.Now && (match.HomeGoals != null || match.AwayGoals != null)) {
+            else if (match.Date > DateTime.Now && (match.HomeGoals != null || match.AwayGoals != null)) {
 
                 ViewData["Error"] = "Cannot specify a score for a match that has not occured yet.";
                 return false;

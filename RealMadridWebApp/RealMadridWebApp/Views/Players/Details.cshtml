@@ -6,7 +6,7 @@
     ViewData["Title"] = Model.FirstName + ' ' + Model.LastName;
 }
 
-<h1>@Html.DisplayFor(model => model.FirstName) Details</h1>
+<h1>Player Details</h1>
 @if (Context.User.IsInRole(UserType.Admin.ToString())
   || Context.User.IsInRole(UserType.Manager.ToString()))
 {
@@ -78,5 +78,5 @@
     </div>
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Go to List</a>
 </div>

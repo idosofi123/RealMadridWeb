@@ -14,7 +14,7 @@
         <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
     </div>
 }
-<a asp-action="Index">Back to List</a>
+<a asp-action="Index">Go to List</a>
 <hr />
 
 <div class="card cardBody matchCard">
@@ -59,14 +59,21 @@
             <div class="card-body">
                 <h5 class="card-title">@ViewBag.TicketsLeft tickets left.</h5>
                 <h6>Price: @Html.DisplayFor(model => model.Competition.TicketPrice)</h6>
-                @if (Model.Date < DateTime.Now) {
+                @if (Model.Date < DateTime.Now)
+                {
                     <p class="card-text">Match has already occured.</p>
-                } else if (ViewBag.HasAlreadyPurchased) {
-                    <p class="card-text">You have already purchased a ticket for this match.</p>
-                } else {
-                    <p class="card-text">Hurry up and get your ticket now!</p>
                 }
-                <button type="submit" class="btn btn-success" disabled="@(ViewBag.HasAlreadyPurchased || Model.Date < DateTime.Now)" data-toggle="modal" data-target="#staticModal">
+                else if (ViewBag.HasAlreadyPurchased)
+                {
+                    <p class="card-text">You have already purchased a ticket for this match.</p>
+                }
+                else if (ViewBag.TicketsLeft <= 0)
+                {
+                    <p class="card-text">Sold out!</p>
+                } else {
+                <p class="card-text">Hurry up and get your ticket now!</p>
+                }
+                <button type="submit" class="btn btn-success" disabled="@(ViewBag.HasAlreadyPurchased || Model.Date < DateTime.Now || ViewBag.TicketsLeft <= 0)" data-toggle="modal" data-target="#staticModal">
                     Purchase a Ticket
                 </button>
             </div>
