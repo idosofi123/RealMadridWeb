@@ -15,6 +15,7 @@ namespace RealMadridWebApp.Models
         public string ImagePath { get; set; }
 
         [Display(Name = "Position")]
+        [Required]
         public string PositionName { get; set; }
 
         [JsonIgnore]

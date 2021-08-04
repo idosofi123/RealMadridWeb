@@ -3,9 +3,7 @@
         e.preventDefault();
 
         var role = $('#role').val();
-
         var userName = $('#userName').val();
-
         var fromDate = $('#fromDate').val();
         var toDate = $('#toDate').val();
 

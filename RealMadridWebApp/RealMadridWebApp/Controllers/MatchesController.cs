@@ -280,7 +280,7 @@ namespace RealMadridWebApp.Controllers
 
             var matchAtDay = await _context.Match.Include(m => m.Team).Where(m=> m.Id != match.Id).FirstOrDefaultAsync(m => m.Date.Date == match.Date.Date);
 
-            if(matchAtDay!= null)
+            if (matchAtDay != null)
             {
                 ViewData["Error"] = "There has alreay a game against " + matchAtDay.Team.Name + " at this day" ;
                 return false;

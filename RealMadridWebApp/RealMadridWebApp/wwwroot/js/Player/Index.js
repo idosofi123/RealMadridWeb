@@ -2,9 +2,6 @@
 const INITAIL_MAX_AGE = 100;
 
 $(function () {
-    $("#playerImg").on('load', function () {
-        alert("image is loaded");
-    });
 
     $("#minAge").val(INITIAL_MIN_AGE);
     $("#minAgeLabel").html("Min Age: " + INITIAL_MIN_AGE);

@@ -17,7 +17,7 @@ namespace RealMadridWebApp.Controllers
     {
         private readonly RealMadridWebAppContext _context;
 
-        const string DEFAULT_IMAGE_PATH = "/Images/Players/Default.jpg";
+        const string DEFAULT_IMAGE_PATH = "/Images/Players/Default.png";
 
         public PlayersController(RealMadridWebAppContext context)
         {
@@ -51,7 +51,6 @@ namespace RealMadridWebApp.Controllers
                     PlayerId = player.PlayerId
                 }).ToListAsync();
 
-                /*Include(p => p.BirthCountry).Include(p => p.Position).ToListAsync();*/
             Random rnd = new Random();
             int playerNumber = rnd.Next(0, players.Count());
             return Json(players.ElementAt(playerNumber));
@@ -119,7 +118,7 @@ namespace RealMadridWebApp.Controllers
 
             var playerWithShirt = await _context.Player.FirstOrDefaultAsync(m => m.ShirtNumber == player.ShirtNumber);
 
-                // Checking if shirt number not taken and 
+                // Checking if shirt number not taken
                 if (playerWithShirt == null)
                 {
                     player.ImagePath = player.ImagePath == null ? DEFAULT_IMAGE_PATH : player.ImagePath;

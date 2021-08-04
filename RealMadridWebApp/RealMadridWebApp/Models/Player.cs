@@ -54,6 +54,7 @@ namespace RealMadridWebApp.Models
         [EnumDataType(typeof(Foot))]
         public Foot PreferedFoot { get; set; }
 
+        [Display(Name = "Birth Country")]
         public Country BirthCountry { get; set; }
 
         [Required]

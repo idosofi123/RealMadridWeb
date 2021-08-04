@@ -34,8 +34,15 @@ namespace RealMadridWebApp.Controllers
         // GET: Users/Login
         public IActionResult Login(string returnUrl)
         {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
+            if(HttpContext.User != null && HttpContext.User.Claims != null && HttpContext.User.Claims.Count() > 0)
+            {
+                return RedirectToAction(nameof(Logout));
+            } else
+            {
+                ViewData["ReturnUrl"] = returnUrl;
+                return View();
+            }
+            
         }
 
         // POST: Users/Login
@@ -51,10 +58,10 @@ namespace RealMadridWebApp.Controllers
             }
             else
             {
-
                 var q = await _context.User.FirstOrDefaultAsync(u => u.Username.Equals(user.Username) && u.Password.Equals(user.Password));
 
-                if (q != null && q.Username.Equals(user.Username))
+                // Comparing the credentials in a case-sensitive way.
+                if (q != null && q.Username.Equals(user.Username) && q.Password.Equals(user.Password))
                 {
                     Signin(q);
                     return Redirect(returnUrl == null ? "/" : returnUrl);
@@ -92,7 +99,14 @@ namespace RealMadridWebApp.Controllers
         // GET: Users/Register
         public IActionResult Register()
         {
-            return View();
+            if (HttpContext.User != null && HttpContext.User.Claims != null && HttpContext.User.Claims.Count() > 0)
+            {
+                return RedirectToAction(nameof(Logout));
+            }
+            else
+            {
+                return View();
+            }
         }
 
         // POST: Users/Register
@@ -144,10 +158,10 @@ namespace RealMadridWebApp.Controllers
             return Json(users);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public JsonResult GetRolesValue()
         {
-            string[] roles = (string[])Enum.GetNames(typeof(UserType));
+            string[] roles = Enum.GetNames(typeof(UserType));
             return Json(roles);
         }
 
@@ -160,15 +174,16 @@ namespace RealMadridWebApp.Controllers
 
             if (id != null) // From URL
             {
-                var currentUserName = HttpContext.User.Identity.Name;
-
-                var userDB = _context.User.FirstOrDefault(u => u.Username == currentUserName);
+                var userDB = _context.User.FirstOrDefault(u => u.Username == HttpContext.User.Identity.Name);
 
                 if (userDB.Id != id && !HttpContext.User.IsInRole(UserType.Admin.ToString()))
                 {
                     return RedirectToAction(nameof(Index), nameof(Unauthorized));
                 }
-                 user = await _context.User.Include(u => u.Matches).FirstOrDefaultAsync(m => m.Id == id);
+                 user = await _context.User.Include(u => u.Matches)
+                                            .ThenInclude(m => m.Team)
+                                          .Include(u => u.Matches)
+                                            .ThenInclude(m => m.Competition).FirstOrDefaultAsync(m => m.Id == id);
             }
 
             // From Layout
@@ -197,9 +212,7 @@ namespace RealMadridWebApp.Controllers
 
             ViewData["ReadOnly"] = "false";
 
-            var currentUserName = HttpContext.User.Identity.Name;
-
-            var userDB = _context.User.FirstOrDefault(u => u.Username == currentUserName);
+            var userDB = _context.User.FirstOrDefault(u => u.Username == HttpContext.User.Identity.Name);
 
             if(userDB.Id != id)
             {
@@ -241,9 +254,6 @@ namespace RealMadridWebApp.Controllers
                 }
                 else
                 {
-                    try
-                    {
-
                         if (EditedUser.Username == HttpContext.User.Identity.Name)
                         {
                             user.CreationDate = EditedUser.CreationDate;
@@ -265,6 +275,10 @@ namespace RealMadridWebApp.Controllers
                             return RedirectToAction(nameof(Index), nameof(Unauthorized));
                         }
 
+                    try
+                    {
+
+
                         _context.Update(user);
                         await _context.SaveChangesAsync();
                     }
@@ -279,8 +293,8 @@ namespace RealMadridWebApp.Controllers
                             throw;
                         }
                     }
-                    string targetController = HttpContext.User.IsInRole(UserType.Admin.ToString()) ? "Users" : "Home";
-                    return RedirectToAction(nameof(Index), targetController);
+                    string targetAction = HttpContext.User.IsInRole(UserType.Admin.ToString()) ? "Index" : "Details";
+                    return RedirectToAction(targetAction);
                 }
             }
             ViewData["ReadOnly"] = (HttpContext.User.IsInRole(UserType.Admin.ToString()) && user.Username != HttpContext.User.Identity.Name) ? "true" : "false";
@@ -296,8 +310,7 @@ namespace RealMadridWebApp.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var user = await _context.User.FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
             {
                 return NotFound();
