@@ -20,12 +20,12 @@ namespace RealMadridWebApp.Models
 
         [Required]
         [Display(Name = "First Name")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First name must contain only letters")]
+        [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "First name must contain only letters")]
         public string FirstName { get; set; }
 
         [Required]
         [Display(Name = "Last Name")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Last name must contain only letters")]
+        [RegularExpression(@"^[a-zA-Z ]+$", ErrorMessage = "Last name must contain only letters")]
         public string LastName { get; set; }
 
         [Required]
@@ -34,6 +34,7 @@ namespace RealMadridWebApp.Models
         public int ShirtNumber { get; set; }
 
         [Display(Name = "Image Path")]
+
         public string ImagePath { get; set; }
 
         [Required]

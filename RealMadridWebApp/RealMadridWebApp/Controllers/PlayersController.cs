@@ -17,7 +17,7 @@ namespace RealMadridWebApp.Controllers
     {
         private readonly RealMadridWebAppContext _context;
 
-
+        const string DEFAULT_IMAGE_PATH = "/Images/Players/Default.jpg";
 
         public PlayersController(RealMadridWebAppContext context)
         {
@@ -122,6 +122,7 @@ namespace RealMadridWebApp.Controllers
                 // Checking if shirt number not taken and 
                 if (playerWithShirt == null)
                 {
+                    player.ImagePath = player.ImagePath == null ? DEFAULT_IMAGE_PATH : player.ImagePath;
                     _context.Add(player);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -175,6 +176,8 @@ namespace RealMadridWebApp.Controllers
                 // Checking if shirt number not taken and 
                 if (playerWithShirt == null || playerWithShirt.PlayerId == player.PlayerId)
                 {
+                    player.ImagePath = player.ImagePath == null ? DEFAULT_IMAGE_PATH : player.ImagePath;
+
                     try
                     {
                         _context.Update(player);

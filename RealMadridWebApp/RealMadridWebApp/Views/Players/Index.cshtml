@@ -18,6 +18,10 @@
             }
      }
 
+<script>
+
+</script>
+
         <div class="container">
             <div id="buttonArea">
                 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#searchArea" aria-expanded="false" aria-controls="collapseExample">
@@ -60,7 +64,7 @@
                         {
                             <div class="col-4 col-lg-3 cardCol player-card">
                                 <div class="card h-100">
-                                    <img src="@player.ImagePath" alt="Card image cap">
+                                    <img id="playerImg" src="@player.ImagePath" height="285px" alt="Card image cap">
                                     <img class="country-photo" src="@player.BirthCountry.ImagePath" alt="Card image cap">
                                     <div class="shirtNumberBox"><span>@Html.DisplayFor(modelItem => player.ShirtNumber)</span></div>
                                     <div class="card-body">

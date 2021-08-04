@@ -2,11 +2,14 @@
 const INITAIL_MAX_AGE = 100;
 
 $(function () {
+    $("#playerImg").on('load', function () {
+        alert("image is loaded");
+    });
+
     $("#minAge").val(INITIAL_MIN_AGE);
     $("#minAgeLabel").html("Min Age: " + INITIAL_MIN_AGE);
     $("#maxAge").val(INITAIL_MAX_AGE);
     $("#maxAgeLabel").html("Max Age: " + INITAIL_MAX_AGE);
-
 
     $("#minAge").on('change', function () {
         const minVal = parseInt(this.value);

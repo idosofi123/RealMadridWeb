@@ -17,10 +17,39 @@ h4 {
     animation: paragraph 3.5s ease-in;
 }
 
+aside {
+    float: right;
+    margin: 10px;
+    animation: paragraph 3.5s ease-in;
+}
+
+#teamImg{
+    border-radius: 30px;
+}
+
 .logo {
     width: 100px;
     height: 100px;
     animation: zoom 5s ease-in-out infinite;
+    margin-bottom: 10px;
+}
+.multiParaTitle {
+font-weight: bold;
+font-size: 1.45rem;
+margin-bottom: 5px;
+}
+.title {
+    font-weight: bold;
+}
+.paragraph {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.multipleColumnPara {
+    column-count: 3;
+    column-gap: 20px;
+    column-rule: 1px solid grey;
 }
 
 @keyframes paragraph {

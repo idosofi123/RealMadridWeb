@@ -110,8 +110,8 @@
                 </td>
                 <td>
 
-
-                    <a rel="tooltip" title="Edit" asp-action="Edit" asp-route-id="@item.Id"><i class="bi-pencil-square"></i></a> 
+                    <a rel="tooltip" title="Details" asp-action="Details" asp-route-id="@item.Id"><i class="bi-info-circle"></i></a> |
+                    <a rel="tooltip" title="Edit" asp-action="Edit" asp-route-id="@item.Id"><i class="bi-pencil-square"></i></a>
                     @if (item.Type != UserType.Admin)
                     {
                         @:|
@@ -154,10 +154,11 @@
                 {type}
             </td>
             <td>
+                <a rel="tooltip" title="Details" href="/Users/Details/{id}"><i class="bi-info-circle"></i></a> |
                 <a rel="tooltip" title="Edit" href="/Users/Edit/{id}"><i class="bi-pencil-square"></i></a>
                 <span style="visibility: {isAdmin}">
-                |
-                <a rel="tooltip" title="Delete" href="/Users/Delete/{id}"><i class="bi-trash"></i></a>
+                    |
+                    <a rel="tooltip" title="Delete" href="/Users/Delete/{id}"><i class="bi-trash"></i></a>
                 </span>
 
             </td>
