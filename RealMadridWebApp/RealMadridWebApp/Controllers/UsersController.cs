@@ -232,13 +232,12 @@ namespace RealMadridWebApp.Controllers
 
             if (ModelState.IsValid)
             {
-
                 var EditedUser = await _context.User.AsNoTracking().Where(u => u.Id == id).FirstAsync();
+
 
                 if (user.Equals(EditedUser))
                 {
                     ViewData["EditError"] = "No changes were made";
-
                 }
                 else
                 {
@@ -249,13 +248,16 @@ namespace RealMadridWebApp.Controllers
                         {
                             user.CreationDate = EditedUser.CreationDate;
                             user.Username = EditedUser.Username;
+                            user.Type = EditedUser.Type;
 
                         }
                         else if (HttpContext.User.IsInRole(UserType.Admin.ToString()))
                         {
                             var role = user.Type;
+                            var password = user.Password;
                             user = EditedUser;
                             user.Type = role;
+                            user.Password = password;
 
                         // A non-admin user is trying to change an other user - unauthorized!
                         } else
@@ -299,6 +301,11 @@ namespace RealMadridWebApp.Controllers
             if (user == null)
             {
                 return NotFound();
+
+            } 
+            else if (user.Type == UserType.Admin)
+            {
+                return RedirectToAction(nameof(Index), nameof(Unauthorized));
             }
 
             return View(user);
@@ -307,9 +314,16 @@ namespace RealMadridWebApp.Controllers
         // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var user = await _context.User.FindAsync(id);
+
+            if (user.Type == UserType.Admin)
+            {
+                return RedirectToAction(nameof(Index), nameof(Unauthorized));
+            }
+
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

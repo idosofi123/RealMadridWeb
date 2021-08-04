@@ -278,7 +278,7 @@ namespace RealMadridWebApp.Controllers
 
             Team givenTeam = await _context.Team.FirstOrDefaultAsync(t => t.Id == match.TeamId);
 
-            var matchAtDay = await _context.Match.Include(m => m.Team).FirstOrDefaultAsync(m => m.Date.Date == match.Date.Date);
+            var matchAtDay = await _context.Match.Include(m => m.Team).Where(m=> m.Id != match.Id).FirstOrDefaultAsync(m => m.Date.Date == match.Date.Date);
 
             if(matchAtDay!= null)
             {

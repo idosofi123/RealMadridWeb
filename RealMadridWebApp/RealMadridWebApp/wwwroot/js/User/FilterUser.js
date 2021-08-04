@@ -48,6 +48,7 @@ function setUsersData(data) {
 
                 temp = temp.replaceAll('{' + key + '}', value);
             });
+            temp = temp.replaceAll('{isAdmin}', roles[val.type] == 'Admin' ? 'hidden' : 'visible')
             $('tbody').append(temp);
         });
     });
